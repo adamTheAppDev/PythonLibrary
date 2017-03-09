@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Mar  8 13:58:36 2017
-
-@author: AmatVictoriaCuramIII
+Spyder editor
 """
 import numpy as np
 from pandas_datareader import data
