@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Spyder Editor
-
-This is a temporary script file.
 """
+
 from pandas_datareader import data
 import numpy as np
 s = data.DataReader('^GSPC', 'yahoo', start='1/1/2010', end='01/01/2050')
