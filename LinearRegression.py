@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 17 14:52:46 2017
-
-@author: AmatVictoriaCuramIII
+Spyder Editor
 """
 
 from scipy.stats import linregress
