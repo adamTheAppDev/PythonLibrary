@@ -4,7 +4,6 @@ Spyder editor
 from pandas_datareader import data
 import numpy as np
 import pandas as pd
-
 ticker = '^GSPC'
 s = data.DataReader(ticker, 'yahoo', start='9/12/2016', end='01/01/2050')
 a = 12 #number of days for exp moving average window
