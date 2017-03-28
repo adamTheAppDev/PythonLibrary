@@ -1,7 +1,6 @@
 """
 Spyder Editor
 """
-
 from scipy.stats import linregress
 from pandas_datareader import data
 s = data.DataReader('^GSPC', 'yahoo', start='1/1/2001', end='01/01/2050')
