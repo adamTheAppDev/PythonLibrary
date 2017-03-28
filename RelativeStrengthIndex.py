@@ -1,7 +1,6 @@
 """
 Spyder editor
 """
-
 import numpy as np
 from pandas_datareader import data
 s1 = data.DataReader('^GSPC', 'yahoo', start='01/01/2015', end='01/01/2050') 
