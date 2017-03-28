@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Mar 27 16:20:21 2017
-
-@author: AmatVictoriaCuramIII
+Spyder Editor
 """
-
 import numpy as np
 from pandas_datareader import data
 import pandas as pd
