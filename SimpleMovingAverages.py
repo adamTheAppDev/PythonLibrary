@@ -1,7 +1,6 @@
 """
 Spyder Editor
 """
-
 from pandas_datareader import data
 import numpy as np
 ticker = '^GSPC'
