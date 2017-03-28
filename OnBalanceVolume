@@ -12,6 +12,7 @@ Length = len(s['LogReturn'])
 Range = range(0,Length)
 OBV = []
 store = 0
+index = s.index
 for i in Range:
     if s['LogReturn'][i] > 0:
         store = store + s['Volume'][i]
@@ -22,5 +23,5 @@ for i in Range:
     elif s['LogReturn'][i] == 0:
         store = store + 0
         OBV.append(store)
-OBVSeries = pd.Series(OBV)
-OBVSeries.plot(grid=True, figsize = (8,5))
+OBVSeries = pd.Series(OBV, index=index)
+OBVSeries.plot(grid=True, figsize = (8,3))
