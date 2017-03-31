@@ -1,6 +1,7 @@
 """
 Spyder Editor
 """
+#the following code runs, but it has major flaws for when multiple days have similar closing prices.. to be continued..
 import numpy as np
 from pandas_datareader import data
 import pandas as pd
@@ -9,7 +10,7 @@ start = t.time()
 ticker = '^GSPC'
 s = data.DataReader(ticker, 'yahoo', start='01/01/2016', end='01/01/2050') 
 #start = t.time() #for timing purposes un-comment this line and lines 48-49
-window = 25 #minimum window is 10 days
+window = 25 #minimum functional window is 10 days
 s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1)) 
 s['LogRet'] = s['LogRet'].fillna(0)
 s['NDayHigh'] = s['Adj Close'].rolling(center=False, window=window).max()
