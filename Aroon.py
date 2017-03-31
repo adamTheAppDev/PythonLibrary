@@ -8,7 +8,7 @@ import time as t
 start = t.time()
 ticker = '^GSPC'
 s = data.DataReader(ticker, 'yahoo', start='01/01/2016', end='01/01/2050') 
-#start = t.time() #for timing purposes un-comment this line and lines 58-59
+#start = t.time() #for timing purposes un-comment this line and lines 56-57
 window = 10 #minimum window is 10 days
 s['NDayHigh'] = s['Adj Close'].rolling(center=False, window=window).max()
 s['NDayHigh'] = s['NDayHigh'].fillna(0)
