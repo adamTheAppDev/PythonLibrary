@@ -10,8 +10,6 @@ ticker = '^GSPC'
 s = data.DataReader(ticker, 'yahoo', start='01/01/2016', end='01/01/2050') 
 #start = t.time() #for timing purposes un-comment this line and lines 58-59
 window = 10 #minimum window is 10 days
-s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1)) 
-s['LogRet'] = s['LogRet'].fillna(0)
 s['NDayHigh'] = s['Adj Close'].rolling(center=False, window=window).max()
 s['NDayHigh'] = s['NDayHigh'].fillna(0)
 s['NDayHigh'][:window-1]  = s.loc[:,'NDayHigh'][window]
