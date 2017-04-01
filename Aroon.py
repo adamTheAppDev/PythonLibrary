@@ -3,6 +3,7 @@ Spyder Editor
 """
 #I must confess that this indicator can be made in a fraction of the lines used.
 #However MY programming skills at this time are not strong enough.
+#The Divergence column is also known as the Aroon Oscillator
 from pandas_datareader import data
 import pandas as pd
 import time as t
