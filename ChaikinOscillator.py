@@ -15,8 +15,8 @@ Range = range(0,Length)
 ADI = []
 store = 0
 index = s.index
-a = 3 #number of days for moving average window
-b = 10 #numer of days for moving average window
+a = 3 #number of days for exponential moving average window
+b = 10 #numer of days for exponential moving average window
 multiplierA = (2/(a+1))
 multiplierB = (2/(b+1))
 for i in Range:
