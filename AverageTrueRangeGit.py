@@ -1,7 +1,8 @@
 """
 Spyder Editor
 """
-
+#There is value to be added for utlization in a strategy.
+#I would normalize the ATR by price or some rolling price.
 from pandas_datareader import data
 import numpy as np
 ticker = 'SPY'
