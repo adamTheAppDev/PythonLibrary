@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """
 Spyder Editor
-
 """
 from pandas_datareader import data
 import pandas as pd
