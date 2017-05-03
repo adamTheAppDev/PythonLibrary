@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-Created on Tue May  2 22:21:03 2017
-
-@author: AmatVictoriaCuramIII
+Spyder Editor
 """
 
 from pandas_datareader import data
