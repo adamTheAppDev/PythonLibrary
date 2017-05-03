@@ -1,7 +1,6 @@
 """
 Spyder Editor
 """
-
 from pandas_datareader import data
 import pandas as pd
 import numpy as np
