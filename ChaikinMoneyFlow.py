@@ -6,8 +6,6 @@ from pandas_datareader import data
 ticker = '^GSPC'
 window = 20
 s = data.DataReader(ticker, 'yahoo', start='11/01/2016', end='01/01/2050')
-s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1)) 
-s['LogRet'] = s['LogRet'].fillna(0)
 s['MFMultiplier'] = (((s['Adj Close'] - s['Low']) - (s['High'] - s['Adj Close']))
                     / (s['High'] - s['Low']))
 s['MFVolume'] = (s['Volume'] * s['MFMultiplier'])
