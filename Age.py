@@ -6,7 +6,7 @@ Created on Tue Feb 28 13:03:32 2017
 """
 
 #pandas_datareader is deprecated, use YahooGrabber
-#This is a time series length calculator
+#This is a summary statistic tool
 
 from pandas_datareader import data
 def Age(s):
