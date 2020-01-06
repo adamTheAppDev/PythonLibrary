@@ -2,10 +2,10 @@
 """
 Created on Mon Apr  3 16:08:47 2017
 
-#pandas_datareader is deprecated use YahooGrabber
-#This is part of a k-th fold optimization tool
 """
-#lock and load
+#pandas_datareader is deprecated, use YahooGrabber
+#This is part of a k-th fold optimization tool
+
 #import numpy as np
 #from pandas_datareader import data
 import pandas as pd
