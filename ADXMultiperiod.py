@@ -2,7 +2,8 @@
 """
 Created on Mon Apr  3 16:08:47 2017
 
-@author: AmatVictoriaCuramIII
+#pandas_datareader is deprecated use YahooGrabber
+#This is part of a k-th fold optimization tool
 """
 #lock and load
 #import numpy as np
