@@ -4,6 +4,8 @@ Created on Mon Mar 27 16:20:21 2017
 
 @author: AmatVictoriaCuramIII
 """
+#pandas_datareader is deprecated, use YahooGrabber
+#This is a techincal indicator.
 
 import numpy as np
 from pandas_datareader import data
