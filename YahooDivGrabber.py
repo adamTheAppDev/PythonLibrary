@@ -14,7 +14,7 @@ def YahooDivGrabber(ticker):
     from CrumbCatcher import CrumbCatcher
     starttime = t.time()
     ticker = str(ticker)
-    artificialcrumb = CrumbCatcher()
+    artificialcrumb = CrumbCatcher(ticker)
     downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
     + "?period1=-631123200&period2=1598374000&interval=1d&events=div&crumb=" + artificialcrumb)
     mainurl = "https://finance.yahoo.com/quote/" + ticker + "/history?p=" + ticker

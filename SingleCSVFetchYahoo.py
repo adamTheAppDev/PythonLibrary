@@ -4,14 +4,14 @@ Created on Thu May 18 15:55:54 2017
 
 @author: AmatVictoriaCuramIII
 """
-import webbrowser as web
 import requests
 from io import StringIO
 import pandas as pd
 import time as t
+from CrumbCatcher import CrumbCatcher
 starttime = t.time()
-ticker = "CXW"
-artificialcrumb = "1.ZWRp1I9ZS"
+ticker = "ACFS"
+artificialcrumb = str(CrumbCatcher(ticker))
 downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
 + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
 response = requests.post(downloadurl)#, data=CookieDict)

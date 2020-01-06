@@ -15,10 +15,11 @@ Empty = []
 Start = t.time()
 Counter = 0
 Counter2 = 0
-iterations = range(0, 2000)
+iterations = range(0, 500)
 Dataset2 = pd.DataFrame()
 #Input
-tickers = ('TLT', 'MS')
+tickers = ('TLT', 'SPY', 'TMF')#, 'AAPL', 'PBF', 'UVXY', '^VIX', 'GLD', 'SLV',
+#           'JO','CORN', 'DBC', 'SOYB')
 
 #Make all pairs in final list
 MajorList = ListPairs(tickers)
@@ -27,7 +28,6 @@ MajorList = ListPairs(tickers)
 
 #Brute Force Optimization
 for m in MajorList:
-    print(m)
     Dataset = pd.DataFrame()
     Ticker1 = m[0]
     Ticker2 = m[1]
@@ -77,32 +77,22 @@ for m in MajorList:
             continue
         e = rand.randint(3,25)
         f = rand.randint(3,25)
-        g = rand.randint(3,60)
-        h = rand.randint(3,60)
-        if g < e:
-            continue
-        if h < f:
-            continue
+
         window = int(e)
         window2 = int(f)
-        window3 = int(g)
-        window3 = int(h)
-        n = .1 - (rand.random())/5        
-        o = .1 - (rand.random())/5       
         
-        Asset1['smallSMA'] = Asset1['Adj Close'].rolling(window=e, center=False).mean()
-        Asset2['smallSMA'] = Asset2['Adj Close'].rolling(window=f, center=False).mean()
-        Asset1['largeSMA'] = Asset1['Adj Close'].rolling(window=g, center=False).mean()
-        Asset2['largeSMA'] = Asset2['Adj Close'].rolling(window=h, center=False).mean()        
-        Asset1['SMAspread'] = Asset1['smallSMA'] - Asset1['largeSMA']
-        Asset2['SMAspread'] = Asset2['smallSMA'] - Asset2['largeSMA']
+        Asset1['MA'] = Asset1['Adj Close'].rolling(window=e, center=False).mean()
+        Asset2['MA'] = Asset2['Adj Close'].rolling(window=f, center=False).mean()        
+        
+                
+        
         Asset1['Position'] = a
-        Asset1['Position'] = np.where(Asset1['SMAspread'].shift(1) > n,
+        Asset1['Position'] = np.where(Asset1['Adj Close'].shift(1) > Asset1['MA'].shift(1),
                                         c,a)                                    
         Asset1['Pass'] = (Asset1['LogRet'] * Asset1['Position'])
 
         Asset2['Position'] = b
-        Asset2['Position'] = np.where(Asset2['SMAspread'].shift(1) > o,
+        Asset2['Position'] = np.where(Asset2['Adj Close'].shift(1) > Asset2['MA'].shift(1),
                                         d,b)
         Asset2['Pass'] = (Asset2['LogRet'] * Asset2['Position'])
         
@@ -135,10 +125,6 @@ for m in MajorList:
         Empty.append(d)
         Empty.append(e)
         Empty.append(f)
-        Empty.append(g)
-        Empty.append(h)
-        Empty.append(n)
-        Empty.append(o)
         Empty.append(sharpe)
         Empty.append(sharpe/MaxDD)
         Empty.append(dailyreturn/MaxDD)
@@ -148,18 +134,18 @@ for m in MajorList:
         Dataset[i] = Emptyseries.values
         Empty[:] = [] 
 #find optimal parameters from pair
-    z1 = Dataset.iloc[11]
+    z1 = Dataset.iloc[7]
     w1 = np.percentile(z1, 80)
     v1 = [] #this variable stores the Nth percentile of top performers
     DS1W = pd.DataFrame() #this variable stores your financial advisors for specific dataset
-    for l in z1:
-        if l > w1:
-          v1.append(l)
+    for h in z1:
+        if h > w1:
+          v1.append(h)
     for j in v1:
-          r = Dataset.columns[(Dataset == j).iloc[11]]    
+          r = Dataset.columns[(Dataset == j).iloc[7]]    
           DS1W = pd.concat([DS1W,Dataset[r]], axis = 1)
     y = max(z1)
-    k = Dataset.columns[(Dataset == y).iloc[11]] #this is the column number
+    k = Dataset.columns[(Dataset == y).iloc[7]] #this is the column number
     kfloat = float(k[0])
     End = t.time()
     print(End-Start, 'seconds later')
@@ -171,18 +157,18 @@ for m in MajorList:
         
 Portfolio2 = pd.DataFrame()
 #find some winning parameters
-z1 = Dataset2.iloc[11]
+z1 = Dataset2.iloc[7]
 w1 = np.percentile(z1, 99)
 v1 = [] #this variable stores the Nth percentile of top performers
 winners = pd.DataFrame() #this variable stores your financial advisors for specific dataset
-for l in z1:
-    if l > w1:
-      v1.append(l)
+for h in z1:
+    if h > w1:
+      v1.append(h)
 for j in v1:
-      r = Dataset2.columns[(Dataset2 == j).iloc[11]]    
+      r = Dataset2.columns[(Dataset2 == j).iloc[7]]    
       winners = pd.concat([winners,Dataset2[r]], axis = 1)
 y = max(z1)
-k = Dataset2.columns[(Dataset2 == y).iloc[11]] #this is the name of the pair
+k = Dataset2.columns[(Dataset2 == y).iloc[7]] #this is the name of the pair
 kfloat = str(k[0])
 
 #most likely, you will want to export to csv for further future investigation
@@ -211,26 +197,16 @@ Asset4['LogRet'] = Asset4['LogRet'].fillna(0)
 
 window = int((Dataset2[kfloat][4]))
 window2 = int((Dataset2[kfloat][5]))   
-window3 = int((Dataset2[kfloat][6]))
-window4 = int((Dataset2[kfloat][7]))   
 
-threshold = Dataset2[kfloat][8]
-threshold2 = Dataset2[kfloat][9] 
-
-Asset3['smallSMA'] = Asset3['Adj Close'].rolling(window=window, center=False).mean()
-Asset4['smallSMA'] = Asset4['Adj Close'].rolling(window=window2, center=False).mean()
-Asset3['largeSMA'] = Asset3['Adj Close'].rolling(window=window3, center=False).mean()
-Asset4['largeSMA'] = Asset4['Adj Close'].rolling(window=window4, center=False).mean()
-
-Asset3['SMAspread'] = Asset3['smallSMA'] - Asset3['largeSMA']
-Asset4['SMAspread'] = Asset4['smallSMA'] - Asset4['largeSMA']
+Asset3['MA'] = Asset3['Adj Close'].rolling(window=window, center=False).mean()
+Asset4['MA'] = Asset4['Adj Close'].rolling(window=window2, center=False).mean()
 
 Asset3['Position'] = (Dataset2[k[0]][0])
-Asset3['Position'] = np.where(Asset3['SMAspread'].shift(1) > threshold,
+Asset3['Position'] = np.where(Asset3['Adj Close'].shift(1) > Asset3['MA'].shift(1),
                                     Dataset2[k[0]][2],Dataset2[k[0]][0])
 Asset3['Pass'] = (Asset3['LogRet'] * Asset3['Position'])
 Asset4['Position'] = (Dataset2[kfloat][1])
-Asset4['Position'] = np.where(Asset4['SMAspread'].shift(1) > threshold,
+Asset4['Position'] = np.where(Asset4['Adj Close'].shift(1) > Asset4['MA'].shift(1),
                                     Dataset2[k[0]][3],Dataset2[k[0]][1])
 Asset4['Pass'] = (Asset4['LogRet'] * Asset4['Position'])
 #
