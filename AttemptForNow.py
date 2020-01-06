@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Aug 30 19:07:37 2017
-
-@author: Adam Reinhold Von Fisher -- Sup y'all, stalk my instagram : @damfisher
 """
+
+#This is a portfolio strategy tool with brute force optimizer
+#Takes 2 assets to examine and a third for signal generation
+
 import numpy as np
 import random as rand
 import pandas as pd
@@ -71,7 +73,7 @@ Asset3['Contango'] = (Asset2['Close']/Asset3['Close'])
 #Asset2 = Asset2[window:]                             
 #Asset3 = Asset3[window:]
 
-#Brute Force Optimization - 2000 iterations on Macbook takes about 14 seconds
+#Brute Force Optimization - 2000 iterations on a 2012 Macbook takes about 14 seconds
 iterations = range(0, 2000)
 
 for i in iterations:
