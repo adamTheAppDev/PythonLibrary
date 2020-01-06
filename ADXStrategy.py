@@ -4,6 +4,9 @@ Created on Sun Apr  9 16:28:16 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a strategy tester
+
 import pandas as pd
 import numpy as np
 from YahooGrabber import YahooGrabber
