@@ -13,10 +13,10 @@ import numpy as np
 #import random as rand
 import pandas as pd
 #import time as t
-#from DatabaseGrabber import DatabaseGrabber
-from YahooGrabber import YahooGrabber
+from YahooSourceDailyGrabber import YahooSourceDailyGrabber
 #import matplotlib.pyplot as plt
 import warnings 
+from YahooGrabber import YahooGrabber
 
 #Inputs - OHLC data
 Ticker1 = 'GLD'
@@ -85,7 +85,12 @@ Asset1['RollingMin'] = Asset1['Low'].rolling(window=donchianwindow, center=False
 Asset1['LongSignal'] = np.where(Asset1['High'] >= Asset1['RollingMax'].shift(1), 1, 0)
 #if price is less than the min go short
 Asset1['ShortSignal'] = np.where(Asset1['Low'] <= Asset1['RollingMin'].shift(1), 1, 0)
-
+#Add filter
+#Asset1['Filter'] = np.where(Asset1['1wkEfficiency'] >= 0, 1, -1)
+#
+#Asset1['LongSignal'].loc[(Asset1['LongSignal'] == 1) & (Asset1['Filter'] == -1)] = 0
+#
+#Asset1['ShortSignal'].loc[(Asset1['ShortSignal'] == 1) & (Asset1['Filter'] == 1)] = 0
 #If double signal days exist, then entry and P/L on those days will not be reflected correctly, spurious return stream
 Asset1['DoubleDay'] = np.where(Asset1['LongSignal'] + Asset1['ShortSignal'] == 2, 1, 0)
 

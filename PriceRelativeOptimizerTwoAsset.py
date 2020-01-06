@@ -18,7 +18,7 @@ Counter = 0
 
 #Input
 
-Ticker1 = 'AAPL'
+Ticker1 = 'TQQQ'
 Ticker2 = 'TMF'
 #Ticker3 = '^VIX'
 

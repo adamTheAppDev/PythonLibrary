@@ -30,7 +30,7 @@ Asset1 = YahooGrabber(Ticker1)
 #Asset2 = YahooGrabber(Ticker2)
 
 
-Asset2 = read_csv('C:\\Users\\AmatVictoriaCuramIII\\Desktop\\Python\\VX1CC.csv', sep = ',')
+Asset2 = pd.read_csv('C:\\Users\\AmatVictoriaCuramIII\\Desktop\\Python\\VX1CC.csv', sep = ',')
 Asset2.Date = pd.to_datetime(Asset2.Date, format = "%m/%d/%Y") 
 Asset2 = Asset2.set_index('Date')
 Asset2 = Asset2.reindex(index=Asset2.index[::-1])
@@ -101,11 +101,11 @@ for i in iterations:
     Portfolio['Multiplier'] = Portfolio['LongShort'].cumsum().apply(np.exp)
     drawdown =  1 - Portfolio['Multiplier'].div(Portfolio['Multiplier'].cummax())
     MaxDD = max(drawdown)
-    if MaxDD > float(.2): 
+    if MaxDD > float(.3): 
         continue
 #    
     dailyreturn = Portfolio['LongShort'].mean()
-    if dailyreturn < .003:
+    if dailyreturn < .002:
         continue
     
     dailyvol = Portfolio['LongShort'].std()

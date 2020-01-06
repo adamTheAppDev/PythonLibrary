@@ -15,7 +15,7 @@ Empty = []
 Start = t.time()
 Counter = 0
 Counter2 = 0
-iterations = range(0, 10000)
+iterations = range(0, 100)
 Dataset2 = pd.DataFrame()
 #Input
 tickers = ('TLT', 'SPY', 'TMF', 'AAPL', 'PBF', 'UVXY', '^VIX', 'GLD', 'SLV',

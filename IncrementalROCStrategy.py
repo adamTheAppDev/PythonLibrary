@@ -22,13 +22,13 @@ Asset1 = Asset1[:] #In
 Asset1['SubIndex'] = range(1,len(Asset1)+1)
 
 #Variable windows
-ROCWindow = 31
-HoldPeriod = 68
+ROCWindow = 28
+HoldPeriod = 185
 ATRWindow = 20
 Counter = 0
-PositionSize = 1.4#PERCENT!
-UniformMove = .08
-PositionScale = .6#PERCENT!
+PositionSize = 3#PERCENT!
+UniformMove = .006
+PositionScale = .0393#PERCENT!
 #Log Returns
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)

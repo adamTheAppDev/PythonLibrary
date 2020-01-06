@@ -17,7 +17,7 @@ from YahooGrabber import YahooGrabber
 Ticker1 = 'UVXY'
 Asset1 = DatabaseGrabber(Ticker1)
 Asset1 = Asset1[:] #In
-Iterations = range(0,50000)
+Iterations = range(0,50)
 Counter = 1
 #Numbered subindex 
 Asset1['SubIndex'] = range(1,len(Asset1)+1)
@@ -30,7 +30,7 @@ for n in Iterations:
     ATRWindow = 20
     PositionSize = 1 + (rand.random() * 5) # 8 = 8% of account per leg
     UniformMove = rand.random() * .4 # .5 = 1.5 highoverrollingmin for first unit to be active
-    PositionScale = rand.random() * 4 # 8 = add 8% to each new leg over previous leg
+    PositionScale = rand.random() * .04 # .08 = add 8% to each new leg over previous leg
     #Log Returns
     Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
     Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
@@ -116,7 +116,7 @@ for n in Iterations:
     #s['drawdown'] =  1 - s['Multiplier'].div(s['Multiplier'].cummax())
     MaxDD = max(drawdown)
     Counter = Counter + 1
-    if MaxDD > .4:
+    if MaxDD > .5:
         continue
     dailyreturn = Asset1['Strategy'].mean()
     if dailyreturn < .0015:

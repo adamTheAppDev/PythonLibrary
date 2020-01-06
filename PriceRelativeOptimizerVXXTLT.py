@@ -10,15 +10,15 @@ from pandas_datareader import data
 import random as rand
 import pandas as pd
 import time as t
-from DatabaseGrabber import DatabaseGrabber
+from YahooGrabber import YahooGrabber
 empty = []
 dataset = pd.DataFrame()
 asone = pd.DataFrame()
 start = t.time()
 counter = 0
 
-Asset1 = DatabaseGrabber('UVXY')
-Asset2 = DatabaseGrabber('VXX')
+Asset1 = YahooGrabber('UVXY')
+Asset2 = YahooGrabber('TQQQ')
 
 trim = abs(len(Asset1) - len(Asset2))
 if len(Asset1) == len(Asset2):
@@ -105,19 +105,19 @@ print(dataset[k])
 
 
 
-TLT['Position'] = (dataset[kfloat][0])
-TLT['Pass'] = (TLT['LogRet'] * TLT['Position'])
+#TLT['Position'] = (dataset[kfloat][0])
+#TLT['Pass'] = (TLT['LogRet'] * TLT['Position'])
 Asset1['Position'] = (dataset[kfloat][1])
 Asset1['Pass'] = (Asset1['LogRet'] * Asset1['Position'])
-VIX['Position'] = .5
-VIX['Pass'] = VIX['LogRet'] * VIX['Position']
-VXV['Position'] = .5
-VXV['Pass'] = VXV['LogRet'] * VXV['Position']
-TLT['Position'] = .5
-TLT['Pass'] = TLT['LogRet'] * TLT['Position']
+#VIX['Position'] = .5
+#VIX['Pass'] = VIX['LogRet'] * VIX['Position']
+#VXV['Position'] = .5
+#VXV['Pass'] = VXV['LogRet'] * VXV['Position']
+#TLT['Position'] = .5
+#TLT['Pass'] = TLT['LogRet'] * TLT['Position']
 asone['VXXpass'] = Asset1['Pass']
 asone['UVXYpass'] = Asset2['Pass']
-asone['PriceRelative'] = Asset1['Adj Close'] / TLT['Adj Close']
+asone['PriceRelative'] = Asset1['Adj Close'] / Asset2['Adj Close']
 #asone['PriceRelative'][-180:].plot(grid = True, figsize = (8,5))
 asone['LongShort'] = Asset2['Pass'] + (-1 * Asset1['Pass']) 
 asone = asone[:-2]
