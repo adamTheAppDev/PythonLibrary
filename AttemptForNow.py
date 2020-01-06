@@ -5,6 +5,7 @@ Created on Wed Aug 30 19:07:37 2017
 
 #This is a portfolio strategy tool with brute force optimizer
 #Takes 2 assets to examine and a third for signal generation
+#Use YahooGrabber for data instead of read_pickle
 
 import numpy as np
 import random as rand
