@@ -4,6 +4,10 @@ Created on Tue Feb 28 13:05:05 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#Use YahooGrabber for data req
+#This is a summary statistic tool
+
 import numpy as np
 from DatabaseGrabber import DatabaseGrabber
 def AverageReturn(s):
