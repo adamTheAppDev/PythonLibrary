@@ -2,6 +2,8 @@
 Spyder Editor
 """
 #pandas_datareader is deprecated use YahooGrabber
+#This is a techincal analysis tool
+
 from pandas_datareader import data
 import numpy as np
 ticker = '^GSPC'
