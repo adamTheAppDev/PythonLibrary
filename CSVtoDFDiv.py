@@ -8,11 +8,13 @@ from pandas import read_csv
 import pandas as pd
 import os
 
-CSVfiles = os.listdir('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV')
+#This file does not yet recognize files with 'Stockdiv.csv' titles
+#Be aware of assignment
+CSVfiles = os.listdir('F:\\Users\\AmatVictoriaCuram\\TemporaryDiv')
 ranger = range(0,len(CSVfiles))
 for i in ranger:
     try:
-        temp = read_csv('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\' +
+        temp = read_csv('F:\\Users\\AmatVictoriaCuram\\TemporaryDiv\\' +
                          (CSVfiles[i]), sep = ',')
         temp = temp.set_index('Date')
         temp.index = pd.to_datetime(temp.index, format = "%Y/%m/%d") 

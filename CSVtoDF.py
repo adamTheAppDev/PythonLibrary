@@ -24,16 +24,18 @@ for i in ranger:
                           CSVfiles[i][:-4])
         pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\Database\\' +
                           CSVfiles[i][:-4] + '\\' + CSVfiles[i][:-4])
+        print(CSVfiles[i])
     except OSError:
         continue
 for i in ranger:
     try:
         glaze = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\Database\\' +
-                         (CSVfiles[i][:-4]))
+                        CSVfiles[i][:-4] + '\\' + CSVfiles[i][:-4])
         for x in glaze.columns:
             glaze[x] =  pd.to_numeric(glaze[x], errors='coerce')
         pd.to_pickle(glaze, 'F:\\Users\\AmatVictoriaCuram\\Database\\' +
-                          CSVfiles[i][:-4])
+                         CSVfiles[i][:-4] + '\\' + CSVfiles[i][:-4])
+        print(CSVfiles[i])
     except OSError:
         continue
 #this is for testing individual CSVs

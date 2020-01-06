@@ -37,7 +37,7 @@ atrwindow = 20
 donchianwindow = 10
 
 #How many days to calculate e-ratio for
-LengthOfTest = range(2, 25) #(2,3) = 2 day Eratio // assuming fill at "Entry Price"
+LengthOfTest = range(2, 50) #(2,3) = 2 day Eratio // assuming fill at "Entry Price"
 
 edgeratioframe = pd.DataFrame(index = range(2, len(LengthOfTest) + 2))
 #Initiate testing for loop
@@ -47,7 +47,7 @@ for ticker in tickerlist:
     Asset = YahooGrabber(ticker)
     
     #In sample Trimmer
-    Asset = Asset[-1000:]
+    Asset = Asset[:]
     
     #Make column that represents X axis 
     Asset['Index'] = Asset.index
