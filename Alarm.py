@@ -5,6 +5,8 @@ Created on Mon Jan 22 00:22:53 2018
 @author: AmatVictoriaCuramIII
 """
 
+#This is an alarm clock, turn up the volume!
+
 import webbrowser
 import time
 
