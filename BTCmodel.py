@@ -11,7 +11,8 @@ Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
-#BTC model
+#BTC strategy model with brute force optimization, need BTC data set to run.
+ 
 
 import numpy as np
 import random as rand
