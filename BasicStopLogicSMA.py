@@ -6,6 +6,8 @@ Created on Thu Mar 22 12:52:40 2018
 """
 
 #Basic Stop / SMA model
+#This program is outdated and probably doesn't work well. 
+#See 
 
 #Lock n' Load
 import numpy as np
