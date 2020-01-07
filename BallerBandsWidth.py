@@ -2,6 +2,9 @@
 Spyder Editor
 """
 
+#pandas_datareader is deprecated, use YahooGrabber
+#This is a technical analysis tool
+
 from pandas_datareader import data
 ticker = '^GSPC'
 s = data.DataReader(ticker, 'yahoo', start='11/01/2016', end='01/01/2050')
