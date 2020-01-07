@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Dec 12 18:14:01 2017
-
-@author: AmatVictoriaCuramIII
-"""
-
-# -*- coding: utf-8 -*-
-"""
 Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
-#BTC strategy model with brute force optimization, need BTC data set to run.
- 
+
+#BTC strategy model with brute force optimization, need BTC data set to run. 
 
 import numpy as np
 import random as rand
