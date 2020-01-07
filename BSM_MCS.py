@@ -5,6 +5,8 @@ Created on Fri Sep 16 23:44:19 2016
 @author: AmatVictoriaCuramIII
 """
 
+#This is a Black Scholes model from Yves Hilpisch's book
+
 def bsm_call_value(S0, K, T, r, sigma):
     from math import log, sqrt, exp
     from scipy import stats
