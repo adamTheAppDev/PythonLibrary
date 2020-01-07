@@ -7,7 +7,7 @@ Created on Thu Mar 22 12:52:40 2018
 
 #Basic Stop / SMA model
 #This program is outdated and probably doesn't work well. 
-#See 
+#See DonchianTrendSingleStockSingleFrequency.py for properly constructed models
 
 #Lock n' Load
 import numpy as np
