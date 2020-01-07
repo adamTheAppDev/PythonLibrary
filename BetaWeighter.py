@@ -5,6 +5,9 @@ Created on Thu Aug 31 08:55:46 2017
 @author: AmatVictoriaCuramIII
 """
 
+#pandas_datareader is deprecated, use YahooGrabber
+#This is a portfolio analysis tool, useful for pair trades and hedging
+
 import numpy as np
 from pandas_datareader import data
 import random as rand
