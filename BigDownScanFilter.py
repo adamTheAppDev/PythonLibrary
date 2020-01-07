@@ -4,6 +4,11 @@ Created on Tue Feb 28 23:29:44 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#pandas_datareader is deprecated, use YahooGrabber
+#This is a scanning tool with technical analysis modules inside
+#There is a more efficient way to do this process somewhere in the MasterLibrary
+
 #Get modules
 from SAge import SAge
 from SAverageReturn import SAverageReturn
