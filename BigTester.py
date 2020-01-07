@@ -5,6 +5,10 @@ Created on Wed Aug 30 19:07:37 2017
 @author: Adam Reinhold Von Fisher - adamrvfisher@gmail.com 
 linkedin.com/in/adamrvfisher - github.com/adamrvfisher/TechnicalAnalysisLibrary
 """
+
+#This is a portfolio analysis tool
+#
+
 #Load your modules
 import numpy as np
 import random as rand
