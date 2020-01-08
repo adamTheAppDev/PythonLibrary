@@ -4,17 +4,9 @@ Created on Thu Dec 28 01:20:06 2017
 
 @author: AmatVictoriaCuramIII
 """
-#Main questions...
-#Are the bracket orders and gaps correctly simulated and accounted for?
-#Would it be difficult to add position sizing rules?
-#How important are commission and slippage constraints?
-#Appropriate slippage percent?
 
-#How can I reduce redundant assignments and other code inefficiencies?
-#Main constraints and assumptions
-#Commissions and entry slippage
-#Adverse Gaps are closed on open
-
+#This program is outdated and probably doesn't work
+#See donchian trend models for properly functioning stop/profit taking/time based exits
 
 #Bracket Logic w/ SMA Strategy
 
