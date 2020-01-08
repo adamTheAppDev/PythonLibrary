@@ -4,6 +4,10 @@ Created on Wed Apr  5 20:13:42 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is part of a kth fold optimization set of programs
+#Test sets are stored in pickles locally
+
 firsttime = '07/01/1983'
 secondtime = '01/01/1995'
 thirdtime = '01/01/2006'
