@@ -6,6 +6,7 @@ Created on Sun Oct  6 19:04:59 2019
 """
 
 #Supervised Learning Binary Classification Wisconsin cancer Data
+#Machine learning model from Intro to Machine Learning in Python bu Muller and Guido
 
 #import sys
 #import sklearn
