@@ -6,8 +6,8 @@ Created on Wed Aug 30 19:07:37 2017
 linkedin.com/in/adamrvfisher - github.com/adamrvfisher/TechnicalAnalysisLibrary
 """
 
-#This is a portfolio analysis tool
-#
+#This is a single issue strategy tester + portfolio analysis tool
+#Tests one asset at a time, places best performers in final portfolio
 
 #Load your modules
 import numpy as np
