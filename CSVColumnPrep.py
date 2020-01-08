@@ -5,6 +5,8 @@ Created on Thu Aug 10 23:37:21 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a formatting tool for database management involving SQL
+
 #TempCSV transfer to CSVtoSQL with Access/SQL COLUMN HEADERS
 import pandas as pd
 import time as t
