@@ -5,7 +5,9 @@ Created on Fri Aug 11 00:35:14 2017
 @author: AmatVictoriaCuramIII
 """
 
-#the daily dose maker!
+#This is a formatting tool for CSV files
+#Database management tool
+
 from pandas import read_csv
 import pandas as pd
 import os
