@@ -8,8 +8,8 @@ from pandas import read_csv
 import pandas as pd
 import os
 
-#This file does not yet recognize files with 'Stockdiv.csv' titles
-#Be aware of assignment
+#This is a formatting tool for database management
+
 CSVfiles = os.listdir('F:\\Users\\AmatVictoriaCuram\\TemporaryDiv')
 ranger = range(0,len(CSVfiles))
 for i in ranger:
