@@ -5,7 +5,9 @@ Created on Wed Jun 14 14:34:43 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a summary statistic tool for portfolio analysis
 #really gnarly covariance matrix
+
 import pandas as pd
 import os
 
