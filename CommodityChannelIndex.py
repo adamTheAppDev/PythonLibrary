@@ -2,6 +2,8 @@
 Spyder Editor
 """
 
+#This is a technical analysis tool
+
 from DatabaseGrabber import DatabaseGrabber
 ticker = 'IWM'
 constant = .02
