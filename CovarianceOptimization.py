@@ -7,6 +7,7 @@ Created on Wed Jun 14 23:55:18 2017
 
 #This is a portfolio statistic tool based on Markowitz mean variance optimization
 #turn covariance matrix into max sharpe & minimum variance
+
 import pandas as pd
 from DatabaseGrabber import DatabaseGrabber
 import numpy as np
