@@ -1,6 +1,10 @@
 """
 Spyder Editor
 """
+
+#pandas_datareader is deprecated, use YahooGrabber
+#This is a technical analysis tool
+
 import numpy as np
 from pandas_datareader import data
 ticker = '^GSPC'
