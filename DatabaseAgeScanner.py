@@ -4,6 +4,8 @@ Created on Tue Feb 28 23:29:44 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is an older iteration of a database scanning and sorting tool
 #Get modules
 def DatabaseAgeScanner(MinAge):
     from SAge import SAge
