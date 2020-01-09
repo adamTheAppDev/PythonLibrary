@@ -4,6 +4,9 @@ Created on Fri Aug 11 00:32:47 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a database management tool for use in batch file..
+
 import os
 #Clean up routine
 
@@ -17,4 +20,3 @@ tempCSV1 = 'F:\\Users\\AmatVictoriaCuram\\CSVtoSQL\\'
 fileList2 = os.listdir(tempCSV1)
 for d in fileList2:
     os.remove(tempCSV1 + "\\" + d)  
-    
