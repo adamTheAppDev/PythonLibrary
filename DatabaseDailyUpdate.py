@@ -4,6 +4,9 @@ Created on Sun May 21 14:32:32 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a shortened version of a database update tool
+
 import pandas as pd
 import time as t
 import webbrowser as web
