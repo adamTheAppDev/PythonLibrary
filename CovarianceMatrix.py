@@ -5,6 +5,10 @@ Created on Tue May  2 22:21:03 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a summary statistic tool
+#pandas_datareader is deprecated, use YahooGrabber
+#Add more tickers for fun
+
 from pandas_datareader import data
 import pandas as pd
 import numpy as np
