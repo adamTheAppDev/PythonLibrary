@@ -4,6 +4,10 @@ Created on Tue Feb 28 13:28:23 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#pandas_datareader is deprecated, use YahooGrabber
+#This is a summary statistic calculator
+
 import numpy as np
 from pandas_datareader import data
 def CoeffVar(s):
