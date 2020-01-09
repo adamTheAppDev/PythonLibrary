@@ -4,6 +4,9 @@ Created on Wed May  3 15:14:55 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a HTML parsing/scraping tool
+
 def CrumbCatcher():
 
     import requests 
