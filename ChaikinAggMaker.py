@@ -5,6 +5,7 @@ Created on Mon Apr  3 16:24:54 2017
 @author: AmatVictoriaCuramIII
 """
 
+#pandas_datareader is deprecated, use YahooGrabber
 #This is part of a kth fold optimization tool with Chaikin technical indicator
 
 #multiperiod tester
