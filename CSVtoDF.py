@@ -4,6 +4,9 @@ Created on Sun May 21 11:47:12 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a formatting tool for database management
+
 from pandas import read_csv
 import pandas as pd
 import os
