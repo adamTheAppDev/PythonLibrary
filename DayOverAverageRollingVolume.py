@@ -4,6 +4,9 @@ Created on Tue Feb 28 13:31:53 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a summary statistic tool
+
 def DayOverAverageRollingVolume(s):
     window = 60
     s['AverageRollingVolume'] = s['Volume'].rolling(center=False, 
