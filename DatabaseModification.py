@@ -4,7 +4,9 @@ Created on Fri Jun  2 10:35:04 2017
 
 @author: AmatVictoriaCuramIII
 """
-#This is a database management tool with many technical indicator calculations
+
+#This is a database management/creation tool with many technical indicator calculations
+
 import pandas as pd
 import time as t
 #from datetime import date
