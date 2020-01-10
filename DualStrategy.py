@@ -5,6 +5,8 @@ Created on Sat Apr  8 11:41:28 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a two asset portfolio strategy tester from a kth fold optimization
+
 import numpy as np
 import pandas as pd
 NC = pd.read_pickle('SP500NCAdviceJuly07_50')
