@@ -5,6 +5,7 @@ Created on Sat Feb 23 18:13:31 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is an Edge Ratio calculator for single issue
 #N Period Edge Ratio Computation
 
 #Imports 
@@ -27,7 +28,7 @@ nDay = None
 
 #Variable assignment
 #Tickers for testing
-tickerlist = ['NUGT', 'JNUG']
+#tickerlist = ['NUGT', 'JNUG']
 ticker = 'NUGT'
 
 #For ATR + MFE/MFA calculation
