@@ -5,6 +5,8 @@ Created on Tue Apr 11 23:20:32 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is part of a kth fold optimization tool
+
 def DefModADXAdviceGiver(Aggregate, q):
     import numpy as np
     import pandas as pd
