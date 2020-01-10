@@ -5,7 +5,7 @@ Created on Fri Jun  2 10:35:04 2017
 @author: AmatVictoriaCuramIII
 """
 #This is a database management tool that adds qualitative data 
-#from external source to existing database
+#from external source to existing database as well as many technical calculations
 
 #Modify existing items
 import pandas as pd
