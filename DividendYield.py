@@ -5,7 +5,10 @@ Created on Thu Oct 12 00:29:28 2017
 @author: AmatVictoriaCuramIII
 """
 
+
+#This is a technical analysis tool based on last dividend
 #Div Yield Approximation
+
 def DividendYield(ticker):
     from YahooGrabber import YahooGrabber
     from YahooDivGrabber import YahooDivGrabber
