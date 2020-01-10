@@ -5,6 +5,8 @@ Created on Sun Mar 19 20:59:29 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is part of a kth fold optimization tool
+
 import numpy as np
 import os
 os.chdir('C:\\Users\\AmatVictoriaCuramIII\\Desktop\\Python')
