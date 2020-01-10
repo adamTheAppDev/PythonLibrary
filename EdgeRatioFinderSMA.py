@@ -5,8 +5,9 @@ Created on Fri Feb 16 15:57:24 2018
 @author: AmatVictoriaCuramIII
 """
 
+#This is an Edge Ratio calculator for single issue
+#May be deprecated see ERatioSingleIssueDonchianTrendIII.py
 #SMA edge ratio w/ VIX
-#Surprise, it's a complete edgeratio finder
 
 from YahooGrabber import YahooGrabber
 import numpy as np
