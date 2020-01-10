@@ -6,6 +6,8 @@ Created on Tue Dec 19 19:17:24 2017
 """
 
 #doji finder, its sketchy.
+#This is a techincal analysis tool and strategy tester
+
 #modules
 from YahooGrabber import YahooGrabber
 import numpy as np
