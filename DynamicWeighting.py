@@ -6,7 +6,8 @@ Created on Mon Sep  4 23:29:15 2017
 """
 
 #This is a two asset weighting/testing tool, it has a reallocation
-#method which is not suitable for real life probably..
+#method based on drawdown which may not be suitable for real life
+#Probably some curve fitting going on here.
 
 #Dynamic Weighting
 
