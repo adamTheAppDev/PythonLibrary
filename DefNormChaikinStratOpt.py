@@ -4,6 +4,9 @@ Created on Tue Apr  4 11:01:58 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a brute force optimization tool that is part of a kth fold optimization tool
+
 def DefNormChaikinStratOpt(ticker,start,end):
     import numpy as np
     from pandas_datareader import data
