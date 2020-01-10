@@ -4,6 +4,9 @@ Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a brute force optimization single asset strategy tester
+
 import numpy as np
 import random as rand
 import pandas as pd
