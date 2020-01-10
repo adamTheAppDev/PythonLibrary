@@ -5,6 +5,9 @@ Created on Mon Sep  4 23:29:15 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a two asset weighting/testing tool, it has a reallocation
+#method which is not suitable for real life probably..
+
 #Dynamic Weighting
 
 import numpy as np
@@ -29,7 +32,7 @@ Ticker2 = 'VXX' #Long Position
 Asset1 = DatabaseGrabber(Ticker1)
 Asset2 = DatabaseGrabber(Ticker2)
 
-##Grab data post request
+#Grab data post request
 
 #Asset1 = YahooGrabber()
 #Asset2 = YahooGrabber()
@@ -51,7 +54,7 @@ else:
 #Asset2 = Asset2[-100:]
 
 #Log Returns
-#
+
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
 Asset2['LogRet'] = np.log(Asset2['Adj Close']/Asset2['Adj Close'].shift(1))
