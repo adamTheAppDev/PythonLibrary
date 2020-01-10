@@ -4,7 +4,7 @@ Created on Fri Jun  2 10:35:04 2017
 
 @author: AmatVictoriaCuramIII
 """
-#The power comes from within you
+#This is a database management tool with many technical indicator calculations
 import pandas as pd
 import time as t
 #from datetime import date
