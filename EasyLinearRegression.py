@@ -5,7 +5,9 @@ Created on Mon Oct 21 21:28:54 2019
 @author: AmatVictoriaCuramIII
 """
 
-#Easy linear regression
+#This is from a book written in part by https://github.com/amueller 
+#Easy linear regression using the mglearn datasets
+
 from sklearn.linear_model import LinearRegression
 import mglearn
 from sklearn.model_selection import train_test_split
