@@ -6,7 +6,7 @@ Created on Tue Feb 28 23:29:44 2017
 """
 
 #This is a database scanning and sorting tool
-#Lists all stock tickers that pass the scan
+#Lists and sorts all stock tickers that pass the scan
 
 #Get modules
 
