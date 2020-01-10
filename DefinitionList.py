@@ -4,6 +4,10 @@ Created on Mon Sep 19 21:45:57 2016
 
 @author: AmatVictoriaCuramIII
 """
+
+#When executed, this program is just a database scanner. 
+#Nothing real special. 
+
 #Get modules
 import numpy as np
 import pandas.io.data as web
