@@ -4,7 +4,8 @@ Created on Fri Jun  2 10:35:04 2017
 
 @author: AmatVictoriaCuramIII
 """
-#The power comes from within you
+#This is a database management tool that adds qualitative data 
+#from external source to existing database
 
 #Modify existing items
 import pandas as pd
