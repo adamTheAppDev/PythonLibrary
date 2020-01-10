@@ -6,7 +6,7 @@ Created on Mon Sep  4 23:29:15 2017
 """
 
 #This is a two asset strategy tester with a brute force optimization and 
-#a reallocation based on drawdown, probably not suitable for real life
+#a reallocation based on drawdown, may not be suitable for real life
 #Potentially a lot of curve fitting going on here. 
 
 #Dynamic Weighting
