@@ -5,6 +5,8 @@ Created on Thu Jun  8 12:37:08 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a database management/query tool 
+
 def DatabaseGrabber(ticker):    
     import pandas as pd
     dataframe = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\Database\\' + 
