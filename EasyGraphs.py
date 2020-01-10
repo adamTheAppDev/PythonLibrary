@@ -5,6 +5,8 @@ Created on Thu Feb 21 20:24:43 2019
 @author: AmatVictoriaCuramIII
 """
 
+#Basic graphing tool for candlestick charts using matplotlib
+
 #graphs
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
