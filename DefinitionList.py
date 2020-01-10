@@ -6,7 +6,7 @@ Created on Mon Sep 19 21:45:57 2016
 """
 
 #When executed, this program is just a database scanner. 
-#Nothing real special. 
+#Nothing real special. Didn't actually finish whatever it was I set to do here..
 
 #Get modules
 import numpy as np
