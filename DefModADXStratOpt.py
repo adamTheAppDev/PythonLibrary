@@ -5,6 +5,8 @@ Created on Sun Apr  9 16:36:25 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a brute force optimization tool that is part of a kth fold optimization tool
+
 import pandas as pd
 from pandas_datareader import data
 import numpy as np
