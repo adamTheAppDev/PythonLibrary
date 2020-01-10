@@ -4,6 +4,9 @@ Created on Sun Apr 30 01:24:05 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a brute force optimization tool that is part of a kth fold optimization tool
+
 def DefModADXControlledStrategyOptimizer(ranger2, s):
     import numpy as np
     import pandas as pd
