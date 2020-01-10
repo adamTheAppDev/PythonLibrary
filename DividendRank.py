@@ -5,7 +5,8 @@ Created on Tue Feb 28 23:29:44 2017
 @author: AmatVictoriaCuramIII
 """
 
-#This lists all stock tickers that pass the scan
+#This is a database scanning and sorting tool
+#Lists all stock tickers that pass the scan
 
 #Get modules
 
