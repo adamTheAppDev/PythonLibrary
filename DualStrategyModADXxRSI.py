@@ -5,6 +5,8 @@ Created on Wed Apr 12 22:36:20 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a two asset trading model
+
 import numpy as np
 import pandas as pd
 from pandas_datareader import data
