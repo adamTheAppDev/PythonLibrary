@@ -5,6 +5,8 @@ Created on Sat Feb 23 18:13:31 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is an Edge Ratio calculator for single issue
+#May be deprecated see E Ratio Multi Issue 
 #N Period Edge Ratio Computation
 
 #Imports 
