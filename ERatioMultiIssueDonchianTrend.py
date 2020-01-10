@@ -5,6 +5,9 @@ Created on Sat Feb 23 18:13:31 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is an Edge Ratio calculator + Graphics for multiple tickers
+#Tests entry signal edge over N Periods
+
 #N Period Edge Ratio Computation
 
 #Imports 
