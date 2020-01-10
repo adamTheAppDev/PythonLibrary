@@ -6,6 +6,7 @@ Created on Wed Jul 11 09:04:55 2018
 """
 #Developed in Python 3.5 
 
+#This is a trading model/strategy tester
 #R Multiple Finder; Trade Data Tracking
 
 #Import libraries
