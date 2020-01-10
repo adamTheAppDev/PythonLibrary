@@ -6,6 +6,7 @@ Created on Wed Jun 14 10:51:40 2017
 """
 
 #This program is not concise, but it is a faster way 
+#Essentially a database query tool that returns specific columns from all tickers in database
 
 #column grabber and concatenation
 from DatabaseGrabber import DatabaseGrabber
