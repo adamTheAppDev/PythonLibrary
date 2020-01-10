@@ -4,6 +4,9 @@ Created on Thu Apr  6 13:41:57 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is part of a kth fold optimization tool
+
 def DefNCAdviceGiver(Aggregate, q):
     import numpy as np
     import pandas as pd
