@@ -4,7 +4,9 @@ Created on Tue Apr 18 08:43:33 2017
 
 @author: AmatVictoriaCuramIII
 """
-#menu selection lab pt 2
+
+#Menu selection with input
+
 print('        Select a planet')
 print('1. Mercury')
 print('2. Venus')
