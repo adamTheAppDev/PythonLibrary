@@ -6,13 +6,16 @@ Created on Thu Jan 10 16:39:32 2019
 """
 
 #Entity Creation
+#This is an I/O process that sets up folders 
 #Modify the structure and contents of the directory hierarchy to be populated by processes
 
 #Imports
 import os 
 
-#Working Directory
+#Working Directory, standard destination can be used to reduce redundance and standardize for other users
+
 WD = "C:\\Jared\\Users\\Desktop\\JDL"
+
 #Create the folder from which everything flows.
 if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL'):
     os.makedirs('F:\\Users\\AmatVictoriaCuram\\FDL')
