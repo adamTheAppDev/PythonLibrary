@@ -1,6 +1,10 @@
 """
 Spyder editor
 """
+
+#pandas_datareader is deprecated, use YahooGrabber
+#This calculation of EMA is long winded and slow
+
 from pandas_datareader import data
 import numpy as np
 import pandas as pd
