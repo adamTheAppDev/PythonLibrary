@@ -4,6 +4,9 @@ Created on Wed Apr  5 21:41:36 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#EZ sorting, gross, let's make a deboaz tree instead.
+
 import pandas as pd
 #import numpy as np
 import random as rand
