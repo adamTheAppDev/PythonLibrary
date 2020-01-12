@@ -5,6 +5,9 @@ Created on Thu Aug 25 10:19:07 2016
 @author: AmatVictoriaCuramIII
 """
 
+#This is a strategy tester, probably from the hilpisch book.
+#pandas_datareader is deprecated, use YahooGrabber
+
 import numpy as np
 import pandas as pd
 from pandas_datareader import data
