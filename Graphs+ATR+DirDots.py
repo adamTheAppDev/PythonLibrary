@@ -5,6 +5,8 @@ Created on Tue Feb  5 19:50:19 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is a graphical display tool, nice.
+
 #Graphs
 from YahooGrabber import YahooGrabber
 from YahooSourceDailyGrabber import YahooSourceDailyGrabber
@@ -12,8 +14,6 @@ import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
 import numpy as np
-
-
 
 #Acquire input data
 string = 'STX'
