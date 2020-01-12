@@ -5,6 +5,9 @@ Created on Thu Feb 21 21:34:44 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is an Edge Ratio calculator for single issue
+#May be deprecated see ERatioSingleIssueDonchianTrendIII.py
+
 #E-ratio SMA no filter
 from YahooGrabber import YahooGrabber
 import numpy as np
