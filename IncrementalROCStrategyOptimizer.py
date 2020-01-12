@@ -7,6 +7,7 @@ Created on Sun Jul 22 19:13:12 2018
 
 #This is a brute force optimizer for a short only, martingale style, volatility trading strategy
 #that takes incrementally larger positions
+
 import numpy as np
 import random as rand
 import pandas as pd
