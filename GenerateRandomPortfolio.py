@@ -5,6 +5,8 @@ Created on Fri Jun 16 00:57:19 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a portfolio analysis tool, must have all tickers log returns in a table to run 
+
 #Generate Random Portfolio
 def GenerateRandomPortfolio(logret):
     import pandas as pd
