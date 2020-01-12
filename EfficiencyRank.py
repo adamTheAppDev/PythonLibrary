@@ -5,15 +5,16 @@ Created on Tue Feb 28 23:29:44 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a sorting and database query tool
 #This lists all stock tickers that pass the scan
 
-#Get modules
-
+#Import modules
 from DatabaseGrabber import DatabaseGrabber
 import os
 from YahooSourceDailyGrabber import YahooSourceDailyGrabber
 import pandas as pd
-#Got to get that payback!!
+
+#Variable assignment
 Counter = 0
 Empty = []
 Empty2 = []
