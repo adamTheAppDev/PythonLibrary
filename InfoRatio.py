@@ -4,6 +4,10 @@ Created on Mon Sep  5 16:16:10 2016
 
 @author: AmatVictoriaCuramIII
 """
+
+#pandas_datareader is deprecated use YahooGrabber
+#Information ratio is a summary statistic
+
 import numpy as np
 import pandas.io.data as web
 from pandas_datareader import data
