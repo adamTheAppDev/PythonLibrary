@@ -5,6 +5,8 @@ Created on Tue Feb  5 19:50:19 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is a graphical display tool with a trading model inside
+
 #Graphs
 #from YahooGrabber import YahooGrabber
 from YahooSourceDailyGrabber import YahooSourceDailyGrabber
