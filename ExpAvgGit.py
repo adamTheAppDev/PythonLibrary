@@ -3,7 +3,7 @@ Spyder editor
 """
 
 #pandas_datareader is deprecated, use YahooGrabber
-#This calculation of EMA is long winded and slow
+#This calculation of EMA is non-pythonic/inefficient/process intensive
 
 from pandas_datareader import data
 import numpy as np
