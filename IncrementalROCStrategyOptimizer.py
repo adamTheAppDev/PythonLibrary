@@ -5,7 +5,8 @@ Created on Sun Jul 22 19:13:12 2018
 @author: AmatVictoriaCuramIII
 """
 
-#Drag w/ Increment
+#This is a brute force optimizer for a short only, martingale style, volatility trading strategy
+
 import numpy as np
 import random as rand
 import pandas as pd
