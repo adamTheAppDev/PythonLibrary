@@ -5,6 +5,9 @@ Created on Mon Jun 10 17:00:32 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is an unfinished scraping and formatting tool for use in manufacturing operations
+#if supplier template is refined, this process could be completed with ease
+
 #Cut Pak quote generator for Jujin PDFs
 
 #Import
