@@ -4,6 +4,9 @@ Created on Thu Apr 13 23:39:56 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#Input, while loops, functions
+
 def GetANumber(LowerBound, UpperBound):
     BadInput = True
     while BadInput == True:
