@@ -6,7 +6,7 @@ Created on Thu Jan 10 16:39:32 2019
 """
 
 #Entity Creation
-#This is an I/O process that sets up folders 
+#This is an organizational tool, an I/O process that sets up folders
 #Modify the structure and contents of the directory hierarchy to be populated by processes
 #Refer to this program when writing/saving data from new apps
 
