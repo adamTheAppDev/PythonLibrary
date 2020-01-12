@@ -5,7 +5,7 @@ Created on Tue Feb 28 23:29:44 2017
 @author: AmatVictoriaCuramIII
 """
 
-#This is a sorting and database query tool
+#This is a sorting and database query tool, technical indicators must be populated already
 #This lists all stock tickers that pass the scan
 
 #Import modules
