@@ -5,7 +5,7 @@ Created on Thu Aug 25 10:19:07 2016
 @author: AmatVictoriaCuramIII
 """
 
-#This is a strategy tester, probably from the hilpisch book.
+#This is a strategy tester, probably from the Yves Hilpisch Python for Finance book.
 #pandas_datareader is deprecated, use YahooGrabber
 
 import numpy as np
