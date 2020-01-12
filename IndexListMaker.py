@@ -4,6 +4,10 @@ Created on Fri May 19 14:02:48 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a formatting tool for adding carrots to index names 
+#so they can be added to SymbolList for scraping/dataRequisition
+
 import pandas as pd 
 data = pd.read_csv('Indicies.txt',  sep="\t",header = None,
                   names=['Ticker', 'EverythingElse'])
