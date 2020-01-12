@@ -5,8 +5,8 @@ Created on Sun Oct  6 19:04:59 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is a model from https://github.com/amueller/ 
 #Supervised Learning - Two feature dataset with Binary Classification
-
 #K Nearest Neighbor
 
 #import sys
