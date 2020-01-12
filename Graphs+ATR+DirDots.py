@@ -5,7 +5,8 @@ Created on Tue Feb  5 19:50:19 2019
 @author: AmatVictoriaCuramIII
 """
 
-#This is a graphical display tool for candlestick charts + indicators, nice.
+#This is a graphical display tool for candlestick charts + indicators
+#It has a trading model inside, nice.
 
 #Graphs
 from YahooGrabber import YahooGrabber
