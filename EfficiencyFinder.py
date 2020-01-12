@@ -6,6 +6,8 @@ Created on Tue Aug  7 13:54:45 2018
 """
 
 #Efficiency by Tharp
+#This is a summary statistic/technical analysis tool
+
 import numpy as np
 import random as rand
 import pandas as pd
