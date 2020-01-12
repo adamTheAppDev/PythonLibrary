@@ -4,7 +4,9 @@ Created on Tue Apr 18 08:00:58 2017
 
 @author: AmatVictoriaCuramIII
 """
-#menu selection lab
+
+#Menu selection with input
+
 print('1. Calculate the area of a circle.')
 print('2. Calculate the area of a rectangle.')
 print('3. Calculate the area of a triangle.')
