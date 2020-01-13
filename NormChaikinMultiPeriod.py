@@ -4,7 +4,11 @@ Created on Mon Apr  3 16:08:47 2017
 
 @author: AmatVictoriaCuramIII
 """
-#lock and load
+
+#This is part of a kth fold optimization tool
+#Pandas_datareader is deprecated, use YahooGrabber
+
+#Import modules
 #import numpy as np
 #from pandas_datareader import data
 import pandas as pd
