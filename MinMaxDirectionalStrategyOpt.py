@@ -4,7 +4,9 @@ Created on Fri Mar  2 14:48:09 2018
 
 @author: AmatVictoriaCuramIII
 """
-#pseudoturtle
+
+#This is a brute force optimizer for a donchian trend strategy
+
 from YahooGrabber import YahooGrabber
 import numpy as np
 import time as t
