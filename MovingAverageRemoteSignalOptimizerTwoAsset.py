@@ -5,7 +5,7 @@ Created on Wed Aug 30 19:07:37 2017
 @author: AmatVictoriaCuramIII
 """
 
-#This is a brute force optimization and trading strategy based on a 'remote' signal
+#This is a brute force optimization, portfolio analysis, and trading strategy based on a 'remote' signal
 
 import numpy as np
 import random as rand
