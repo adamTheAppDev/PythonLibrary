@@ -5,6 +5,7 @@ Created on Tue Feb 28 23:29:44 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a database scanning/query tool
 #This lists all stock tickers that pass the scan
 
 #Get modules
@@ -22,7 +23,6 @@ from DatabaseGrabber import DatabaseGrabber
 from SCommodityChannelIndex import SCommodityChannelIndex
 import os
 
-#Got to get that payback!!
 counter = 1
 #import the CSV
 #df = read_csv('goodsymbols.csv', sep = ',')
