@@ -2,8 +2,11 @@
 """
 Created on Wed Aug 30 19:07:37 2017
 
-@author: AmatVictoriaCuramIII
+@author: AmatVictoriaCuram
 """
+
+#This is strategy tester for spot VIX + VX futures strategy - 2 asset portfolio
+
 import numpy as np
 import random as rand
 import pandas as pd
