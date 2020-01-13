@@ -4,6 +4,10 @@ Created on Tue Feb 28 13:49:17 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#pandas_datareader is deprecated, use YahooGrabber
+#This is a strategy tester from Yves Hilpisch's Python Finance Book
+
 import numpy as np
 from pandas_datareader import data
 def MovingAverages(s):
