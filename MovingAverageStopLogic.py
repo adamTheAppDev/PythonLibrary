@@ -4,6 +4,10 @@ Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is an attempt to implement stop losses and profit targets into a trading strategy
+#It is not accurate, see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py for properly constructed model
+
 import numpy as np
 import random as rand
 import pandas as pd
