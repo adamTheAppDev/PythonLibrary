@@ -5,6 +5,7 @@ Created on Fri Jun 14 14:36:11 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is a PCA model for volatility analysis, need to add a trading model behind it.
 #PCA draft for ROC to fwd returns PCA
 
 #Import modules
