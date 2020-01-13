@@ -5,7 +5,7 @@ Created on Fri May 19 16:53:41 2017
 @author: AmatVictoriaCuramIII
 """
 
-#This is an HTML scraper and formatting tool for database construction
+#This is an HTML scraper and formatting tool for time series database construction
 
 from pandas import read_csv 
 import requests
