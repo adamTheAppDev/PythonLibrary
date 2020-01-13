@@ -5,6 +5,8 @@ Created on Wed Apr 12 20:05:59 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is part of a kth fold optimization tool
+
 import numpy as np
 import pandas as pd
 import time as t
