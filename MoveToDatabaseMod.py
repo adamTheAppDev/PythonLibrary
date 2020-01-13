@@ -6,7 +6,7 @@ Created on Sun Jun 11 19:26:12 2017
 """
 
 #This is mostly a technical analysis tool
-
+#provides the basic structure/idea for Database Modification
 
 import numpy as np
 import pandas as pd
