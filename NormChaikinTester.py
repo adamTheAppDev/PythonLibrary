@@ -4,6 +4,10 @@ Created on Sat Apr  1 14:31:49 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a strategy tester
+#Pandas_datareader is deprecated, use YahooGrabber
+
 import numpy as np
 from pandas_datareader import data
 import pandas as pd
