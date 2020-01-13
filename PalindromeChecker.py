@@ -4,6 +4,9 @@ Created on Tue May  9 23:00:14 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This app checks words to see if they are palindromes
+
 def main():
     print('What palindrome would you like to test?')
     string = input('')
