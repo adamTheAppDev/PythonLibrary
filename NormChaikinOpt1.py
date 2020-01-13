@@ -5,6 +5,9 @@ Created on Tue Apr  4 02:25:29 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a strategy tester with a brute force optimizer
+#Pandas_datareader is deprecated, use YahooGrabber
+
 import numpy as np
 from pandas_datareader import data
 import random as rand
