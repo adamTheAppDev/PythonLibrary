@@ -6,7 +6,7 @@ Created on Wed Aug 30 19:07:37 2017
 """
 
 #This is strategy tester for spot VIX + VX futures strategy - 2 asset portfolio
-
+#Looks like STD of STD divergenge is the signal, interesting..
 import numpy as np
 import random as rand
 import pandas as pd
