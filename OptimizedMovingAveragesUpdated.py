@@ -6,8 +6,9 @@ Created on Thu Mar  2 15:26:12 2017
 """
 
 #This is a strategy tester with a brute force optimizer
+#Pandas_datareader is deprecated, use YahooGrabber
 
-#This will be a function of 
+#Random variable params
 #a random.int between 1 and 60 
 #b random.int between 1 and 504
 #c random between .0001 and .1
