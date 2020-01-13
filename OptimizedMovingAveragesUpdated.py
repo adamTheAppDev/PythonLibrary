@@ -4,6 +4,9 @@ Created on Thu Mar  2 15:26:12 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a strategy tester with a brute force optimizer
+
 #This will be a function of 
 #a random.int between 1 and 60 
 #b random.int between 1 and 504
