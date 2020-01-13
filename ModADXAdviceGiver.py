@@ -5,6 +5,9 @@ Created on Sat Apr 15 10:44:11 2017
 @author: AmatVictoriaCuramIII
 """
 
+#pandas_datareader is deprecated, use YahooGrabber
+#This is part of a kth fold optimization tool
+
 from pandas_datareader import data
 import time as t    
 import numpy as np
