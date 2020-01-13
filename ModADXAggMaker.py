@@ -4,7 +4,10 @@ Created on Mon Apr  3 16:24:54 2017
 
 @author: AmatVictoriaCuramIII
 """
-#multiperiod tester
+
+#pandas_datareader is deprecated, use YahooGrabber
+#This is part of a kth fold optimization tool
+
 import numpy as np
 import pandas as pd
 import time as t
