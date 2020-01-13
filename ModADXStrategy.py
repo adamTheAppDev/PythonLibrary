@@ -5,6 +5,9 @@ Created on Mon Apr 10 18:28:30 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a strategy tester
+#pandas_datareader is deprecated, use YahooGrabber
+
 import pandas as pd
 from pandas_datareader import data
 import numpy as np
