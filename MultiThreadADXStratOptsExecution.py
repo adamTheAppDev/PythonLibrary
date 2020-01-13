@@ -4,6 +4,9 @@ Created on Tue Apr 18 14:52:56 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#Part of a multithreading app to increase brute force optimization speed.
+
 from multithreadADXStratOpt import multithreadADXStratOpt
 import numba as nb
 import time as t
