@@ -5,7 +5,7 @@ Created on Mon Feb  5 15:03:47 2018
 @author: AmatVictoriaCuramIII
 """
 
-#Systematic Volatility Model
+#This is a trading strategy that has a reallocation based on max drawdown
 
 import numpy as np
 import random as rand
