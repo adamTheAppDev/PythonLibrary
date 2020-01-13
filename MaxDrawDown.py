@@ -4,11 +4,14 @@ Created on Sun Sep  3 22:37:50 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a max drawdown calculator that was copied from unknown source.
+
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
 import pandas as pd
 from WindowedView import WindowedView
-#Stolen rolling drawdown
+
 def MaxDrawDown(x, window_size, min_periods=1):
     """Compute the rolling maximum drawdown of `x`.
 
