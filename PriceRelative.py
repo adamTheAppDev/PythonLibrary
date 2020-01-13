@@ -5,6 +5,9 @@ Created on Sat May 13 01:28:14 2017
 @author: AmatVictoriaCuramIII
 """
 
+#The structure here is abominable, but this is a portfolio analysis tool 
+#based on price relative info
+#Pandas_datareader is deprecated, use YahooGrabber
 import numpy as np
 from pandas_datareader import data
 import random as rand
@@ -75,70 +78,8 @@ for r in ranger:
         
 print(maxdd)
     
-    
 correl =  pd.DataFrame()
 correl['VXX'] = VXX['Pass']
 correl['UVXY'] = UVXY['Pass']
 #print(correl.corr())
 wannabecorr = correl['VXX'].rolling(window = 40).corr(correl['UVXY'])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#s3['Position'] = .5
-#s3['Pass'] = s3['LogRet'] * s3['Position']
-#s4['LogRet'] = np.log(s4['Adj Close']/s4['Adj Close'].shift(1))
-#s4['LogRet'] = s4['LogRet'].fillna(0)
-#s4['Position'] = .5
-#s4['Pass'] = s4['LogRet'] * s4['Position']
-#trim = len(s3) - len(s4)
-#s3 = s3[trim:]
-#s3['Meter'] = s['Close']/s2['Close']
-#s3['LogRet'] = np.log(s3['Adj Close']/s3['Adj Close'].shift(1))
-#s3['LogRet'] = s3['LogRet'].fillna(0)
-#s3['Meter'] = s['Close']/s2['Close']
-#s3['Meter'].plot(grid=True, figsize=(8, 5))
-#s3['Touch'] = np.where(s3['Meter'] < 2, -1, 0) # short signal
-#s3['Touch'] = np.where(s3['Meter'] > 1.048121, 1, s3['Touch']) #flat signal
-#s3['Sustain'] = np.where(s3['Touch'].shift(1) == -1, -1, 0) #short
-#s3['Sustain'] = np.where(s3['Sustain'].shift(1) == -1, -1, #stays
-#                                     s3['Sustain']) #short
-#s3['Sustain'] = np.where(s3['Touch'].shift(1) == 0, 0, 0) #flat
-#s3['Sustain'] = np.where(s3['Sustain'].shift(1) == 0, 0, #stays
-#                                     s3['Sustain']) #flat
-##    s3['Sustain'] = np.where(s3['Meter'] < .8, 0, s3['Sustain']) #cover short
-#s3['Regime'] = s3['Touch'] + s3['Sustain']
-#s3['Strategy'] = ((s3['Regime']).shift(1)*s3['Pass']*-1) + ((s3['Regime']
-#                                ).shift(1)*s4['Pass'])
-#s3['Strategy'] = s3['Strategy'].fillna(0)
-#s3['NegLogReturns'] = s3['LogRet'] * -1  
-#s3['ShortReturns'] = (s3['Pass']) + (s4['Pass']*-1)
-#sharpe = (s3['Strategy'].mean()-s3['ShortReturns'].mean())/s3['Strategy'].std()
-#print(sharpe)
-#s3[['NegLogReturns', 'Strategy']].cumsum().apply(np.exp).plot(grid=True,
-#                                                figsize=(8, 5))
