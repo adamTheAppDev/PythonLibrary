@@ -4,6 +4,10 @@ Created on Tue Apr 11 23:32:44 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is part of a kth fold optimization tool
+#pandas_datareader is deprecated, use YahooGrabber
+
 from DefModADXControlledStrategyOptimizer import DefModADXControlledStrategyOptimizer
 import numpy as np
 import pandas as pd
