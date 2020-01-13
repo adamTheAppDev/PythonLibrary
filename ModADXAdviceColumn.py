@@ -6,6 +6,7 @@ Created on Tue Apr 11 23:32:44 2017
 """
 
 #pandas_datareader is deprecated, use YahooGrabber
+#This is part of a kth fold optimization
 
 from DefModADXAdviceGiver import DefModADXAdviceGiver
 import numpy as np
