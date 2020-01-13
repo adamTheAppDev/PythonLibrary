@@ -4,8 +4,13 @@ Created on Sun Apr  9 16:36:25 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#Part of a multithreading app to increase processing speed for brute force optimization
+#pandas_datareader is deprecated, use YahooGrabber
+
 from numba import jit
 @jit
+
 def multithreadADXStratOpt():
     import pandas as pd
     from pandas_datareader import data
