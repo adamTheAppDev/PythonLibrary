@@ -4,6 +4,10 @@ Created on Tue Feb 28 23:23:57 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is similar to a remote signal - this is a tester with a brute force optimizer
+#Pandas_datareader is deprecated, use YahooGrabber
+
 import numpy as np
 from pandas_datareader import data
 import random as rand
