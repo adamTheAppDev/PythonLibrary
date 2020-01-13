@@ -5,6 +5,8 @@ Created on Tue Apr 11 23:32:44 2017
 @author: AmatVictoriaCuramIII
 """
 
+#pandas_datareader is deprecated, use YahooGrabber
+
 from DefModADXAdviceGiver import DefModADXAdviceGiver
 import numpy as np
 import pandas as pd
