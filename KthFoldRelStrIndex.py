@@ -5,6 +5,8 @@ Created on Tue Mar 21 00:14:40 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a tester for part a kth fold optimization.
+
 #from DefRSIPredictor import DefRSIPredictor
 import numpy as np
 import pandas as pd
