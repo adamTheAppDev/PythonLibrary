@@ -3,8 +3,10 @@
 Created on Thu Jun  8 12:37:08 2017
 
 @author: Adam Reinhold Von Fisher - adamrvfisher@gmail.com 
-linkedin.com/in/adamrvfisher - github.com/adamrvfisher/TechnicalAnalysisLibrary
+linkedin.com/in/adamrvfisher
 """
+
+#This is a modified version of DatabaseGrabber - a query tool
 
 def ModDatabaseGrabber(ticker):    
     import pandas as pd 
