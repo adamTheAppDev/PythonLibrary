@@ -8,6 +8,7 @@ Created on Sat May 13 01:28:14 2017
 #The structure here is abominable, but this is a portfolio analysis tool 
 #based on price relative info
 #Pandas_datareader is deprecated, use YahooGrabber
+
 import numpy as np
 from pandas_datareader import data
 import random as rand
