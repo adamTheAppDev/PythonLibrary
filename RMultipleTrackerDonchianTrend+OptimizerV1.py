@@ -6,6 +6,9 @@ Created on Wed Jul 11 09:04:55 2018
 """
 #Developed in Python 3.5 
 
+#This is a trading strategy model with a brute force optimizer - under construction
+#also see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
+
 #R Multiple Finder; Trade Data Tracking; Graphs
 
 #Import libraries
@@ -44,7 +47,6 @@ ParamsAndResultsList = []
 Trades = pd.DataFrame()
 ParamsAndResults = pd.DataFrame()
 #Num iterations for optimizer
-
 iterations = range(0,15) 
  
 #Constraints in percentages; both unimplemented
