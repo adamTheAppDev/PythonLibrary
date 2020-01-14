@@ -4,6 +4,9 @@ Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a two asset portfolio/strategy tester with a brute force optimizer - ATR is incorporated in signal
+
 import numpy as np
 import random as rand
 import pandas as pd
@@ -24,7 +27,7 @@ Ticker2 = '^VIX'
 #Remote Signal
 Ticker3 = '^VIX'
 
-#Here we go
+#Data requisition
 Asset1 = YahooGrabber(Ticker1)
 Asset2 = YahooGrabber(Ticker2)
 
@@ -49,7 +52,6 @@ Asset3 = Asset3[-len(Asset2):]
 #Asset2 = Asset2[-600:]
 
 #Log Returns
-
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
 Asset2['LogRet'] = np.log(Asset2['Adj Close']/Asset2['Adj Close'].shift(1))
