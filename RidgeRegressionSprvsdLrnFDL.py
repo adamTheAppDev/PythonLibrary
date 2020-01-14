@@ -5,9 +5,8 @@ Created on Sun Oct  6 19:04:59 2019
 @author: AmatVictoriaCuramIII
 """
 
-#This is a ML model applied to price/technical data 
+#This is a ML model applied to price/technical data - X values are highly correlated, beware
 #Supervised Learning FDL Data Ridge Regression
-
 
 #import sys
 #import sklearn
@@ -24,7 +23,6 @@ from sklearn.linear_model import LinearRegression
 from YahooSourceDailyGrabber import YahooSourceDailyGrabber
 
 #load data; 
-
 data = YahooSourceDailyGrabber('TQQQ')
 
 columntuple = tuple(data.columns[25:])
