@@ -5,8 +5,10 @@ Created on Sun Oct  6 19:04:59 2019
 @author: AmatVictoriaCuramIII
 """
 
-#Supervised Learning Binary Classification Wisconsin Data Ridge Regression
-#bruh
+#This is a ML model applied to price/technical data 
+#Supervised Learning FDL Data Ridge Regression
+
+
 #import sys
 #import sklearn
 import numpy as np
@@ -20,8 +22,6 @@ from sklearn.linear_model import Ridge
 from sklearn.linear_model import LinearRegression
 #from YahooGrabber import YahooGrabber
 from YahooSourceDailyGrabber import YahooSourceDailyGrabber
-
-
 
 #load data; 
 
