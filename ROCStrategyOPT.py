@@ -2,6 +2,8 @@
 Spyder Editor
 """
 
+#This is a strategy tester with a brute force optimizer
+
 from YahooGrabber import YahooGrabber
 import numpy as np
 import time as t
