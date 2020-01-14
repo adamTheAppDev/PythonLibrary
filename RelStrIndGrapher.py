@@ -5,6 +5,9 @@ Created on Tue Feb 28 14:00:21 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a strategy tester
+#pandas_datareader is deprecated, use YahooGrabber
+
 from pandas_datareader import data
 import numpy as np
 #def RelStrInd(s):
