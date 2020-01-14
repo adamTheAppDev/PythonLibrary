@@ -4,6 +4,11 @@ Created on Tue Feb 28 23:22:24 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is the first part of a kth fold optimization tool
+#Its definitely written out the long way
+#pandas_datareader is deprecated, use YahooGrabber
+
 #lock and load
 import numpy as np
 from pandas_datareader import data
