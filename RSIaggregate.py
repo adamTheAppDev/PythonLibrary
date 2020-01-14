@@ -5,6 +5,8 @@ Created on Tue Feb 28 14:00:21 2017
 @author: AmatVictoriaCuramIII
 """
 
+#this is part of a kth fold optimization tool with RSI indicator
+
 import numpy as np
 def RSIaggregate(s, Aggregate):
     Aggregate = Aggregate.loc[:,~Aggregate.columns.duplicated()]
