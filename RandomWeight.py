@@ -5,6 +5,8 @@ Created on Thu Jun 15 15:35:50 2017
 @author: AmatVictoriaCuramIII
 """
 
+#random (uniformly distributed) weighting tool...
+
 #Random Weights = 1
 def RandomWeight(num_assets):
     import numpy as np
