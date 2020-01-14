@@ -5,7 +5,9 @@ Created on Sat Apr  1 12:21:13 2017
 @author: AmatVictoriaCuramIII
 """
 
-#This is a technical analysis tool, main calculation stolen from the depths of the internet
+#This is a strategy tester with a brute force optimizer
+#Aroon calculation stolen from the depths of the internet after much frustration
+#pandas_datareader is deprecated, use YahooGrabber
 
 from pandas_datareader import data
 import pandas as pd
