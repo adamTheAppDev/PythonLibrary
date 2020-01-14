@@ -5,6 +5,10 @@ Created on Tue Feb 28 14:00:21 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is the middle part of a kth fold optimization tool
+#Its definitely written out the long way
+#pandas_datareader is deprecated, use YahooGrabber
+
 #from pandas_datareader import data
 import numpy as np
 import pandas as pd
