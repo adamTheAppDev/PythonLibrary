@@ -6,6 +6,9 @@ Created on Wed Jul 11 09:04:55 2018
 """
 #Developed in Python 3.5
 
+#This is a trading strategy model
+#Does not function properly see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
+
 #R Multiple Finder; Trade Tracking
 import numpy as np
 import random as rand
