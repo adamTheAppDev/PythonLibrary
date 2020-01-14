@@ -4,6 +4,9 @@ Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a two asset portfolio/strategy tester with a brute force optimizer
+
 import numpy as np
 import random as rand
 import pandas as pd
@@ -17,7 +20,6 @@ Start = t.time()
 Counter = 0
 
 #Input
-
 Ticker1 = 'UVXY'
 Ticker2 = '^VIX'
 
@@ -68,7 +70,7 @@ Asset3['Meter'] = (Asset3['Close']/Asset4['Close'])
 #Asset3 = Asset3[window:]
 
 #Brute Force Optimization
-iterations = range(0, 200000-----------------------------------------)
+iterations = range(0, 200000)
 
 for i in iterations:
     Counter = Counter + 1
@@ -95,8 +97,6 @@ for i in iterations:
     
     Portfolio['Asset1Pass'] = (Asset1['Pass']) * (-1) #Pass a short position
     Portfolio['Asset2Pass'] = (Asset2['Pass']) #* (-1)
-
-
     
     Portfolio['LongShort'] = (Portfolio['Asset1Pass']) + (Portfolio['Asset2Pass'])   
     if Portfolio['LongShort'].std() == 0:    
