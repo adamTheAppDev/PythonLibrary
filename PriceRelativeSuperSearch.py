@@ -22,7 +22,7 @@ start = t.time()
 counter = 0
 
 #the goal is to make a for loop to get all combinations of tickers and find 
-#predictable relationships/trends
+#predictable relationships/trends - This is not accomplished in this code, see speed dater..
 
 UVXY = DatabaseGrabber('UVXY')
 VXX = DatabaseGrabber('VXX')
