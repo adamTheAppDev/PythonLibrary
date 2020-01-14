@@ -5,7 +5,9 @@ Created on Sat Nov 10 15:53:34 2018
 @author: AmatVictoriaCuramIII
 """
 
+#This is a database management, I/O, and formatting tool
 #This will merge the qualitative data with the quantative data already in database
+
 #Import-ant
 from pandas import read_csv
 import pandas as pd
