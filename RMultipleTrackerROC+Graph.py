@@ -6,6 +6,9 @@ Created on Wed Jul 11 09:04:55 2018
 """
 #Developed in Python 3.5 
 
+#This is a trading strategy model with graphical display - under construction
+#also see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
+
 #R Multiple Finder; Trade Data Tracking; Graphs
 
 #Import libraries
@@ -21,7 +24,6 @@ import math
 import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
-
 
 #Inputs - OHLC data
 Ticker1 = 'UVXY'
