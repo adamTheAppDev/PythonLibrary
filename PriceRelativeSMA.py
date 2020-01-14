@@ -5,7 +5,7 @@ Created on Fri Jan 19 15:03:41 2018
 @author: AmatVictoriaCuramIII
 """
 
-#lets check out the drag in TBT, eh?
+#This is a two asset portfolio/strategy tester with a brute force optimizer - price relative SMA signal
 
 import numpy as np
 import random as rand
