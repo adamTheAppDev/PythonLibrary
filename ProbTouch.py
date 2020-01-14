@@ -4,6 +4,12 @@ Created on Sat Sep  3 23:51:14 2016
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a probability of touch calculator based on a random normal distribution
+#Equities over longer periods of time may be log normally distributed
+#Equities over shorter periods of time may be normally or uniformly distributed
+
+
 import scipy.stats as sp
 import numpy as np
 from pandas_datareader import data
