@@ -5,6 +5,8 @@ Created on Wed Aug 30 19:07:37 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a two asset portfolio/strategy tester with a brute force optimizer for volatility and leveraged tech equity ETFs
+
 import numpy as np
 from pandas_datareader import data
 import random as rand
