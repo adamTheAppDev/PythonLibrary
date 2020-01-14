@@ -15,7 +15,6 @@ from DatabaseGrabber import DatabaseGrabber
 from YahooGrabber import YahooGrabber
 iterations = range(0,20000)
 
-
 Empty = [] #list
 Start = t.time() #timer
 Counter = 0
