@@ -20,14 +20,13 @@ Start = t.time()
 Counter = 0
 
 #Input
-
 Ticker1 = 'UVXY'
 Ticker2 = '^VIX'
 
 #Remote Signal
 Ticker3 = '^VIX'
 
-#Here we go
+#Data requisition
 Asset1 = YahooGrabber(Ticker1)
 Asset2 = YahooGrabber(Ticker2)
 
