@@ -4,6 +4,11 @@ Created on Sat Apr  1 11:05:53 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a strategy tester 
+#Aroon calculation stolen from the depths of the internet after much frustration
+#pandas_datareader is deprecated, use YahooGrabber
+
 from pandas_datareader import data
 import pandas as pd
 import numpy as np
