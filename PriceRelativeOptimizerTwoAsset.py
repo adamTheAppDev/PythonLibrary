@@ -4,6 +4,9 @@ Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a two asset portfolio/stretegy tester with a brute force optimizer
+
 import numpy as np
 import random as rand
 import pandas as pd
