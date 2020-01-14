@@ -5,7 +5,7 @@ Created on Wed Aug 30 19:07:37 2017
 @author: AmatVictoriaCuramIII
 """
 
-#This is a three asset portfolio/strategy tester
+#This is a three asset portfolio/strategy tester with a brute force optimizer
 
 import numpy as np
 import random as rand
