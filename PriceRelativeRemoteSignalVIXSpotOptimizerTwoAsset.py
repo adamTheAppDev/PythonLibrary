@@ -4,6 +4,9 @@ Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a two asset portfolio/strategy tester with a brute force optimizer
+
 import numpy as np
 import random as rand
 import pandas as pd
@@ -17,7 +20,6 @@ Start = t.time()
 Counter = 0
 
 #Input
-
 Ticker1 = 'UVXY'
 Ticker2 = '^VIX'
 
@@ -50,7 +52,6 @@ Asset4 = Asset4[-len(Asset2):]
 #Asset2 = Asset2[-600:]
 
 #Log Returns
-
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
 Asset2['LogRet'] = np.log(Asset2['Adj Close']/Asset2['Adj Close'].shift(1))
