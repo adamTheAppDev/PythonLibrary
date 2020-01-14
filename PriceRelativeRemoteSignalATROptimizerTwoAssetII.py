@@ -20,7 +20,6 @@ Start = t.time()
 Counter = 0
 
 #Input
-
 Ticker1 = 'UVXY'
 Ticker2 = '^VIX'
 
