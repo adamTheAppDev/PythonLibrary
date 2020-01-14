@@ -6,7 +6,8 @@ Created on Sun Oct  6 19:04:59 2019
 """
 
 #Supervised Learning Binary Classification Wisconsin Data Ridge Regression
-#bruh
+#This model is from the Muller and Guido Python ML book
+
 #import sys
 #import sklearn
 #import numpy as np
