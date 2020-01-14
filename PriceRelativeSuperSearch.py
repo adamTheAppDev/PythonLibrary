@@ -17,12 +17,9 @@ from DatabaseGrabber import DatabaseGrabber
 empty = []
 dataset = pd.DataFrame()
 asone = pd.DataFrame()
-listoftickers = ['UVXY', 'VXX', '^VIX', 'VXV', 'TLT', '^GSPC']
+listoftickers = ['UVXY', 'VXX', '^VIX', 'VXV', 'TLT', '^GSPC'] #unused
 start = t.time()
 counter = 0
-
-#the goal is to make a for loop to get all combinations of tickers and find 
-#predictable relationships/trends - This is not accomplished in this code, see speed dater..
 
 UVXY = DatabaseGrabber('UVXY')
 VXX = DatabaseGrabber('VXX')
