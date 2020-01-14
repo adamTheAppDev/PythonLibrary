@@ -6,6 +6,10 @@ Created on Wed Jul 11 09:04:55 2018
 """
 #Developed in Python 3.5 
 
+#This is a trading strategy model
+#It looks like the stop logic and exit logic are correct
+#also see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
+
 #R Multiple Finder; Trade Data Tracking
 
 #Import libraries
@@ -115,7 +119,6 @@ Asset1['StopPriceUnitOne'] = np.nan
 
 #Be sure to check for double signal days, gaps on first unit entry, and gaps on exits.
 
-
 #Default stops and entries 
 #Find the first trade of the signal period, so we can document entry prices
 #Long entry first unit // enter one cent above previous high
@@ -123,8 +126,7 @@ Asset1['EntryPriceUnitOne'] = np.where(Asset1['Signal'] == 1,
                               Asset1['RollingMax'].shift(1) + .01, np.nan)
 #Short entry first unit // enter one cent below previous low
 Asset1['EntryPriceUnitOne'] = np.where(Asset1['Signal'] == -1, 
-              Asset1['RollingMin'].shift(1) - .01, Asset1['EntryPriceUnitOne'])
-
+              Asset1['RollingMin'].shift(1) - .01, Asset1['EntryPriceUnitOne']
 
 #Long gap entry first unit
 #Find all days that gap above entry on open
@@ -133,7 +135,6 @@ LongGapEntryIndexList = list(Asset1['EntryPriceUnitOne'].loc[(Asset1['Signal'] =
 #For all LongGapEntries use open price on gap instead of one cent offset breakout price
 for l in LongGapEntryIndexList:
     Asset1.set_value(l, 'EntryPriceUnitOne', Asset1.loc[l]['Open'])
-    
 
 #Short gap entry first unit
 #Find all days that gap below entry on open 
