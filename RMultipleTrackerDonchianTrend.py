@@ -6,6 +6,10 @@ Created on Wed Jul 11 09:04:55 2018
 """
 #Developed in Python 3.5
 
+#This is a trading strategy model with graphical display
+#It looks like the stop logic and exit logic are correct
+#also see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
+
 #R Multiple; Trade Tracking
 import numpy as np
 #import random as rand
