@@ -5,7 +5,7 @@ Created on Sat Feb 23 18:13:31 2019
 @author: AmatVictoriaCuramIII
 """
 
-#N Period Edge Ratio Computation
+#This is a strategy tester with a brute force optimizer; short only - volatility ETF
 
 #Import-ant
 from YahooGrabber import YahooGrabber
@@ -17,7 +17,7 @@ import random as rand
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
  
-#Let's go
+#start timer
 start = t.time()
 Counter = 0
 #Empty structures
