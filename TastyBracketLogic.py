@@ -4,6 +4,9 @@ Created on Thu Dec 28 01:20:06 2017
 
 @author: Adam Reinhold Von Fisher 
 """
+
+#This is an outdated trading model see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
+
 #Main questions...
 #What is the best way to correctly simulate bracket orders?
 #How can I reflect changes in equity during the life of a trade?
@@ -12,8 +15,6 @@ Created on Thu Dec 28 01:20:06 2017
 #What are, in real application, the most effective sampling methodologies? Kth fold, In/Out, none, etc? 
 #Appropriate slippage % for bad fills?
 #How can I reduce redundant assignments and other code inefficiencies?
-
-
 
 #Main constraints and assumptions
 #Assume that I have no idea whats going on here
