@@ -5,6 +5,9 @@ Created on Sun Mar  5 20:47:34 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a technical analysis + summary statistic tool
+#Gets a bit abstract..
+
 import numpy as np
 from pandas_datareader import data
 #import random as rand
