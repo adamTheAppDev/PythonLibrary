@@ -5,7 +5,7 @@ Created on Wed Mar  7 23:28:42 2018
 @author: AmatVictoriaCuramIII
 """
 
-#Original stat model
+#This is a strategy tester for a z-score based model
 
 import numpy as np
 import random as rand
