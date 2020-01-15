@@ -1,6 +1,9 @@
 """
 Spyder Editor
 """
+
+#This is a technical analysis + database query tool
+
 def SCommodityChannelIndex(s):
     constant = .02
     SMAwindow = 20
