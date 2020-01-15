@@ -4,6 +4,9 @@ Created on Thu May 18 15:55:54 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is an HTML scraper + I/O + formatting tool
+
 import requests
 from io import StringIO
 import pandas as pd
@@ -23,6 +26,5 @@ df.index = pd.to_datetime(df.index, format = "%Y/%m/%d")
 endtime = t.time()
 duration = endtime - starttime 
 
-# you may now write to file
-
+#you may now write to file
 df.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\"+ ticker + ".csv"))
