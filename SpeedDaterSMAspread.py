@@ -4,6 +4,10 @@ Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a massive two asset portfolio tester with a brute force optimizer
+#Takes all pair combos, tests, and sorts. 
+
 import numpy as np
 import random as rand
 import pandas as pd
@@ -18,7 +22,7 @@ Counter2 = 0
 iterations = range(0, 2000)
 Dataset2 = pd.DataFrame()
 #Input
-tickers = ('TLT', 'MS')
+tickers = ('TLT', 'MS', 'GLD', 'SLV', 'TQQQ')
 
 #Make all pairs in final list
 MajorList = ListPairs(tickers)
