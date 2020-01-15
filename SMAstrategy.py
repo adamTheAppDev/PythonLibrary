@@ -4,6 +4,9 @@ Created on Wed Aug 30 19:07:37 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a strategy tester with a brute force optimizer
+
 import numpy as np
 import random as rand
 import pandas as pd
@@ -103,7 +106,6 @@ kfloat = float(k[0])
 End = t.time()
 print(End-Start, 'seconds later')
 print(Dataset[k])
-
 
 window = int((Dataset[kfloat][2]))
 Asset1['MA'] = Asset1['Adj Close'].rolling(window=window, center=False).mean()   
