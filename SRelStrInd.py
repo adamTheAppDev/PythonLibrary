@@ -4,6 +4,9 @@ Created on Tue Feb 28 14:00:21 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a technical analysis tool
+
 import numpy as np
 def SRelStrInd(s):
     s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1)) 
@@ -20,4 +23,3 @@ def SRelStrInd(s):
     RS = AvgGain/AvgLoss
     RSI = 100 - (100/(1.0+RS))
     return RSI.tail(1)
-
