@@ -4,6 +4,10 @@ Created on Tue Feb 28 13:24:51 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a summary statistic + database query tool
+#pandas_datareader is deprecated, use YahooGrabber
+
 import numpy as np
 import pandas.io.data as web
 import pandas as pd
