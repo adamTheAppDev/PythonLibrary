@@ -2,6 +2,9 @@
 """
 Spyder Editor
 """
+
+#This is a summary statistic + database query tool
+
 def SGapUp(s):
     import numpy as np
     s['GapUp'] = (s['High'].shift(1) - s['Low']) / s['Adj Close'].shift(1)
