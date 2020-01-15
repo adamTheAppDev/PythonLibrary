@@ -4,6 +4,9 @@ Created on Thu May 18 15:55:54 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is an HTML scraper + I/O + formatting tool
+
 import requests
 from io import StringIO
 import pandas as pd
