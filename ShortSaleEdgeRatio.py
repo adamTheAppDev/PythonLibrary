@@ -13,7 +13,6 @@ import numpy as np
 import time as t
 import pandas as pd
 
-
 tempdf = pd.DataFrame()
 edgelist = []
 ticker1 = 'UVXY'
