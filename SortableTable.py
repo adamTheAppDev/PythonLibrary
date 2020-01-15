@@ -5,7 +5,8 @@ Created on Sun Oct 21 23:01:51 2018
 @author: AmatVictoriaCuramIII
 """
 
-#Executive Dashboard ;]
+#This is a database query tool, expand to make Executive Dashboard
+
 #Import 
 import pandas as pd
 import os
