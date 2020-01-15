@@ -5,6 +5,8 @@ Created on Tue Mar 21 00:14:40 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is part of a kth fold optimization tool
+
 #from DefRSIPredictor import DefRSIPredictor
 import numpy as np
 import pandas as pd
