@@ -5,7 +5,8 @@ Created on Sun Oct  6 19:04:59 2019
 @author: AmatVictoriaCuramIII
 """
 
-#Supervised Learning Regression
+#This is a ML model
+#Supervised Learning Regression - from the Muller and Guido Python ML book
 
 #import sys
 #import sklearn
