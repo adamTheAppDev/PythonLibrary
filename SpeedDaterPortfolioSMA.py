@@ -2,9 +2,13 @@
 """
 Created on Wed Aug 30 19:07:37 2017
 
-@author: Adam Reinhold Von Fisher - adamrvfisher@gmail.com 
-linkedin.com/in/adamrvfisher - github.com/adamrvfisher/TechnicalAnalysisLibrary
+@author: Adam Reinhold Von Fisher
+linkedin.com/in/adamrvfisher
 """
+
+#This is a massive two asset portfolio tester with a brute force optimizer
+#Takes all pair combos, tests, and sorts. 
+
 #Load your modules
 import numpy as np
 import random as rand
