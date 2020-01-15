@@ -5,6 +5,9 @@ Created on Tue Apr 11 23:32:44 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is part of a kth fold optimization tool with a twist
+#pandas_datareader is deprecated, use YahooGrabber
+
 from DefModADXAdviceGiver import DefModADXAdviceGiver
 import numpy as np
 import pandas as pd
@@ -66,7 +69,7 @@ s['CorrectNextDay'] =  np.where(s['Regime'] == 1, s['High'].shift(
                                         -1) > s['Adj Close'] , 0)
 s['CorrectNextDay'] =  np.where(s['Regime'] == -1, s['Low'].shift(
                          -1) < s['Adj Close'] , s['CorrectNextDay'])
-winrate = sum(s['CorrectNextDay']/len(s))
+winrate = sum(s['CorrectNextDay']/len(s)) #This is a bad metric to use for strategy success
 #For increased accuracy, remove first window values from TheAdvice
 s[['LogRet', 'NewStrategy','Strategy']][:].cumsum().apply(np.exp).plot(grid = True,
                                              figsize = (8,5))
