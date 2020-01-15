@@ -2,8 +2,11 @@
 """
 Created on Wed Aug 30 19:07:37 2017
 
-@author: Adam Reinhold Von Fisher -- Sup y'all, stalk my instagram : @damfisher
+@author: Adam Reinhold Von Fisher 
 """
+
+#This is a two asset portfolio strategy tester + brute force optimizer for volatility
+
 import numpy as np
 import random as rand
 import pandas as pd
