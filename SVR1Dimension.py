@@ -1,6 +1,6 @@
-#This code was stolen from Arun Prakash on StackOverflow.com when I was investigating predictive ML
+#This code was stolen from Arun Prakash on StackOverflow.com 
 #Arun wants to know how to predict additional rows, there is good material for him in the Muller and Guido python ML book
-#This is a one dimensions support vector regression
+#This is a one dimensional support vector regression
 
 #importing required libraries
 from sklearn.preprocessing import MinMaxScaler
