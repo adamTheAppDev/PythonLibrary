@@ -4,6 +4,9 @@ Created on Mon Dec 10 18:35:21 2018
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a basic API app for Interactive Brokers API; can be found elsewhere online
+
 #API Access
 #Double check your CWD
 import os
