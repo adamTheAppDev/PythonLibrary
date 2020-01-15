@@ -6,7 +6,7 @@ Created on Mon Oct 21 21:19:34 2019
 """
 
 #This is from the Muller and Guido Python ML book
-#Supervised Learning Regression - single feature regression
+#Supervised Learning Regression - single feature regression using K nearest neighbors
 
 #import sys
 #import sklearn
