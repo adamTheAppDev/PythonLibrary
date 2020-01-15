@@ -4,6 +4,9 @@ Created on Tue Feb 28 23:29:44 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is an older version of a database scanning/query tool
+
 #Get modules
 from Age import Age
 from AverageReturn import AverageReturn
