@@ -5,7 +5,9 @@ Created on Thu Dec 28 01:20:06 2017
 @author: AmatVictoriaCuramIII
 """
 
-#stoplogic\
+#This is a strategy tester for the implementation of stop logic
+#It probably doesn't work properly, see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
+
 import numpy as np
 import random as rand
 import pandas as pd
