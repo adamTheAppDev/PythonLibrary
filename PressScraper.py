@@ -4,6 +4,9 @@ Created on Wed May  3 15:14:55 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a news scraper, it doesn't work very well. See YahooGrabber.
+
 import newspaper
 from newspaper import Article
 bbc_paper = newspaper.build('http://bbc.com/news', language = 'en')
