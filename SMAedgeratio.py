@@ -5,8 +5,8 @@ Created on Fri Feb 16 15:57:24 2018
 @author: AmatVictoriaCuramIII
 """
 
-#SMA edge ratio w/ VIX
-#Surprise, it's a complete edgeratio finder
+#This is an edge ratio calculator, its dated and probably doesn't work correctly.
+#See ERatioSingleIssueDonchianTrendIII.py for latest and greatest
 
 from YahooGrabber import YahooGrabber
 import numpy as np
