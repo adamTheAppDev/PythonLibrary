@@ -2,9 +2,13 @@
 """
 Created on Tue Jan  9 15:47:07 2018
 
-@author: Adam Reinhold Von Fisher - adamrvfisher@gmail.com 
-linkedin.com/in/adamrvfisher - github.com/adamrvfisher/TechnicalAnalysisLibrary
+@author: Adam Reinhold Von Fisher 
+linkedin.com/in/adamrvfisher 
 """
+
+#This is a return stream generator for a two asset portfolio based on params from
+#a separate optimization
+
 def SMAStrategyReturnStream(winners, shortest):
 #Dual Asset SMA Strategy Return Stream Generator
     import numpy as np
