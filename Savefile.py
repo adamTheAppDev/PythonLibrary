@@ -4,6 +4,10 @@ Created on Fri Mar 10 10:52:49 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is part of a kth fold optimization tool
+#pandas_datarader is deprecated, use YahooGrabber
+
 import numpy as np
 import pandas as pd
 from pandas_datareader import data
@@ -61,9 +65,3 @@ for i in testset1:
 #    if endreturns > endgains:
 #        continue       
     sharpe = (s1['Strategy'].mean()-s1['LogRet'].mean())/s1['Strategy'].std()
-
-
-
-
-
-
