@@ -4,6 +4,11 @@ Created on Wed Sep 11 19:56:39 2019
 
 @author: AmatVictoriaCuramIII
 """
+
+#This ML model was stolen from the depths of the internet and modified to fit financial data..
+#Its a single feature/dimension support vector machine - not dissimilar results from a lin regression
+#with this limited number of features/dims
+
 #SVR - RBF
 #Import libraries
 import numpy as np
