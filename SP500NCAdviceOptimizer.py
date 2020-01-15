@@ -5,6 +5,8 @@ Created on Sat Apr  8 00:50:45 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is the last part of a kth fold optimization tool
+
 import numpy as np
 import pandas as pd
 import random as rand
