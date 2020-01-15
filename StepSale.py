@@ -5,7 +5,8 @@ Created on Mon Mar  5 08:34:43 2018
 @author: AmatVictoriaCuramIII
 """
 
-#StepSale Strategy
+#This is a strategy tester, similar to incremental/martingale strategy
+#position size is based off technical information
 
 from YahooGrabber import YahooGrabber
 import numpy as np
