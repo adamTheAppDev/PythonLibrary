@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 Spyder Editor
-
 """
+
+#This is a summary statistic/technical analysis tool
+#pandas_datareader is deprecated, use YahooGrabber
+
 from pandas_datareader import data
 import pandas as pd
 import numpy as np
