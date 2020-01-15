@@ -26,8 +26,5 @@ df.index = pd.to_datetime(df.index, format = "%Y/%m/%d")
 endtime = t.time()
 duration = endtime - starttime 
 
-# you may now write to file
-
+#you may now write to file
 df.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\"+ ticker + "div.csv"))
-
-
