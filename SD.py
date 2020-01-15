@@ -4,6 +4,9 @@ Created on Tue Feb 28 13:05:58 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a summary statistic + database query tool
+
 import numpy as np
 from pandas_datareader import data
 def SD(s):
