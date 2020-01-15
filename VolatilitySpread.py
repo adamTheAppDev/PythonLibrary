@@ -4,6 +4,9 @@ Created on Tue Feb 28 23:23:57 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a strategy tester for volatility
+
 import numpy as np
 from pandas_datareader import data
 s = data.DataReader('^VIX', 'yahoo', start='1/1/1900', end='01/01/2050') 
