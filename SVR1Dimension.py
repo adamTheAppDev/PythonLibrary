@@ -1,3 +1,7 @@
+#This code was stolen from Arun Prakash on StackOverflow.com when I was investigating predictive ML
+#Arun wants to know how to predict additional rows, there is good material for him in the Muller and Guido python ML book
+#This is a one dimensions support vector regression
+
 #importing required libraries
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
@@ -54,3 +58,14 @@ X_test = np.array(X_test)
 X_test = np.reshape(X_test, (X_test.shape[0],X_test.shape[1],1))
 closing_price = model.predict(X_test)
 closing_price = scaler.inverse_transform(closing_price)
+rms=np.sqrt(np.mean(np.power((valid-closing_price),2)))
+print ("rms final 1:"+str(rms))
+
+#for plotting
+train = new_data[:train_length]
+valid = new_data[train_length+10:]
+valid['Predictions'] = closing_price
+plt.figure(figsize=(16,8))
+plt.plot(train['Close'])
+plt.plot(valid[['Close','Predictions']])
+plt.show()
