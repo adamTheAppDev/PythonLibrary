@@ -5,6 +5,7 @@ Created on Sun Sep 29 21:39:33 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is from the Muller and Guido Python ML book
 #Supervised Learning - Multiclass Classification
 
 #import sys
