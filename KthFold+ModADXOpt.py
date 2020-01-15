@@ -5,6 +5,9 @@ Created on Tue Apr 11 23:32:44 2017
 @author: AmatVictoriaCuramIII
 """
 
+#This is a kth fold optimization tool with a brute force optimizer + a twist
+#pandas_datareader is deprecated, use YahooGrabber
+
 import numpy as np
 import pandas as pd
 import random as rand
