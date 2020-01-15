@@ -4,6 +4,9 @@ Created on Tue Feb  7 11:27:35 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a weighting tester for two asset portfolio analysis
+
 #Get modules
 #import scipy as sp
 import numpy as np
