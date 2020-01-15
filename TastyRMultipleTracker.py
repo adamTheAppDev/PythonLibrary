@@ -6,6 +6,7 @@ Created on Wed Jul 11 09:04:55 2018
 """
 #Developed in Spyder - Python 3.5.2
 
+#This is a trading model, similar to DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
 #R Multiple Finder; Trade Data Tracking
 
 #Import libraries
