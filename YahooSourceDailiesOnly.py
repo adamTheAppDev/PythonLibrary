@@ -4,6 +4,8 @@ Created on Wed Jan  9 20:29:48 2019
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a database creation tool, I/O, technical analysis tool, and formatting tool.
 #This file is dependent on EntityCreation
 #Prior to running this, run EntityCreation, run NASDAQSource population,
 #Yahoo sourcing for monthlies, weeklies, dailies, dividend, and qualitative data
