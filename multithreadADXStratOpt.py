@@ -4,8 +4,12 @@ Created on Sun Apr  9 16:36:25 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is part of a multithreading tool to speed up brute force optimization - may be unfinished.
+
 from numba import jit
 @jit
+
 def multithreadADXStratOpt():
     import pandas as pd
     from pandas_datareader import data
