@@ -4,10 +4,12 @@ Created on Wed Jan  9 20:29:48 2019
 
 @author: AmatVictoriaCuramIII
 """
-#This file is dependent on EntityCreation
+
+#This is a database creation tool, I/O, technical analysis tool, and formatting tool.
+#File is dependent on running EntityCreation first
 #Prior to running this, run EntityCreation, run NASDAQSource population,
 #Yahoo sourcing for monthlies, weeklies, dailies, dividend, and qualitative data
-#When it finishes, YahooSource folder will populate
+#When it finishes, YahooSource folder from EntityCreation will populate
 
 #Import modules
 import numpy as np
