@@ -4,6 +4,10 @@ Created on Mon Dec 10 18:35:21 2018
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is an API app for Interactive Brokers API, it requests and prints line by line data to screen.
+#Need more functionality - use pandas
+
 #API Access
 #Double check your CWD
 import os
