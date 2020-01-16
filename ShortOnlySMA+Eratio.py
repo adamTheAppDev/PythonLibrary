@@ -5,7 +5,8 @@ Created on Fri Feb 16 15:57:24 2018
 @author: AmatVictoriaCuramIII
 """
 
-#This is an outdated edge ratio calculator and strategy tester - see for updated version.
+#This is an outdated edge ratio calculator and strategy tester 
+#See ERatioSingleIssueDonchianTrendIII.py for updated version.
 
 from YahooGrabber import YahooGrabber
 import numpy as np
