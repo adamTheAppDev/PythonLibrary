@@ -6,10 +6,9 @@ Created on Wed Jul 11 09:04:55 2018
 """
 #Developed in Python 3.5 
 
-#Model output for multiple stock single frequency //YahooSource Dailies
-#Donchian Trendfollowing
+#Model output for multiple issues with single frequency - saves to model output
+#55 period Donchian Trend signal
 #Trade Data Tracking
-
 
 #Import libraries
 import numpy as np
