@@ -4,6 +4,10 @@ Created on Tue Apr  4 12:36:09 2017
 
 @author: AmatVictoriaCuramIII
 """
+
+#This is a much faster EMA calculation using np.convolve - stolen from the depths of the internet. 
+#pandas_datareader is deprecated, use YahooGrabber
+
 from pandas_datareader import data
 import numpy as np
 ticker = '^GSPC'
