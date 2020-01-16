@@ -5,7 +5,8 @@ Created on Tue Sep  5 13:21:43 2017
 @author: AmatVictoriaCuramIII
 """
 
-#YahooGrabber
+#This is a HTML scraper, I/O, and formatting tool
+
 def YahooGrabber(ticker):
     import requests
     from io import StringIO
