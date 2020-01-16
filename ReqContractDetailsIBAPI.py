@@ -6,7 +6,8 @@ Created on Mon Dec 10 18:35:21 2018
 """
 
 #This is an API app for Interactive Brokers API, it requests and prints line by line data to screen.
-#Need more functionality - use pandas DataFrame object 
+#It can be found in its entirety on YouTube in the IB Python API videos by IB
+#Need more functionality - use pandas DataFrame object
 
 #API Access
 #Double check your CWD
