@@ -5,6 +5,8 @@ Created on Tue Jan 22 22:41:00 2019
 @author: AmatVictoriaCuramIII
 """
 
+#This is a local database query tool
+
 #Yahoo Daily Grabber
 def YahooSourceDailyGrabber(ticker):    
     import pandas as pd
