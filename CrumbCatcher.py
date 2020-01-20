@@ -1,24 +1,48 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed May  3 15:14:55 2017
 
-@author: AmatVictoriaCuramIII
+@author: @author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#This is a HTML parsing/scraping tool
+#If the Yahoo! response changes, it will be necessary to amend code
+#This is a HTML scraping and formatting tool
 
-def CrumbCatcher(ticker):
+#Define function
+def PolishedCrumbCatcher(ticker):
 
-    import requests 
+    #Import modules
+    import requests
+    
+    #Format ticker
     ticker = str(ticker)
+    
+    #Assign URL for post request
     url = 'http://finance.yahoo.com/quote/' + str(ticker)
+
+    #Make post request
     page = requests.post(url)
-    textfile = page.text
-    num = textfile.find('CrumbStore')
-    textfile2 = textfile[num:]
-    num2 = textfile2.find('QuotePageStore') - 3
-    textfile3 = textfile2[:num2]
-    num3 = textfile3.rfind(':') + 1
-    textfile4 = textfile3[num3:]
-    textfile4.replace('"','')
-    return str(textfile4)
+    
+    #Format response to text
+    textI = page.text
+    
+    #Locate text in response
+    markerI = textI.find('CrumbStore')
+    #Assign trimmed response
+    textII = textI[markerI:]
+
+    #Locate text in trimmed response
+    markerII = textII.find('StreamStore') - 3
+    #Assign trimmed response
+    textIII = textII[:markerII]
+
+    #Locate text in trimmed response
+    markerIII = textIII.rfind(':') + 1
+    #Assign trimmed response
+    textIV = textIII[markerIII:]
+    
+    #Format and reassign; remove "s
+    textIV = textIV.replace('"','')
+    
+    #Return the crumb from URL
+    return str(textIV)
