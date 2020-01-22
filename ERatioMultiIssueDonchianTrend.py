@@ -5,9 +5,6 @@ Created on Sat Feb 23 18:13:31 2019
 @author: AmatVictoriaCuramIII
 """
 
-#This is an Edge Ratio calculator + Graphics for multiple tickers
-#Tests entry signal edge over N Periods
-
 #N Period Edge Ratio Computation
 
 #Imports 
@@ -18,6 +15,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
+from pandas.parser import CParserError
  
 #Empty structures
 tempdf = pd.DataFrame()
@@ -30,14 +28,14 @@ nDay = None
 
 #Variable assignment
 #Tickers for testing
-tickerlist = ['NUGT', 'SPY', 'TMF', 'WEAT', 'SLV', 'FXY', 'FXE', 'UCO', 'UVXY']
+tickerlist = ['NUGT', 'SPY', 'TMF', 'UCO']
 #ticker = 'NUGT'
 
 #For ATR + MFE/MFA calculation
 atrwindow = 20
 
 #For signal generation
-donchianwindow = 10
+donchianwindow = 20
 
 #How many days to calculate e-ratio for
 LengthOfTest = range(2, 50) #(2,3) = 2 day Eratio // assuming fill at "Entry Price"
@@ -45,10 +43,13 @@ LengthOfTest = range(2, 50) #(2,3) = 2 day Eratio // assuming fill at "Entry Pri
 edgeratioframe = pd.DataFrame(index = range(2, len(LengthOfTest) + 2))
 #Initiate testing for loop
 for ticker in tickerlist:
-    
-    #Get data
-    Asset = YahooGrabber(ticker)
-    
+    while True: 
+        try:
+            #Get data
+            Asset = YahooGrabber(ticker)
+        except CParserError:
+            continue
+        break
     #In sample Trimmer
     Asset = Asset[:]
     
