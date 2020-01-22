@@ -4,7 +4,9 @@
 @author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
 
 """
-#pairing a list into a comprehensive list of pairs.
+#This is an organizational tool that pairs items in list into a comprehensive list of all possible pairs.
+#For use in SpeedDater_ apps
+
 def ListPairs(tickers):
     import itertools as it
     subList = it.combinations(tickers, 2)
