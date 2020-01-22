@@ -5,8 +5,7 @@ Created on Sat Feb 23 18:13:31 2019
 @author: AmatVictoriaCuramIII
 """
 
-#This is an Edge Ratio calculator for single issue
-#N Period Edge Ratio Computation
+#N Period Edge Ratio Computation for single issue with graphical displays
 
 #Imports 
 from YahooGrabber import YahooGrabber
@@ -16,6 +15,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
+from pandas.parser import CParserError
  
 #Empty structures
 tempdf = pd.DataFrame()
@@ -27,24 +27,26 @@ MAElist = []
 nDay = None
 
 #Variable assignment
-#Tickers for testing
-#tickerlist = ['NUGT', 'JNUG']
+#Ticker for testing
 ticker = 'NUGT'
 
 #For ATR + MFE/MFA calculation
 atrwindow = 20
 
 #For signal generation
-donchianwindow = 10
+donchianwindow = 20
 
 #How many days to calculate e-ratio for
-LengthOfTest = range(2, 25) #(2,3) = 2 day Eratio // assuming fill at "Entry Price"
-
-#Initiate testing for loop
-#for ticker in tickerlist:
+LengthOfTest = range(2, 50) #(2,3) = 2 day Eratio // assuming fill at "Entry Price"
 
 #Get data
-Asset = YahooGrabber(ticker)
+while True: 
+    try:
+        #Get data
+        Asset = YahooGrabber(ticker)
+    except CParserError:
+        continue
+    break
 
 #In sample Trimmer
 Asset = Asset[-1000:]
@@ -151,25 +153,19 @@ for z in LengthOfTest:
                 print('Not enough data for this calculation')                
                 continue
             print('Long entry at ', entryprice) 
-            #Check status 
-#            print(tempdf)
             #MFE
             maxup = max(tempdf['High'] - entryprice)
             #MAE            
             maxdown = max(entryprice - tempdf['Low']) 
             print('MFE in points = ', maxup)
             print('MAE in points = ', maxdown)
-#            print(atrwindow, ' day ATR = ', tradedates['AverageTrueRangePoints'].loc[tradedates['RangeIndex'] == i][0])
             #MFE assignment
             MFEpoints = maxup
             MFElist.append(MFEpoints)
-            #MFE assignment to trade dates            
-#            tradedates['MFEpoints'].loc[tradedates['RangeIndex'] == i] = maxup
             #MAE assignment
             MAEpoints = maxdown
             MAElist.append(MAEpoints)
-            #MAE assignment to trade dates            
-#            tradedates['MAEpoints'].loc[tradedates['RangeIndex'] == i] = maxdown
+            
         #For short trades
         if tradedates['OriginalTrade'].loc[tradedates['RangeIndex'] == i][0] == -1:
             if len(tempdf) < z-1 :
@@ -178,30 +174,20 @@ for z in LengthOfTest:
                 print('Not enough data for this calculation')                
                 continue
             print('Short entry at ', entryprice)             
-            #Check status 
-#            print(tempdf)
             #MAE
             maxup = max(tempdf['High'] - entryprice)
             #MFE       
             maxdown = max(entryprice - tempdf['Low'])  
             print('MFE in points = ', maxdown)            
             print('MAE in points = ', maxup)
-#            print(atrwindow, ' day ATR = ', tradedates['AverageTrueRangePoints'].loc[tradedates['RangeIndex'] == i][0])
             #MFE assignment
             MFEpoints = maxdown
             MFElist.append(MFEpoints)
-            #MFE assignment to trade dates                        
-#            tradedates['MFEpoints'].loc[tradedates['RangeIndex'] == i] = maxdown
             #MAE assignment
             MAEpoints = maxup
             MAElist.append(MAEpoints)
-            #MAE assignment to trade dates            
-#            tradedates['MAEpoints'].loc[tradedates['RangeIndex'] == i] = maxup
-#        print('--------------------------------------------')    
-#        print('--------------------------------------------')    
-#        print('--------------------------------------------')   
-     
-    #rotating column name
+
+    #Rotating column name        
     nDay = str(z)
 
     print(MFElist)
@@ -236,18 +222,15 @@ for z in LengthOfTest:
     
     print('The ', z, ' day edge ratio is', edgeratio)
     edgelist.append(edgeratio)
-#              
-#Length = len(Asset1['LogRet'])
-#Range = range(0,Length)
-#print(MaxDD*100, '% = Max Drawdown')
-#
+
+#Get calculations ready for graphing
 edgeratioframe = pd.DataFrame(index = range(2, len(edgelist) + 2))
 edgeratioframe['EdgeRatio'] = edgelist
-#
+#plot edge ratio
 edgeratioframe['EdgeRatio'].plot(grid=True, figsize=(8,5))
-#end = t.time()
-#print((end - start), ' seconds later.')
-#print('Max eRatio is', max(edgeratioframe['EdgeRatio']))
+end = t.time()
+print((end - start), ' seconds later.')
+print('Max eRatio is', max(edgeratioframe['EdgeRatio']))
 
 #Graphics
 #X and Y axis scale figure
@@ -275,6 +258,4 @@ figure2, axe2 = plt.subplots(figsize = (10,2))
 plt.ylabel(ticker + ' ATR Percent')
 plt.xlabel('Date')
 axe2.plot(AssetCopy['IndexToNumber'], Asset['AverageTrueRangePercent'], color = 'black', label = '4wkATRPercent')
-#axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMax'], color = 'green', label = 'ATRRollingMax')
-#axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMin'], color = 'red', label = 'ATRRollingMin')
 axe2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
