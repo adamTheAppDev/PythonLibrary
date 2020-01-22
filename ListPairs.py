@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Nov  4 00:37:10 2017
 
-@author: Adam Reinhold Von Fisher 
-linkedin.com/in/adamrvfisher 
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
-
-#This program takes a list and pairs all combinations into a comprehensive list of pairs.
-#It plugs in to the speed dater
-
+#pairing a list into a comprehensive list of pairs.
 def ListPairs(tickers):
     import itertools as it
-    sublist = it.combinations(tickers, 2)
-    fulllist = list(sublist)
-    return fulllist
+    subList = it.combinations(tickers, 2)
+    fullList = list(subList)
+    return fullList
