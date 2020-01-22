@@ -1,52 +1,64 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug 30 19:07:37 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#This is a massive two asset portfolio tester with a brute force optimizer
-#Takes all pair combos, tests, and sorts. 
+#This is a two asset portfolio tester with a brute force optimizer
+#Takes all pair combos, tests, sorts, returns optimal params from all pairs + top performing pair params 
 
+#Import modules
 import numpy as np
 import random as rand
 import pandas as pd
 import time as t
-#from DatabaseGrabber import DatabaseGrabber
 from YahooGrabber import YahooGrabber
 from ListPairs import ListPairs
+from pandas.parser import CParserError
+
+#Variable assignment
 Empty = []
 Start = t.time()
 Counter = 0
 Counter2 = 0
 iterations = range(0, 100)
 Dataset2 = pd.DataFrame()
-#Input
-tickers = ('TLT', 'SPY', 'TMF', 'AAPL', 'PBF', 'UVXY', '^VIX', 'GLD', 'SLV',
-           'JO','CORN', 'DBC', 'SOYB')
+
+#Input tickers for study 
+tickers = ('JNUG', 'TQQQ', 'TMF')#, 'AAPL', 'PBF', 'UVXY', '^VIX', 'TLT', 'SLV',
+#           'JO','CORN', 'DBC', 'SOYB')
 
 #Make all pairs in final list
 MajorList = ListPairs(tickers)
 
-#Here we go
-
-#Brute Force Optimization
+#For every combination of tickers
 for m in MajorList:
-    Dataset = pd.DataFrame()
+    #Ticker Assignment
     Ticker1 = m[0]
     Ticker2 = m[1]
+    #Combo name
     TAG = m[0] + '/' + m[1]
+    #Clear data tables
     Dataset = pd.DataFrame()
     Portfolio = pd.DataFrame()
-#pull online data, change to local for testing
-    Asset1 = YahooGrabber(Ticker1)
-    Asset2 = YahooGrabber(Ticker2)    
-#get log returns
+    
+    #Request data
+    while True: 
+        try:
+            Asset1 = YahooGrabber(Ticker1)
+            Asset2 = YahooGrabber(Ticker2)            
+        except CParserError:
+            continue
+        break    
+    
+    #Calculate log returns
     Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
     Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
     Asset2['LogRet'] = np.log(Asset2['Adj Close']/Asset2['Adj Close'].shift(1))
     Asset2['LogRet'] = Asset2['LogRet'].fillna(0)
-#Match lengths
+
+    #Match time series lengths
     trim = abs(len(Asset1) - len(Asset2))
     if len(Asset1) == len(Asset2):
         pass
@@ -55,67 +67,91 @@ for m in MajorList:
             Asset1 = Asset1[trim:]
         else:
             Asset2 = Asset2[trim:]
-#
+    #Brute force optimization
     for i in iterations:
+        #Iteration tracking
         Counter = Counter + 1
+        
+        #Determining position and direction
         aa = rand.random() * 2 #uniformly distributed random number 0 to 2
-        a = aa - 1          #a > 1 indicating long position in a
+        a = aa - 1             #a > 1 indicating long position in a
         bb = rand.random()
         if bb >= .5:
-            bb = 1
+            bb = 1 #long
         else:
-            bb = -1
-        b = bb * (1 - abs(a))
+            bb = -1 #short
+        b = bb * (1 - abs(a)) #long/short (1 - a)  
 
-#you can change c and d to 0 by default if you want to just go flat
+        #Change c and d to 0 by default to go flat - no exposure
 
+        #Determining position and direction
         cc = rand.random() * 2 #uniformly distributed random number 0 to 2
-        c = cc - 1          #cc > 1 indicating long position in c
+        c = cc - 1             #c > 1 indicating long position in c
         dd = rand.random() * 2
         if dd >= 1:
-            edd = 1
+            edd = 1 #long
         else:
-            edd = -1
+            edd = -1 #short
         d = (dd - 1)
         if abs(c) + abs(d) > 1:
             continue
+        
+        #Moving average window assignment 
         e = rand.randint(3,20)
         window = int(e)
-#        
+        
+        #Price relative calculation
         Asset1['PriceRelative'] = Asset1['Adj Close']/Asset2['Adj Close']
+        #Price relative moving average calculation
         Asset1['PRMA'] = Asset1['PriceRelative'].rolling(window=window, center=False).mean()
+
+        #Position sizing
         Asset1['Position'] = a
         Asset1['Position'] = np.where(Asset1['PriceRelative'].shift(1) > Asset1['PRMA'].shift(1),
-                                        c,a)                                    
+                                        c,a)
+        #Apply position size to returns to pass to portfolio
         Asset1['Pass'] = (Asset1['LogRet'] * Asset1['Position'])
+
+        #Position sizing       
         Asset2['Position'] = b
         Asset2['Position'] = np.where(Asset1['PriceRelative'].shift(1) > Asset1['PRMA'].shift(1),
                                         d,b)
+        #Apply position size to returns to pass to portfolio
         Asset2['Pass'] = (Asset2['LogRet'] * Asset2['Position'])
-        
-        Portfolio['Asset1Pass'] = (Asset1['Pass']) #* (-1) #Pass a short position?
-        Portfolio['Asset2Pass'] = (Asset2['Pass']) #* (-1) #Pass a short position?
-        Portfolio['LongShort'] = Portfolio['Asset1Pass'] + Portfolio['Asset2Pass']
-        if Portfolio['LongShort'].std() == 0:    
+
+        #Pass position returns to portfolio
+        Portfolio['Asset1Pass'] = (Asset1['Pass']) #* (-1) #Pass a short position for long only position sizing
+        Portfolio['Asset2Pass'] = (Asset2['Pass']) #* (-1) #Pass a short position for long only position sizing
+
+        #Add individual position returns to get portfolio returns
+        Portfolio['Returns'] = Portfolio['Asset1Pass'] + Portfolio['Asset2Pass']
+        if Portfolio['Returns'].std() == 0:    
             continue
         
-        Portfolio['Multiplier'] = Portfolio['LongShort'].cumsum().apply(np.exp)
+        #Returns on $1
+        Portfolio['Multiplier'] = Portfolio['Returns'].cumsum().apply(np.exp)
+        
+        #Max drawdown calculation
         drawdown =  1 - Portfolio['Multiplier'].div(Portfolio['Multiplier'].cummax())
         MaxDD = max(drawdown)
-        if MaxDD > float(.51): 
-            continue
         
-        dailyreturn = Portfolio['LongShort'].mean()
-        if dailyreturn < .0003:
-            continue
-        
-        dailyvol = Portfolio['LongShort'].std()
+        #Optional max drawdown constraint
+#        if MaxDD > float(.51): 
+#            continue
+        #Daily average return
+        dailyreturn = Portfolio['Returns'].mean()
+        #Optional Daily average return constraint
+#        if dailyreturn < .0003:
+#            continue
+        #Daily standard deviation of returns
+        dailyvol = Portfolio['Returns'].std()
+        #Info/sharpe ratio
         sharpe =(dailyreturn/dailyvol)
-        
-        Portfolio['Multiplier'] = Portfolio['LongShort'].cumsum().apply(np.exp)
-        drawdown =  1 - Portfolio['Multiplier'].div(Portfolio['Multiplier'].cummax())
-        MaxDD = max(drawdown)
+
+        #Iteration tracking        
         print(Counter)
+
+        #Saving params and metrics to table for sorting
         Empty.append(a)
         Empty.append(b)
         Empty.append(c)
@@ -129,53 +165,72 @@ for m in MajorList:
         Dataset[0] = Emptyseries.values
         Dataset[i] = Emptyseries.values
         Empty[:] = [] 
-#find optimal parameters from pair
+        
+    #Isolate sharpe/max drawdown metric
     z1 = Dataset.iloc[6]
+    #Take cutoff for top 20% performers
     w1 = np.percentile(z1, 80)
     v1 = [] #this variable stores the Nth percentile of top performers
-    DS1W = pd.DataFrame() #this variable stores your financial advisors for specific dataset
+    DS1W = pd.DataFrame() #This variable stores params
+    #Sorting/organizing
     for h in z1:
         if h > w1:
           v1.append(h)
+    #Storing params in DS1W
     for j in v1:
           r = Dataset.columns[(Dataset == j).iloc[6]]    
           DS1W = pd.concat([DS1W,Dataset[r]], axis = 1)
+    #top performing metric      
     y = max(z1)
-    k = Dataset.columns[(Dataset == y).iloc[6]] #this is the column number
+    k = Dataset.columns[(Dataset == y).iloc[6]] #this is the column number that has top performing metric
+    #Combo name
     kfloat = float(k[0])
+    #End timer
     End = t.time()
     print(End-Start, 'seconds later')
+    #Assignment
     Dataset[TAG] = Dataset[kfloat]
     Dataset2[TAG] = Dataset[TAG]
+    #Column ID
     Dataset2 = Dataset2.rename(columns = {Counter2:TAG})
     Counter2 = Counter2 + 1
-#    print(Dataset[TAG])
-        
+
+#Final portfolio for top params        
 Portfolio2 = pd.DataFrame()
-#find some winning parameters
+#find top parameters
 z1 = Dataset2.iloc[6]
 w1 = np.percentile(z1, 99)
 v1 = [] #this variable stores the Nth percentile of top performers
-winners = pd.DataFrame() #this variable stores your financial advisors for specific dataset
+winners = pd.DataFrame() #this variable stores params
+
+#Sorting
 for h in z1:
     if h > w1:
       v1.append(h)
+#Storing top params
 for j in v1:
       r = Dataset2.columns[(Dataset2 == j).iloc[6]]    
       winners = pd.concat([winners,Dataset2[r]], axis = 1)
 y = max(z1)
-k = Dataset2.columns[(Dataset2 == y).iloc[6]] #this is the name of the pair
+k = Dataset2.columns[(Dataset2 == y).iloc[6]] #this is the name of the top pair/combo
 kfloat = str(k[0])
 
-#most likely, you will want to export to csv for further future investigation
-
-#print(Dataset[TAG])
+#TAG ID separation
 num = kfloat.find('/')
 num2 = num + 1
-#you will need to re-call the Asset1 and Asset2 time series and log returns start here!!!
-Asset3 = YahooGrabber(kfloat[:num])
-Asset4 = YahooGrabber(kfloat[num2:])    
 
+#Need to request the top combo time series
+
+#Request data
+while True: 
+    try:
+        Asset3 = YahooGrabber(kfloat[:num])
+        Asset4 = YahooGrabber(kfloat[num2:])    
+    except CParserError:
+        continue
+    break    
+
+#Trim timeseries lengths to match
 trim = abs(len(Asset3) - len(Asset4))
 if len(Asset3) == len(Asset4):
     pass
@@ -185,38 +240,51 @@ else:
     else:
         Asset4 = Asset4[trim:]
 
-#get log returns
+#Log return calculation
 Asset3['LogRet'] = np.log(Asset3['Adj Close']/Asset3['Adj Close'].shift(1))
 Asset3['LogRet'] = Asset3['LogRet'].fillna(0)
 Asset4['LogRet'] = np.log(Asset4['Adj Close']/Asset4['Adj Close'].shift(1))
 Asset4['LogRet'] = Asset4['LogRet'].fillna(0)
 
-window = int((Dataset2[kfloat][4]))   
+#MA window
+window = int((Dataset2[kfloat][4]))
+
+#Price relative calculation   
 Asset3['PriceRelative'] = Asset3['Adj Close']/Asset4['Adj Close']
 Asset3['PRMA'] = Asset3['PriceRelative'].rolling(window=window, center=False).mean()
 
+#Position sizing from params
 Asset3['Position'] = (Dataset2[k[0]][0])
 Asset3['Position'] = np.where(Asset3['PriceRelative'].shift(1) > Asset3['PRMA'].shift(1),
                                     Dataset2[k[0]][2],Dataset2[k[0]][0])
+#Apply position size to pass to portfolio
 Asset3['Pass'] = (Asset3['LogRet'] * Asset3['Position'])
+
+#Position sizing from params
 Asset4['Position'] = (Dataset2[kfloat][1])
 Asset4['Position'] = np.where(Asset3['PriceRelative'].shift(1) > Asset3['PRMA'].shift(1),
                                     Dataset2[k[0]][3],Dataset2[k[0]][1])
+#Apply position size to pass to portfolio
 Asset4['Pass'] = (Asset4['LogRet'] * Asset4['Position'])
-#
-Portfolio2['Asset3Pass'] = Asset3['Pass'] #* (-1)
-Portfolio2['Asset4Pass'] = Asset4['Pass'] #* (-1)
-Portfolio2['LongShort'] = Portfolio2['Asset3Pass'] + Portfolio2['Asset4Pass'] 
-Portfolio2['LongShort'][:].cumsum().apply(np.exp).plot(grid=True,
+
+#Pass to portfolio
+Portfolio2['Asset3Pass'] = Asset3['Pass']
+Portfolio2['Asset4Pass'] = Asset4['Pass'] 
+#Return calculation
+Portfolio2['Returns'] = Portfolio2['Asset3Pass'] + Portfolio2['Asset4Pass'] 
+#Plotting retuns
+Portfolio2['Returns'][:].cumsum().apply(np.exp).plot(grid=True,
                                      figsize=(8,5))
-dailyreturn = Portfolio2['LongShort'].mean()
-dailyvol = Portfolio2['LongShort'].std()
+#Portfolio statistics                                     
+dailyreturn = Portfolio2['Returns'].mean()
+dailyvol = Portfolio2['Returns'].std()
 sharpe =(dailyreturn/dailyvol)
-Portfolio2['Multiplier'] = Portfolio2['LongShort'].cumsum().apply(np.exp)
-drawdown2 =  1 - Portfolio2['Multiplier'].div(Portfolio2['Multiplier'].cummax())
+#Portfolio returns on $1
+Portfolio2['Multiplier'] = Portfolio2['Returns'].cumsum().apply(np.exp)
+#Portfolio drawdown
+PortfolioDrawdown =  1 - Portfolio2['Multiplier'].div(Portfolio2['Multiplier'].cummax())
 #conversionfactor = Portfolio['PriceRelative'][-1]
 print(kfloat)
 print('--------')
 print(Dataset2[kfloat])
-print('Max Drawdown is ',max(drawdown2),'See Dataset2')
-##pd.to_pickle(Portfolio, 'VXX:UVXY')
+print('Max Drawdown is ',max(PortfolioDrawdown),'See Dataset2')
