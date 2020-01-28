@@ -42,7 +42,7 @@ for i in iterations:
     df['ndayhi'] = df['Adj Close'].shift(1).rolling(window = a).max()
     df['ndaylo'] = df['Adj Close'].shift(1).rolling(window = a).min()
     df['Signal'] = np.where(df['Adj Close'].shift(1) > (df['ndayhi'].shift(1) * b), 1, 0)
-    df['Pass'] = df['Signal'] * df['LogRet']
+    df['Pass'] = df['Signal'].shift(1) * df['LogRet']
     df['StratReturns'] = df['Pass'].cumsum().apply(np.exp)
     stratdailyreturn = df['Pass'].mean()
     stratdailyvol = df['Pass'].std()
@@ -87,7 +87,7 @@ b = float((Dataset[kfloat][1]))
 df['ndayhi'] = df['Adj Close'].shift(1).rolling(window = a).max()
 df['ndaylo'] = df['Adj Close'].shift(1).rolling(window = a).min()
 df['Signal'] = np.where(df['Adj Close'].shift(1) > (df['ndayhi'].shift(1) * b), 1, 0)
-df['Pass'] = df['Signal'] * df['LogRet']
+df['Pass'] = df['Signal'].shift(1) * df['LogRet']
 df['StratReturns'] = df['Pass'].cumsum().apply(np.exp)
 
 df[['StratReturns','BTCmult']].plot(grid=True,    figsize=(8,5))
