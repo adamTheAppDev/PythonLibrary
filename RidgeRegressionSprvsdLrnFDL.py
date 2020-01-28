@@ -5,7 +5,7 @@ Created on Sun Oct  6 19:04:59 2019
 @author: AmatVictoriaCuramIII
 """
 
-#This is a ML model applied to price/technical data - X values are highly correlated, need to diversify features in production
+#This is a ML model applied to price/technical data 
 #Supervised Learning FDL Data Ridge Regression
 
 #import sys
