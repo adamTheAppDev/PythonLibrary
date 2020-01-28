@@ -28,8 +28,20 @@ data = YahooSourceDailyGrabber('TQQQ')
 columntuple = tuple(data.columns[25:])
 #X is features n OG features and nn interactions, y is price 
 
-X = np.array(data[['8wkBreakOutRatio', '8wkBreakDownRatio', '7wkBreakOutRatio', '7wkBreakDownRatio', '6wkBreakOutRatio', '6wkBreakDownRatio', '5wkBreakOutRatio', '5wkBreakDownRatio', '4wkBreakOutRatio', '4wkBreakDownRatio', '3wkBreakOutRatio', '3wkBreakDownRatio', '2wkBreakOutRatio', '2wkBreakDownRatio', '1wkBreakOutRatio', '1wkBreakDownRatio']][50:].fillna(0))
-
+X = np.array(data[['8wkBreakOutRatio', '8wkBreakDownRatio', '4wkBreakOutRatio', 
+'4wkBreakDownRatio', '2wkBreakOutRatio', '2wkBreakDownRatio', 'HigherOpen', 'LowerOpen',
+'HigherHigh', 'LowerHigh', 'HigherLow', 'LowerLow', 'HigherClose', 'LowerClose','GapUp',
+'GapDown','8wkRangePercent', '4wkRangePercent', '2wkRangePercent', '8wkRollingAverageRange',
+'4wkRollingAverageRange', '2wkRollingAverageRange', '8wkRARtoTAR', '4wkRARtoTAR',
+'2wkRARtoTAR', '8wkRollingAverageReturn', '4wkRollingAverageReturn', '2wkRollingAverageReturn',
+'8wkRollingStdDev', '4wkRollingStdDev', '2wkRollingStdDev', '8wkRateOfChange', '4wkRateOfChange',
+'2wkRateOfChange', '8wkRollingAverageVolume', '4wkRollingAverageVolume' ,'2wkRollingAverageVolume',
+'8wkRollingReturnOverAverage', '4wkRollingReturnOverAverage', '2wkRollingReturnOverAverage',
+'8wkRollingStdDevOverAverage', '4wkRollingStdDevOverAverage', '2wkRollingStdDevOverAverage',
+'8wkATRPercent','4wkATRPercent', '2wkATRPercent','8wkRAATRtoTAATR', '4wkRAATRtoTAATR',
+'2wkRAATRtoTAATR', '8wkATRtoRange', '4wkATRtoRange', '2wkATRtoRange', '8wkRollingAverageATRtoRange',
+'4wkRollingAverageATRtoRange', '2wkRollingAverageATRtoRange', '8wkEfficiency', 
+'4wkEfficiency', '2wkEfficiency']][50:].fillna(0))
 y = np.array(data['Adj Close'][50:])
 
 #display info
