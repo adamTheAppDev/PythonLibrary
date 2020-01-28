@@ -59,7 +59,7 @@ for i in iterations:
     window = int(e)
     Asset1['MA'] = Asset1['Adj Close'].rolling(window=window, center=False).mean()
     Asset1['Regime'] = np.where(Asset1['MA'] < Asset1['Adj Close'], 1 , -1)                                 
-    Asset1['Strategy'] = (Asset1['LogRet'] * Asset1['Regime'])
+    Asset1['Strategy'] = (Asset1['LogRet'] * Asset1['Regime'].shift(1))
     #if Asset1['Strategy'].std() == 0:    
     #    continue
     
@@ -110,7 +110,7 @@ print(Dataset[k])
 window = int((Dataset[kfloat][2]))
 Asset1['MA'] = Asset1['Adj Close'].rolling(window=window, center=False).mean()   
 Asset1['Regime'] = np.where(Asset1['MA'] < Asset1['Adj Close'], 1 , -1)
-Asset1['Strategy'] = (Asset1['LogRet'] * Asset1['Regime'])
+Asset1['Strategy'] = (Asset1['LogRet'] * Asset1['Regime'].shift(1))
 Asset1['Strategy'][:].cumsum().apply(np.exp).plot(grid=True,
                                      figsize=(8,5))
 dailyreturn = Asset1['Strategy'].mean()
