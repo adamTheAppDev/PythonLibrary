@@ -1,6 +1,9 @@
 """
-Spyder Editor
+
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
 #pandas_datareader is deprecated, use YahooGrabber
 #This is a techincal analysis tool
 
