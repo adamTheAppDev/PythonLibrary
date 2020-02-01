@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 
 @author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
