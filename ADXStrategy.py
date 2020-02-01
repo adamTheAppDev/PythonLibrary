@@ -7,16 +7,25 @@ Created on Sun Apr  9 16:28:16 2017
 
 #This is a strategy tester
 
+#Import modules
 import pandas as pd
 import numpy as np
 from YahooGrabber import YahooGrabber
+
+#Input 
 ticker = '^GSPC'
+
+#Request data
 s = YahooGrabber('UVXY')
+
+#Variable assignmnet
 window = 20
-s['UpMove'] = s['High'] - s['High'].shift(1)
-s['DownMove'] = s['Low'] - s['Low'].shift(1)
+
+#Log return calculation
 s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1)) 
 s['LogRet'] = s['LogRet'].fillna(0)
+
+#ATR calculation
 s['Method1'] = s['High'] - s['Low']
 s['Method2'] = abs((s['High'] - s['Adj Close'].shift(1)))
 s['Method3'] = abs((s['Low'] - s['Adj Close'].shift(1)))
@@ -28,6 +37,8 @@ s['AverageTrueRange'] = s['TrueRange'].rolling(window = window,
                                 center=False).sum()
 s['AverageTrueRange'] = ((s['AverageTrueRange'].shift(1)*(window-1
                              ) + s['TrueRange']) / window)
+
+#ADX Calculation
 s['PDM'] = (s['High'] - s['High'].shift(1))
 s['MDM'] = (s['Low'].shift(1) - s['Low'])
 s['PDM'] = s['PDM'][s['PDM'] > 0]
@@ -51,23 +62,26 @@ s['DX'] = (100 * (s['DIdiff']/s['DIsum']))
 s['DX'] = s['DX'].fillna(0)
 s['ADX'] = s['DX'].rolling(window = window, center = False).mean()
 s['ADXmean'] = s['ADX'].mean()
+
+#Trimmer
 trim = (window * 2 - 1)
 s = s[trim:]
 replace = s[:trim]
+
+#Graphical display for indicator
 s[['PDI','MDI','ADX','ADXmean']].plot(grid=True, figsize=(8,3))
+
+#Strategy
 s['Touch'] = np.where(s['DIdivergence'] > 0, 1,0) #long signal
 s['Touch'] = np.where(s['DIdivergence'] < 0, -1, s['Touch']) #short signal
-#s['Sustain'] = np.where(s['Touch'].shift(1) == 1, 1, 0) # never actually true when optimized
-#s['Sustain'] = np.where(s['Sustain'].shift(1) == 1, 1, 
-#                                 s['Sustain']) 
-#s['Sustain'] = np.where(s['Touch'].shift(1) == -1, -1, 0) #true when previous day touch is -1, and current RSI is > line 37 threshold 
-#s['Sustain'] = np.where(s['Sustain'].shift(1) == -1, -1,
-#                                 s['Sustain']) 
-#s['Sustain'] = np.where(s['DIdivergence'] > -97.136948, 0, s['Sustain']) #if RSI is greater than threshold, sustain is forced to 0
-#s['Sustain'] = np.where(s['DIdivergence'] < -34.577265, 0, s['Sustain']) #never actually true when optimized
-s['Regime'] = s['Touch'] #+ s['Sustain']
+#Directional methodology
+s['Regime'] = s['Touch']
+#Strategy returns
 s['Strategy'] = (s['Regime']).shift(1)*s['LogRet']
 s['Strategy'] = s['Strategy'].fillna(0)
+#Performance metrics
 s['sharpe'] = (s['Strategy'].mean()-s['LogRet'].mean())/s['Strategy'].std()
+
+#Display for strategy vs underlying
 s[['LogRet','Strategy']].cumsum().apply(np.exp).plot(grid=True,
                                  figsize=(8,5))
