@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Apr  9 16:36:25 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
 #pandas_datareader is deprecated, use YahooGrabber
 #This is a strategy optimizer
 
