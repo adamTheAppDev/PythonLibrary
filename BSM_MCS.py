@@ -1,30 +1,37 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Sep 16 23:44:19 2016
-
-@author: AmatVictoriaCuramIII
+@author: Yves Hilpisch
 """
 
 #This is a Black Scholes model from Yves Hilpisch's book
 
+#Define function
 def bsm_call_value(S0, K, T, r, sigma):
+    #Import modules
     from math import log, sqrt, exp
     from scipy import stats
-    
+    #Type formatting
     S0 = float(S0)
+    #BSM formula
     d1 = (log(S0 / K) + (r + .5 * sigma ** 2) * T) / (sigma * sqrt(T))
     d2 = (log(S0 / K) + (r + .5 * sigma ** 2) * T) / (sigma * sqrt(T))
     value = (S0 * stats.norm.cdf(d1, 0.0, 1.0) - K * exp(-r * T)
                 * stats.norm.cdf(d2, 0.0, 1.0))
     return value
-    
+
+#Import modules    
 from time import time
 from math import exp, sqrt, log
 from random import gauss, seed
+#Spot
 S0 = 100
+#Strike
 K = 105
+#Time in years
 T = 1.0 
+#risk free short rate
 r = .05
+#volatility factor
 sigma = .2
 seed(20000)
 t0 = time()
