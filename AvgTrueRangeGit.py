@@ -2,18 +2,21 @@
 Spyder Editor
 """
 
-#pandas_datareader is deprecated, use YahooGrabber
 #This is a technical analysis tool
 
-from pandas_datareader import data
+#Import modules
+from YahooGrabber import YahooGrabber
 import numpy as np
+
+#Input ticker
 ticker = 'SPY'
-s = data.DataReader(ticker, 'yahoo', start='01/01/2015', end='01/01/2050')
+#Data request
+s = YahooGrabber(ticker)
+
+#Variable assignment
 window = 14
-s['UpMove'] = s['High'] - s['High'].shift(1)
-s['DownMove'] = s['Low'] - s['Low'].shift(1)
-s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1)) 
-s['LogRet'] = s['LogRet'].fillna(0)
+
+#ATR calculation
 s['Method1'] = s['High'] - s['Low']
 s['Method2'] = abs((s['High'] - s['Close'].shift(1)))
 s['Method3'] = abs((s['Low'] - s['Close'].shift(1)))
@@ -23,6 +26,9 @@ s['Method3'] = s['Method3'].fillna(0)
 s['TrueRange'] = s[['Method1','Method2','Method3']].max(axis = 1)
 s['AverageTrueRange'] = s['TrueRange'].rolling(window = window,
                                 center=False).mean
+#Trim out the window period for graph
 trim = (window * 2 - 1)
 s = s[trim:]
+
+#Graphical display
 s[['AverageTrueRange']].plot(grid=True, figsize=(8,3))
