@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Feb  1 12:50:29 2020
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
+#Brian from stackoverflow hooked it up with the framework for this one
+#Slight modifications to upgrade functionality
 
 #Import modules
 from time import sleep, strftime
@@ -35,7 +38,7 @@ hist = []
 ticker = str()
 
 
-def my_hist_data_handler(msg):
+def hist_data_handler(msg):
     print(msg)
     if "finished" in msg.date:
         print('disconnecting', con.disconnect())
@@ -60,7 +63,7 @@ if __name__ == '__main__':
     con = ibConnection(port=7497,clientId=1)
     con.register(error_handler, message.Error)
     con.register(nextValidId_handler, message.nextValidId)
-    con.register(my_hist_data_handler, message.historicalData)
+    con.register(hist_data_handler, message.historicalData)
     con.connect()
 
     print(con.isConnected())
