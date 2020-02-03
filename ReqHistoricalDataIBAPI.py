@@ -73,7 +73,7 @@ if __name__ == '__main__':
         CntrctObj = Contract()
         CntrctObj.m_secType = "STK" 
         CntrctObj.m_symbol = "AAPL"
-        globals()[ticker] = CntrctObj.m_symbol         
+        #globals()[ticker] = CntrctObj.m_symbol         
         CntrctObj.m_currency = "USD"
         CntrctObj.m_exchange = "SMART"
         endtime = strftime('%Y%m%d %H:%M:%S')
