@@ -5,12 +5,11 @@
 
 """
 
-#pandas_datareader is deprecated, use YahooGrabber
 #This is a strategy optimizer
 
 #Import modules
 import pandas as pd
-from pandas_datareader import data
+from YahooGrabber import YahooGrabber
 import numpy as np
 import time as t
 import random as rand
@@ -19,8 +18,7 @@ import random as rand
 ticker = '^GSPC'
 
 #Request data - Use YahooGrabber
-s = data.DataReader(ticker, 'yahoo', start='01/01/2016', end='01/01/2050')
-
+s = YahooGrabber(ticker)
 #Number of iterations for brute force optimizer
 iterations = range(0,800)
 
