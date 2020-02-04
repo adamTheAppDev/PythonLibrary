@@ -5,12 +5,11 @@
 
 """
 
-#pandas_datareader is deprecated, use YahooGrabber
 #This is a techincal indicator.
 
 #Import modules
 import numpy as np
-from pandas_datareader import data
+from YahooGrabber import YahooGrabber
 import pandas as pd
 
 #Input ticker
