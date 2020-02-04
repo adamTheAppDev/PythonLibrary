@@ -8,7 +8,7 @@
 #This is a techincal analysis tool
 
 #Import modules
-from pandas_datareader import data
+from YahooGrabber import YahooGrabber
 import numpy as np
 
 #Variable assignment
