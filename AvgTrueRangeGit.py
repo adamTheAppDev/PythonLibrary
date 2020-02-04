@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 """
-Spyder Editor
+
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a technical analysis tool
