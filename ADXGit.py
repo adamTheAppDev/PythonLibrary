@@ -5,7 +5,6 @@
 
 """
 
-#pandas_datareader is deprecated, use YahooGrabber
 #This is a techincal analysis tool
 
 #Import modules
@@ -17,7 +16,7 @@ ticker = '^GSPC'
 window = 14
 
 #Request data - Use YahooGrabber
-s = data.DataReader(ticker, 'yahoo', start='01/09/2010', end='01/01/2050')
+s = YahooGrabber(ticker)
 
 #Return calculations
 s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1)) 
