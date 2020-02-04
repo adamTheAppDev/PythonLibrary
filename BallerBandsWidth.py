@@ -1,18 +1,35 @@
-"""
-Spyder Editor
+# -*- coding: utf-8 -*-
 """
 
-#pandas_datareader is deprecated, use YahooGrabber
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
+"""
+
 #This is a technical analysis tool
 
-from pandas_datareader import data
+#Import modules
+from YahooGrabber import YahooGrabber
+
+#Input ticker
 ticker = '^GSPC'
-s = data.DataReader(ticker, 'yahoo', start='11/01/2016', end='01/01/2050')
+
+#Request data
+s = YahooGrabber(ticker)
+
+#Assign variable
 window = 20
+
+#Rolling SMA + STD calculation
 s['nDaySMA'] = s['Adj Close'].rolling(window=window, center=False).mean()
 s['nDaySTD'] = s['Adj Close'].rolling(window=window, center=False).std()
+
+#Bollinger band calculation
 s['UpperBand'] = s['nDaySMA'] + (s['nDaySTD'] * 2)
 s['LowerBand'] = s['nDaySMA'] - (s['nDaySTD'] * 2)
 s['BandWidth'] = ((s['UpperBand'] - s['LowerBand'])/s['nDaySMA'])*100
+
+#Trim data
 s = s[window:]
+
+#Indicator graph
 s['BandWidth'].plot(grid=True, figsize=(8, 3))
