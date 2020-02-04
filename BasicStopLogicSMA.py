@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Mar 22 12:52:40 2018
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#Basic Stop / SMA model
+#Basic SMA model with stop loss logic
 #This program is outdated and probably doesn't work well. 
 #See DonchianTrendSingleStockSingleFrequency.py for properly constructed models
 
-#Lock n' Load
+#Import modules
 import numpy as np
 import random as rand
 import pandas as pd
@@ -17,19 +17,18 @@ import time as t
 from DatabaseGrabber import DatabaseGrabber
 from YahooGrabber import YahooGrabber
 from pandas import read_csv
+
+#Assign variables
 Empty = []
 Dataset = pd.DataFrame()
 Portfolio = pd.DataFrame()
 Start = t.time()
 Counter = 0
 
-
-#Input
-
+#Input ticker
 Ticker1 = 'UVXY'
 
-#Here we go
-#30MinUVXY
+#30 min frequency UVXY time series
 Asset1 = pd.read_csv('UVXYnew.csv')
 #Asset1 = Asset1.set_index(Asset1['Date'])
 Asset1 = Asset1.reindex(index=Asset1.index[::-1])
@@ -43,25 +42,26 @@ Asset1 = Asset1.reindex(index=Asset1.index[::-1])
 #Asset2 = Asset2.set_index('Date')
 #Asset2 = Asset2.reindex(index=Asset2.index[::-1])
 
-
 #Out of Sample Selection
-Asset1 = Asset1[:]
+Asset1 = Asset1[:-1500]
 
-##Log Returns
+#Log Returns
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
 
 #MovingAverage
 window = 20
+
+#Profit taker distance in %
 ProfitTarget = .1
-#Use positive number
+#Stop loss distance in %
 StopLoss = .05
+
 #Define Moving Average
 Asset1['MA'] = Asset1['Adj Close'].rolling(window=window, center=False).mean()
 Asset1['MA'] = Asset1['MA'].fillna(0)  
 
-
-#OG regime
+#Original regime
 #If price is greater than MA then go long. If price < MA go short.
 Asset1['Regime'] = np.where(Asset1['MA'] < Asset1['Adj Close'], 1 , -1)                                 
 
@@ -71,6 +71,7 @@ Asset1['OriginalSignal'] = 0
 Asset1['OriginalSignal'].loc[Asset1['Regime'] != Asset1['Regime'].shift(1)] = Asset1['Regime']
 Asset1['ExposureOnDay'] = Asset1['Regime'].shift(1)
 Asset1['ExposureOnDay'] = Asset1['ExposureOnDay'] .fillna(0)
+
 #Trade fill, add slippage here
 Asset1['EntryPrice'] = 0
 Asset1['EntryPrice'].loc[Asset1['OriginalSignal'] != 0] = Asset1['Adj Close']
@@ -120,55 +121,59 @@ Asset1['MFE'] = np.where(Asset1['ExposureOnDay'] == -1, Asset1['EntryPriceShifte
 #Values less than 1 are losses
 Asset1['MAE'] = np.where(Asset1['ExposureOnDay'] == -1, Asset1['EntryPriceShifted']/Asset1['High'], Asset1['MAE'])
 
+#MFE/MAE nans fill with 0
 Asset1['MFE'] = Asset1['MFE'].fillna(0)
 Asset1['MAE'] = Asset1['MAE'].fillna(0)
 
+#Signal for hitting stop loss or take profit
 Asset1['TargetHit'] = np.where(Asset1['MFE'] > (1 + ProfitTarget), ProfitTarget, 0)
 Asset1['StopHit'] = np.where(Asset1['MAE'] < (1 - StopLoss), -StopLoss, 0)
 
+#If hit then record exposure
 Asset1['TargetHit'] = np.where(Asset1['ExposureOnDay'] == 0, 0, Asset1['TargetHit'])
 Asset1['StopHit'] = np.where(Asset1['ExposureOnDay'] == 0, 0, Asset1['StopHit'])
 Asset1['ExposureChange'] = 0
 Asset1['ExposureChange'].loc[Asset1['ExposureOnDay'] != Asset1['ExposureOnDay'].shift(1)] = 1
 Asset1['ExposureChange'][0] = 0 
-Asset1['InTheGame'] = Asset1['ExposureChange']
+
+#Is in market or not
+Asset1['InTheMarket'] = Asset1['ExposureChange']
 
     
 #Pass returns for brackets
 Asset1['Brackets'] = 0
+
 #Win on first day
 Asset1['Brackets'].loc[(Asset1['ExposureChange'] == 1) & 
     (Asset1['TargetHit'] == ProfitTarget) & (Asset1['StopHit'] == 0)] = ProfitTarget
 #Loss on first day
 Asset1['Brackets'].loc[(Asset1['ExposureChange'] == 1) &
     (Asset1['StopHit'] == -StopLoss)] = -StopLoss
-#redundantcode
-Asset1['InTheGame'].loc[(Asset1['ExposureChange'].shift(1) == 1)
+#Redundant code
+Asset1['InTheMarket'].loc[(Asset1['ExposureChange'].shift(1) == 1)
     & (Asset1['TargetHit'].shift(1) == 0) & (Asset1['StopHit'].shift(1) == 0)] = 1
     
 #this can be considered a time stop 
 for x in range(0,20):
-#Loop from here
-    Asset1['InTheGame'].loc[(Asset1['InTheGame'].shift(1) == 1)
+    Asset1['InTheMarket'].loc[(Asset1['InTheMarket'].shift(1) == 1)
         & (Asset1['TargetHit'].shift(1) == 0) & (Asset1['StopHit'].shift(1) == 0)] = 1
     #Win
-    Asset1['Brackets'].loc[(Asset1['InTheGame'] == 1) & (Asset1['ExposureChange'] == 0) 
+    Asset1['Brackets'].loc[(Asset1['InTheMarket'] == 1) & (Asset1['ExposureChange'] == 0) 
         & (Asset1['TargetHit'] == ProfitTarget) & (Asset1['StopHit'] == 0)] = ProfitTarget
     #Loss
-    Asset1['Brackets'].loc[(Asset1['InTheGame'] == 1) & (Asset1['ExposureChange'] == 0)
+    Asset1['Brackets'].loc[(Asset1['InTheMarket'] == 1) & (Asset1['ExposureChange'] == 0)
         & (Asset1['StopHit'] == -StopLoss)] = -StopLoss
-#To here
      
-     
+#Opening gaps
 Asset1['OpenToEntry'] = Asset1['Open'] / Asset1['EntryPriceShifted']
 Asset1['CloseToEntry'] = Asset1['Adj Close'] / Asset1['EntryPriceShifted']
 
 #The case for no bracket hits, long, time exit, on close
-Asset1['Brackets'].loc[(Asset1['InTheGame'] == 1) & (Asset1['InTheGame'].shift(-1) == 0)
+Asset1['Brackets'].loc[(Asset1['InTheMarket'] == 1) & (Asset1['InTheMarket'].shift(-1) == 0)
                         & (Asset1['ExposureOnDay'] == 1)] = (Asset1['CloseToEntry'] - 1)
                         
 #The case for no bracket hits, short, time exit, on close
-Asset1['Brackets'].loc[(Asset1['InTheGame'] == 1) & (Asset1['InTheGame'].shift(-1) == 0)
+Asset1['Brackets'].loc[(Asset1['InTheMarket'] == 1) & (Asset1['InTheMarket'].shift(-1) == 0)
                         & (Asset1['ExposureOnDay'] == -1)] = 1 - Asset1['CloseToEntry']
 
 #The case for no bracket hits and position change, long to short
@@ -181,30 +186,28 @@ Asset1['Brackets'].loc[(Asset1['ExposureChange'] == 1) & (Asset1['ExposureOnDay'
 
 #The case for gap win days
 #If we are long and take gains on open
-Asset1['Brackets'].loc[(Asset1['InTheGame'] == 1) & (Asset1['ExposureOnDay'] == 1)
+Asset1['Brackets'].loc[(Asset1['InTheMarket'] == 1) & (Asset1['ExposureOnDay'] == 1)
                         & (Asset1['OpenToEntry'] >= 1 + ProfitTarget)] = Asset1['OpenToEntry'] - 1
 #If we are short and take gains on open     
-Asset1['Brackets'].loc[(Asset1['InTheGame'] == 1) & (Asset1['ExposureOnDay'] == -1)
+Asset1['Brackets'].loc[(Asset1['InTheMarket'] == 1) & (Asset1['ExposureOnDay'] == -1)
                         & (Asset1['OpenToEntry'] <= 1 - ProfitTarget)] = 1 - (Asset1['OpenToEntry'])
 
 #The case for gap loss days
 #If we are long and get stopped out short
-Asset1['Brackets'].loc[(Asset1['InTheGame'] == 1) & (Asset1['ExposureOnDay'] == 1)
+Asset1['Brackets'].loc[(Asset1['InTheMarket'] == 1) & (Asset1['ExposureOnDay'] == 1)
                         & (Asset1['OpenToEntry'] <= 1 - StopLoss)] = -(1 - (Asset1['OpenToEntry']))
 #If we are short and get stopped out long     
-Asset1['Brackets'].loc[(Asset1['InTheGame'] == 1) & (Asset1['ExposureOnDay'] == -1)
+Asset1['Brackets'].loc[(Asset1['InTheMarket'] == 1) & (Asset1['ExposureOnDay'] == -1)
                         & (Asset1['OpenToEntry'] >= 1 + StopLoss)] = 1 - (Asset1['OpenToEntry'])
                         
-                        
+#Pass bracket returns as strategy returns // redundant           
 Asset1['Strategy'] = Asset1['Brackets']
-#Pass the returns for basic strategy with no brackets
-#Asset1['Strategy'] = (Asset1['LogRet'] * Asset1['Regime'].shift(1))
-#Asset1['Strategy'] = Asset1['Strategy'].fillna(0)
-#
-#Stats
+
+#Returns on $1
 Asset1['Multiplier'] = Asset1['Strategy'].cumsum().apply(np.exp)
 Asset1['Multiplier'] = Asset1['Multiplier'].fillna(1)
 
+#System performance statistics
 drawdown =  1 - Asset1['Multiplier'].div(Asset1['Multiplier'].cummax())
 MaxDD = max(drawdown)
 
@@ -214,5 +217,6 @@ dailyvol = Asset1['Strategy'].std()
 
 sharpe =(dailyreturn/dailyvol)
 
+#Graphical display
 Asset1['Strategy'][:].cumsum().apply(np.exp).plot(grid=True,
                                      figsize=(8,5))
