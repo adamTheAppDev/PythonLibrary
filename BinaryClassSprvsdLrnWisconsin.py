@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct  6 19:04:59 2019
 
-@author: AmatVictoriaCuramIII
+Cancer Data
+Intro to Machine Learning in Python 
+@author: Muller and Guido
+
 """
 
 #Supervised Learning Binary Classification Wisconsin cancer Data
-#Machine learning model from Intro to Machine Learning in Python bu Muller and Guido
+#Machine learning model from Intro to Machine Learning in Python by Muller and Guido
 
 #import sys
 #import sklearn
