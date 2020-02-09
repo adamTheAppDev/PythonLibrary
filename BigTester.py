@@ -5,8 +5,8 @@
 
 """
 
-#This is a single issue strategy tester + portfolio analysis tool
-#Tests one asset at a time, places best performers in final portfolio
+#This is a single issue strategy tester
+#Tests one asset at a time, finds optimal params
 
 #Load your modules
 import numpy as np
@@ -33,12 +33,8 @@ tickers = DatabaseAgeScanner(1250)
 tickers = tickers[:]
 #tickers = ('AA', 'AAME', 'AAN', 'AAON', 'AAPL', 'AB', 'ABAX', 'ABC', 'ABCB', 'ABEO', 'ABEV')
 
-#Make all pairs in final list by using the ListPairs function.
-
-#MajorList = ListPairs(tickers)
 
 #choose number of asset pairs in final equal weighted portfolio
-
 listlen = len(tickers)
 desiredlen = 10
 lenthreshold = abs(int(round((1 -(((desiredlen)/listlen) - .0000001) * 100))))
