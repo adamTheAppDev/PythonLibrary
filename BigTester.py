@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug 30 19:07:37 2017
 
-@author: Adam Reinhold Von Fisher - adamrvfisher@gmail.com 
-linkedin.com/in/adamrvfisher - github.com/adamrvfisher/TechnicalAnalysisLibrary
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a single issue strategy tester + portfolio analysis tool
@@ -57,11 +56,8 @@ for t in tickers: #Every pair in pairlist
     #get log returns
         Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
         Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
-
-    #Match lengths
-    
-    #Run random variables through model and acquire parameters
-    
+  
+    #Run random variables through model and acquire parameters  
         for i in iterations:
 #            Counter = Counter + 1
             #SMA lookback window            
