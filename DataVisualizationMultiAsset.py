@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 11 09:04:55 2018
 
-@author: Adam Reinhold Von Fisher
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
-#Developed in Python 3.5 
 
+#Developed in Python 3.5 
 #R Multiple Finder; Trade Data Tracking
 
 #Import libraries
