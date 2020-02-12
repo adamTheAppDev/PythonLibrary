@@ -5,7 +5,6 @@
 
 """
 
-
 #This is a formatting tool for directory management
 
 #Import modules
