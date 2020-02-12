@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun May 21 11:47:12 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
 
 #This is a formatting tool for directory management
 
