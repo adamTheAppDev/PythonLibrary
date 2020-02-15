@@ -5,7 +5,6 @@
 
 """
 
-
 #This is a summary statistic calculator
 
 #Import modules
