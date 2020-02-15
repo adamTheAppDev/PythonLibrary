@@ -1,22 +1,32 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Aug 11 00:32:47 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#This is a database management tool for use in batch file..
+#This is a directory management tool for use in batch file..
 
+#Import modules
 import os
-#Clean up routine
 
-#Clean up TemporaryCSV        
+#Select directory        
 tempCSV = 'F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\'
+
+#List all files in directory
 fileList1 = os.listdir(tempCSV)
+
+#For all files in list
 for f in fileList1:
-    os.remove(tempCSV + "\\" + f)   
+    #Remove from directory
+    os.remove(tempCSV + "\\" + f)
     
+#Select directory
 tempCSV1 = 'F:\\Users\\AmatVictoriaCuram\\CSVtoSQL\\'
+#List all files in directory
 fileList2 = os.listdir(tempCSV1)
+
+#For all files in list
 for d in fileList2:
+    #Remove from directory
     os.remove(tempCSV1 + "\\" + d)  
