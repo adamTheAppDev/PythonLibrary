@@ -13,7 +13,7 @@ import pandas as pd
 import os
 
 #Assign folder with CSVs
-CSVfiles = os.listdir('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV')
+CSVfiles = os.listdir('F:\\Users\\UserName\\TemporaryCSV')
 
 #Make range from total number of files in folder
 ranger = range(0,len(CSVfiles))
@@ -22,7 +22,7 @@ ranger = range(0,len(CSVfiles))
 for i in ranger:
     try:
         #Open files
-        temp = read_csv('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\' +
+        temp = read_csv('F:\\Users\\UserName\\TemporaryCSV\\' +
                          (CSVfiles[i]), sep = ',')
         #Change index
         temp = temp.set_index('Date')
@@ -33,13 +33,13 @@ for i in ranger:
         #Delete duplicate index values
         temp = temp[~temp.index.duplicated(keep='first')]
         #If a folder to store pickle does not exist
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        if not os.path.exists('F:\\Users\\UserName\\Database\\' +
                           CSVfiles[i][:-4]):
             #Make folder
-            os.makedirs('F:\\Users\\AmatVictoriaCuram\\Database\\' +
+            os.makedirs('F:\\Users\\UserName\\Database\\' +
                           CSVfiles[i][:-4])
         #Store pickle
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        pd.to_pickle(temp, 'F:\\Users\\UserName\\Database\\' +
                           CSVfiles[i][:-4] + '\\' + CSVfiles[i][:-4])
         #Print progress
         print(CSVfiles[i])
@@ -49,13 +49,13 @@ for i in ranger:
 for i in ranger:
     try:
         #Open pickle
-        files = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        files = pd.read_pickle('F:\\Users\\UserName\\Database\\' +
                         CSVfiles[i][:-4] + '\\' + CSVfiles[i][:-4])
         #Clean values
         for x in files.columns:
             files[x] =  pd.to_numeric(files[x], errors='coerce')
         #Save pickle
-        pd.to_pickle(files, 'F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        pd.to_pickle(files, 'F:\\Users\\UserName\\Database\\' +
                          CSVfiles[i][:-4] + '\\' + CSVfiles[i][:-4])
         #Print progress
         print(CSVfiles[i])
@@ -63,7 +63,7 @@ for i in ranger:
         continue
         
 #this is for testing individual CSVs
-#tester = read_csv('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\' +
+#tester = read_csv('F:\\Users\\UserName\\TemporaryCSV\\' +
 #                     (df['CSVname'][0]), sep = ',')
 #tester = tester.set_index('Date')
-#pd.to_pickle(tester, 'F:\\Users\\AmatVictoriaCuram\\Database\\' + df['CSVname'][0][:-4])
+#pd.to_pickle(tester, 'F:\\Users\\UserName\\Database\\' + df['CSVname'][0][:-4])
