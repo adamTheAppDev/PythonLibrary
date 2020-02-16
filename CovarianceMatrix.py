@@ -1,24 +1,35 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue May  2 22:21:03 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a summary statistic tool
-#pandas_datareader is deprecated, use YahooGrabber
-#Add more tickers for fun
+#Add more tickers as needed
 
-from pandas_datareader import data
-import pandas as pd
+#Import modules
+from YahooGrabber import YahooGrabber
 import numpy as np
+
+#Variable assignment
 tickers = ['^RUT','GLD','SOYB','JO','TLT']
 returns = pd.DataFrame()
+
+#For all tickers
 for s in tickers:
-    s = data.DataReader(s, 'yahoo', start='10/1/2015', end='01/01/2050')
+    #Request data
+    s = YahooGrabber(s)
+    #Calculate returns
     s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1))
+    #Add returns to DataFrame
     returns = pd.concat([returns,s['LogRet']],axis = 1)
+#Add tickers to columns -- BEWARE -- if there is missing data from data req. 
+#Column names will be spurious
 returns.columns = tickers
+#Fill nans with 0
 returns = returns.fillna(0)
+#Calculate covariance 
 matrix = returns.cov()
+#Display
 print(matrix)
