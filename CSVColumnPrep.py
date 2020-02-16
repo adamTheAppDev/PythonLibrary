@@ -20,19 +20,19 @@ import numpy as np
 from pandas import read_csv 
 
 #Get list of files in folder
-CSVlist = os.listdir('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\')
+CSVlist = os.listdir('F:\\Users\\UserName\\TemporaryCSV\\')
 
 #Make program output destination
-if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\CSVtoSQL'):
-    os.makedirs('F:\\Users\\AmatVictoriaCuram\\CSVtoSQL')
+if not os.path.exists('F:\\Users\\UserName\\CSVtoSQL'):
+    os.makedirs('F:\\Users\\UserName\\CSVtoSQL')
     
 #Open and mod each file
 for i in CSVlist:
-    temp = read_csv('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\' +
+    temp = read_csv('F:\\Users\\UserName\\TemporaryCSV\\' +
                          (i), sep = ',')
     temp.insert(1,'Ticker', i[:-4])
     temp.rename(columns={'Date':'StkDate'}, inplace=True)
     
 #Save files to new destination
-    temp.to_csv('F:\\Users\\AmatVictoriaCuram\\CSVtoSQL\\' + (i), sep=',', 
+    temp.to_csv('F:\\Users\\UserName\\CSVtoSQL\\' + (i), sep=',', 
                     index = False)    
