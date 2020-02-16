@@ -14,14 +14,14 @@ import pandas as pd
 import os
 
 #Get list of files in folder
-CSVlist = os.listdir('F:\\Users\\AmatVictoriaCuram\\CSVtoSQL\\')
+CSVlist = os.listdir('F:\\Users\\UserName\\CSVtoSQL\\')
 
 #Make large dataframe
 DF = pd.DataFrame()
 
 #Open and mod each file
 for i in CSVlist:
-    temp = read_csv('F:\\Users\\AmatVictoriaCuram\\CSVtoSQL\\' +
+    temp = read_csv('F:\\Users\\UserName\\CSVtoSQL\\' +
                          (i), sep = ',') 
     DF = pd.concat([DF, temp], axis = 0)
     
@@ -29,5 +29,5 @@ for i in CSVlist:
 DF = DF.loc[:,~DF.Ticker.duplicated()]
 
 #Write to CSV
-DF.to_csv('C:\\Users\\AmatVictoriaCuramIII\\Desktop\\Access\\DF.csv',
+DF.to_csv('C:\\Users\\UserName\\DirectoryLocation\\Access\\DF.csv',
                     index=False)
