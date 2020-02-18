@@ -23,7 +23,7 @@ DatabaseCSV = [s + '.csv' for s in DatabaseTickers]
 ranger = range(0,len(DatabaseCSV))
 
 #Load the CSV
-QualitativeData = pd.read_csv('C:\\Users\\AmatVictoriaCuramIII\\Desktop\\Python\\PretrimQualitativeData.csv', sep = ',')
+QualitativeData = pd.read_csv('C:\\Users\\UserName\\DirectoryLocation\\PretrimQualitativeData.csv', sep = ',')
 QualitativeDataTickers = list(QualitativeData['Symbol'])
 
 for i in ranger:
