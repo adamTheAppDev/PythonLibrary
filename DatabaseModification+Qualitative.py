@@ -16,7 +16,7 @@ import os
 import numpy as np
 start = t.time()
 
-DatabaseTickers = os.listdir('F:\\Users\\AmatVictoriaCuram\\Database')
+DatabaseTickers = os.listdir('F:\\Users\\UserName\\DirectoryLocation')
 
 DatabaseCSV = [s + '.csv' for s in DatabaseTickers]
 
@@ -29,7 +29,7 @@ QualitativeDataTickers = list(QualitativeData['Symbol'])
 for i in ranger:
     try:
         print(DatabaseCSV[i])
-        temp = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        temp = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' +
             DatabaseCSV[i][:-4]+ '\\' + DatabaseCSV[i][:-4])
         #Are the next two lines necessary? They convert any non numeric data in original CSV to numerical data type
         for x in temp.columns:
@@ -1058,7 +1058,7 @@ for i in ranger:
         #Remove duplicate columns
         temp = temp[~temp.index.duplicated(keep='first')]
         #Save DF to database in folders
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                         DatabaseCSV[i][:-4] + '\\' + DatabaseCSV[i][:-4])
     except IndexError: #If there is no qualitative data for given ticker
                        #Fill N/A to missing data from Remote Source
@@ -1073,7 +1073,7 @@ for i in ranger:
         temp['MarketCap'] = np.nan
         temp = temp[~temp.index.duplicated(keep='first')]
         #Save DF to database in folders
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                         DatabaseCSV[i][:-4] + '\\' + DatabaseCSV[i][:-4])
     except OSError:
         continue
