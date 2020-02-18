@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb 28 23:29:44 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#This is an older iteration of a database scanning and sorting tool
-#Get modules
+#This is an older version of a directory scanning and sorting tool
+
+#Define function
 def DatabaseAgeScanner(MinAge):
+    #Get modules
     from SAge import SAge
 #    from SAverageReturn import SAverageReturn
 #    from SCoeffVar import SCoeffVar
@@ -21,20 +23,25 @@ def DatabaseAgeScanner(MinAge):
 #    from SCommodityChannelIndex import SCommodityChannelIndex
     import os
     
-    #Got to get that payback!!
+    #Variable assignment
     counter = 1
+    refinedportfolio = []
     #import the CSV
     #df = read_csv('goodsymbols.csv', sep = ',')
     #df = df[300]
     #symbols = df.Symbol.values
-    port = os.listdir('F:\\Users\\AmatVictoriaCuram\\Database')
-    refinedportfolio = []
+    #Assign tickers for scanning
+    port = os.listdir('F:\\Users\\Username\\DirectoryLocation')
     #print(symbols)
+    #For all stocks in list
     for s in port:
         try:
+            #Iteration tracking
             print(counter)
             counter = counter + 1
-            q = DatabaseGrabber(s)        
+            #Request data
+            q = DatabaseGrabber(s)    
+            #If passed age constraing
             if SAge(q) > MinAge:
     #            if float(SAdjustedClose(q)) > 5:
     #                if float(SAverageRollingVolume(q)) > 500000:
@@ -42,6 +49,7 @@ def DatabaseAgeScanner(MinAge):
     #                        if float(SRelStrInd(q)) < 30:
     #                            if float(SCommodityChannelIndex(q)) < -80:
                         #   ask another if or do commands
+                #List ticker and add to list that passes scan
                 print(s)
                 refinedportfolio.append(s)
     #                            else:
