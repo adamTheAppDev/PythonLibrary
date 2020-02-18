@@ -9,7 +9,7 @@ Created on Thu Jun  8 12:37:08 2017
 
 def DatabaseGrabber(ticker):    
     import pandas as pd
-    dataframe = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\Database\\' + 
+    dataframe = pd.read_pickle('F:\\Users\\UserName\\Directory location\\' + 
                   ticker + '\\' + ticker)
     for i in dataframe.columns:
         dataframe[i] =  pd.to_numeric(dataframe[i], errors='coerce')
