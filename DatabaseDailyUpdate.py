@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun May 21 14:32:32 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a shortened version of a database update tool
@@ -27,8 +27,8 @@ longtimeago = 1200000000
 dayseconds = 86400
 daysaway = int((today - cutoffdatetime).total_seconds()/dayseconds)
 day = str(cutoffseconds + (daysaway * dayseconds))
-artificialcrumb = "1.ZWRp1I9ZS"
-df = read_csv('C:\\Users\\AmatVictoriaCuramIII\\Desktop\\Python\\goodsymbols.csv', sep = ',')
+artificialcrumb = "1.ZWRp1I9ZS" #Use crumbcatcher.py
+df = read_csv('C:\\Users\\UserName\\DirectoryLocation\\goodsymbols.csv', sep = ',')
 symbol = df.Symbol.values
 ranger = range(0,len(df))
 firsthalf = "https://query1.finance.yahoo.com/v7/finance/download/" #insert ticker and add secondhalf
@@ -51,14 +51,14 @@ for i in ranger:
             continue
         strdf = strdf.set_index('Date')
         strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
-        strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\"+ ticker + ".csv"))
+        strdf.to_csv(("F:\\Users\\UserName\\DirectoryLocation\\"+ ticker + ".csv"))
         print(ticker)
     except CParserError:
         print('Parser failed for ' + ticker)
         continue    
     # you may now write to file
 
-location = 'F:/Users/AmatVictoriaCuram/TemporaryCSV'
+location = 'F:\\Users\\UserName\\DirectoryLocation'
 midlist = os.listdir(location)
 idle1 = 0
 if len(midlist) > 0:
@@ -84,7 +84,7 @@ if len(midlist) > 0:
                 continue
             strdf = strdf.set_index('Date')
             strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
-            strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\"+ ticker + ".csv"))
+            strdf.to_csv(("F:\\Users\\UserName\\DirectoryLocation\\"+ ticker + ".csv"))
         except CParserError:
             print("The parser failed for" + ticker)
             continue
@@ -96,47 +96,47 @@ newNeeded = [x for x in startlist if x not in newendlist]
 print(str(len(newNeeded)) + ' Unimported Stocks Exist')
 print("Missing symbols are --- > " + str(newNeeded))
         
-CSVlist = os.listdir("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\")
+CSVlist = os.listdir("F:\\Users\\UserName\\DirectoryLocation\\")
 ranger = range(0,len(CSVlist))
-ranger2 = range(0,len(os.listdir('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\')))
-if len(os.listdir('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\')) > 1:
+ranger2 = range(0,len(os.listdir('F:\\Users\\UserName\\DirectoryLocation\\')))
+if len(os.listdir('F:\\Users\\UserName\\DirectoryLocation\\')) > 1:
     for i in ranger:
         try:
-            #temp = read_csv('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\' +
+            #temp = read_csv('F:\\Users\\UserName\\DirectoryLocation\\' +
            #              (CSV['CSVname'][i]), sep = ',')
-            temp = read_csv('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\' +
+            temp = read_csv('F:\\Users\\UserName\\DirectoryLocation\\' +
             (CSVlist[i]), sep = ',')
             temp = temp.set_index('Date') 
             temp.index = pd.to_datetime(temp.index, format = "%Y/%m/%d")
-            pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\TemporaryPickle\\' + 
+            pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' + 
                   CSVlist[i][:-4] + 'addition')
-            glaze = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\TemporaryPickle\\' +
+            glaze = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' +
                          (CSVlist[i][:-4] + 'addition'))
             for x in glaze.columns:
                 glaze[x] =  pd.to_numeric(glaze[x], errors='coerce')
-            pd.to_pickle(glaze, 'F:\\Users\\AmatVictoriaCuram\\TemporaryPickle\\' +
+            pd.to_pickle(glaze, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                           CSVlist[i][:-4] + 'addition')      
-            bigpickle = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\Database\\' + 
+            bigpickle = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' + 
                   CSVlist[i][:-4] + '\\' + CSVlist[i][:-4])
-            littlepickle = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\TemporaryPickle\\' + 
+            littlepickle = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' + 
                   CSVlist[i][:-4] + 'addition')
             newdata = pd.concat([bigpickle, littlepickle])
-            pd.to_pickle(newdata, 'F:\\Users\\AmatVictoriaCuram\\Database\\' +
+            pd.to_pickle(newdata, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                           CSVlist[i][:-4] + '\\' + CSVlist[i][:-4])
         except OSError:
             continue                   
     
-tempPickle = 'F:\\Users\\AmatVictoriaCuram\\TemporaryPickle\\'
+tempPickle = 'F:\\Users\\UserName\\DirectoryLocation\\'
 fileList2 = os.listdir(tempPickle)
 for ff in fileList2:
     os.remove(tempPickle + "\\" + ff)
     
 start = t.time()
 #
-#if len(os.listdir('F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\')) > 1:
+#if len(os.listdir('F:\\Users\\UserName\\DirectoryLocation\\')) > 1:
 for ii in ranger2:
     try:
-        temp = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        temp = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' +
                 CSVlist[ii][:-4]+ '\\' + CSVlist[ii][:-4])
 #
         for x in temp.columns:
@@ -299,7 +299,7 @@ for ii in ranger2:
 #               
 #    #           #temp = temp.drop('column_name', axis =  1) #drop function
             temp = temp[~temp.index.duplicated(keep='first')]
-            pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\Database\\' +
+            pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                         CSVlist[ii][:-4] + '\\' + CSVlist[ii][:-4])
     except OSError:
         continue
