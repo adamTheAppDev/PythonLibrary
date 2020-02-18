@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun  8 12:37:08 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a database management/query tool 
 
 def DatabaseGrabber(ticker):    
     import pandas as pd
-    dataframe = pd.read_pickle('F:\\Users\\UserName\\Directory location\\' + 
+    dataframe = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' + 
                   ticker + '\\' + ticker)
     for i in dataframe.columns:
         dataframe[i] =  pd.to_numeric(dataframe[i], errors='coerce')
