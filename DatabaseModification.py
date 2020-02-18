@@ -15,7 +15,7 @@ import os
 import numpy as np
 start = t.time()
 
-DatabaseTickers = os.listdir('F:\\Users\\AmatVictoriaCuram\\Database')
+DatabaseTickers = os.listdir('F:\\Users\\UserName\\DirectoryLocation')
 
 DatabaseCSV = [s + '.csv' for s in DatabaseTickers]
 
@@ -24,7 +24,7 @@ ranger = range(0,len(DatabaseCSV))
 for i in ranger:
     try:
         print(DatabaseCSV[i])
-        temp = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        temp = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' +
             DatabaseCSV[i][:-4]+ '\\' + DatabaseCSV[i][:-4])
         #Are the next two lines necessary?
         for x in temp.columns:
@@ -1032,7 +1032,7 @@ for i in ranger:
         
         temp = temp[~temp.index.duplicated(keep='first')]
         
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\Database\\' +
+        pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                         DatabaseCSV[i][:-4] + '\\' + DatabaseCSV[i][:-4])
     except OSError:
         continue
