@@ -41,7 +41,7 @@ def DatabaseAgeScanner(MinAge):
             counter = counter + 1
             #Request data
             q = DatabaseGrabber(s)    
-            #If passed age constraint
+            #If passes age constraint
             if SAge(q) > MinAge:
     #            if float(SAdjustedClose(q)) > 5:
     #                if float(SAverageRollingVolume(q)) > 500000:
