@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Sep 19 21:45:57 2016
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#When executed, this program is just a database scanner. 
-#Nothing real special. Didn't actually finish whatever it was I set to do here..
+#This program houses functions for use in scanners
+#Performs a scan at the end, but can be used to import functions from.
 
 #Get modules
 import numpy as np
@@ -168,18 +168,18 @@ for s in port:
         pass
 #List refined portfolio
 print(port1)
-df2 = pd.DataFrame([])
+#df2 = pd.DataFrame([])
 #Set up new parameters
-cash = 100000
+#cash = 100000
 #Implement logic
-def WxR(port):
-    numsec = len(port)
-    ws = 1/numsec
-    df2 = pd.DataFrame(columns=[])
-    for s in port:
-        s = web.get_data_yahoo(s, start='1/1/1990', end='01/01/2018') 
-        s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1))
-        s['ws'] = ws
-        df2 = pd.concat([df2,s['LogRet']], axis=1)
+#def WxR(port):
+#    numsec = len(port)
+#    ws = 1/numsec
+#    df2 = pd.DataFrame(columns=[])
+#    for s in port:
+#        s = web.get_data_yahoo(s, start='1/1/1990', end='01/01/2018') 
+#        s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1))
+#        s['ws'] = ws
+#        df2 = pd.concat([df2,s['LogRet']], axis=1)
 #    df2 = df2.assign(s=s['LogRet'].values)
-    print(df2)
+#    print(df2)
