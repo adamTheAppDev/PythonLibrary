@@ -9,7 +9,7 @@
 #This is a HTML scraping and formatting tool
 
 #Define function
-def PolishedCrumbCatcher(ticker):
+def CrumbCatcher(ticker):
 
     #Import modules
     import requests
