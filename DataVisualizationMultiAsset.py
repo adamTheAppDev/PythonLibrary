@@ -339,7 +339,7 @@ for ticker in tickerlist[:]:
         SignalTrim = next((n for n, x in enumerate(TradeSubset['Signal']) if x), 0)
         TradeSubset = TradeSubset[SignalTrim:]
     
-    #If there is a trade that is still open..
+    #If there is a trade that is still open
     if sum(abs(TradeSubset['Signal'])) != 0:
         #This exit type corresponds to an open trade 
         ExitTaken = 0
@@ -460,12 +460,16 @@ for ticker in tickerlist[:]:
     
     #This is a graph of the equity curve from trade exits
     fig, ax = plt.subplots()
+    #Line chart of dollar P/L
     ax.plot(Asset1['DollarPL'])
+    #Set title and axis labels
     ax.set_title('Dollar P/L')
     ax.set_xlabel('Date')
     ax.set_ylabel('Profit/Loss')
+    
+    plt.show()    
     print('-' * 55)
-    plt.show()
+    
     #This is a histogram for RMultiples
     fig2, ax2 = plt.subplots()
     #Separate RMultiples for histogram
@@ -476,21 +480,24 @@ for ticker in tickerlist[:]:
     #Make histogram - use odd number of bins so bars don't overlap
     plt.hist(SeparatedRMultiples, bins = 21, color = ['green', 'red'], 
              label=['Positive R', 'Negative R'])         
+    #Place legend on graph
     plt.legend(loc='upper right')
+    #Set title and axis labels
     ax2.set_title('R Multiples')
     ax2.set_xlabel('R Multiple')
     ax2.set_ylabel('Number of Trades')
-    print('-' * 60)
+    
     plt.show()
+    print('-' * 60)
 
     #Make column that represents X axis 
     Asset1['Index'] = Asset1.index
     #Format for mpl
     Asset1['IndexToNumber'] = Asset1['Index'].apply(mdates.date2num)
     
-    #Create axe and define X and Y axis scale
+    #Create graph for candlestick chart and define X and Y axis scale
     figure, axe = plt.subplots(figsize = (10,5))
-    #Assign titles
+    #Assign titles and axis labels
     axe.set_title(ticker)
     plt.ylabel(ticker + ' Price')
     plt.xlabel('Date') 
@@ -527,6 +534,7 @@ for ticker in tickerlist[:]:
     axe.scatter(ExitScatterData.loc[ExitScatterData['TradeDirection'] == 1, 'IndexToNumber'].values, 
             ExitScatterData.loc[ExitScatterData['TradeDirection'] == 1, 'ExitPriceUnitOne'].values, label='skitscat', color='red', s=75, marker="x")
     
+    #Creating candlestick values as copy from original DataFrame
     Asset1Copy = Asset1[['IndexToNumber', 'Open', 'High', 'Low', 'Close', 'Adj Close']].copy()
     #Plot the DF values with the figure, object
     candlestick_ohlc(axe, Asset1Copy.values, width=.6, colorup='green', colordown='red')
@@ -535,13 +543,17 @@ for ticker in tickerlist[:]:
     print('-' * 90)
     plt.show()
     print('-' * 90)
-    #For ATR
+    
+    #For ATR indicator
     figure2, axe2 = plt.subplots(figsize = (10,2))
+    #Set title and axis labels
     axe2.set_title(ticker + ' ATR')
     plt.ylabel(ticker + ' ATR')
     plt.xlabel('Date')
+    #ATR line and ATR channels
     axe2.plot(Asset1['IndexToNumber'], Asset1['ATRPercent'], color = 'black', label = 'ATR Percent')
     axe2.plot(Asset1['IndexToNumber'], Asset1['ATRPercentRollingMax'], color = 'green', label = 'ATRPercentRollingMax')
     axe2.plot(Asset1['IndexToNumber'], Asset1['ATRPercentRollingMin'], color = 'red', label = 'ATRPercentRollingMin')
+    #Format date
     axe2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
     plt.show()
