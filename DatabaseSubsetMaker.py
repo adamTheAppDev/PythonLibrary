@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jun 14 10:51:40 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This program is not concise, but it is a faster way 
@@ -20,7 +20,7 @@ import os
 import numpy as np
 counter = 0
 df2 = pd.DataFrame()
-df = read_csv('C:\\Users\\AmatVictoriaCuramIII\\Desktop\\Python\\goodsymbols.csv', sep = ',')
+df = read_csv('F:\\Users\\Username\\DirectoryLocation\\goodsymbols.csv', sep = ',')
 #whole range
 ranger = range(0,len(df['Symbol']))
 #multiple range subsets
@@ -58,7 +58,7 @@ slice6 = segment(df2, ranger6, counter)
 bigmama = pd.concat([slice1,slice2,slice3,slice4,slice5,slice6],axis=1)
 bigmama = bigmama.fillna(0)
 
-if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\Database\\UniverseLogRet'):
-    os.makedirs('F:\\Users\\AmatVictoriaCuram\\Database\\UniverseLogRet')
+if not os.path.exists('F:\\Users\\Username\\DirectoryLocation\\UniverseLogRet'):
+    os.makedirs('F:\\Users\\Username\\DirectoryLocation\\UniverseLogRet')
     
-pd.to_pickle(bigmama, 'F:\\Users\\AmatVictoriaCuram\\Database\\UniverseLogRet\\UniverseLogRet')
+pd.to_pickle(bigmama, 'F:\\Users\\Username\\DirectoryLocation\\UniverseLogRet\\UniverseLogRet')
