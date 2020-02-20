@@ -5,7 +5,7 @@
 
 """
 
-#This is a database management/creation tool with many technical indicator calculations
+#This is a directory management/creation tool with many technical indicator calculations
 
 import pandas as pd
 import time as t
