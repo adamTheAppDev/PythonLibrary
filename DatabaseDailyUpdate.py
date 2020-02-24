@@ -7,6 +7,7 @@
 
 #This is a shortened version of a database update tool
 
+#Import modules
 import pandas as pd
 import time as t
 import webbrowser as web
@@ -18,58 +19,86 @@ from io import StringIO
 from pandas.parser import CParserError
 import numpy as np
 import requests
+
+#Start timer
 start1 = t.time()
+
+#Variable assingment
 idle = 0
 today = date.today()
+
+#To limit end date of time series
 cutoffdatetime = datetime.date(2017, 6, 20) #should be June 20, 2017.
 cutoffseconds = 1497949000
 longtimeago = 1200000000
 dayseconds = 86400
 daysaway = int((today - cutoffdatetime).total_seconds()/dayseconds)
 day = str(cutoffseconds + (daysaway * dayseconds))
+
+#Use CrumbCatcher.py
 artificialcrumb = "1.ZWRp1I9ZS" #Use crumbcatcher.py
+
+#Universe list assignment
 df = read_csv('C:\\Users\\UserName\\DirectoryLocation\\goodsymbols.csv', sep = ',')
 symbol = df.Symbol.values
+#For iteration tracking
 ranger = range(0,len(df))
+
+#URL assingment
 firsthalf = "https://query1.finance.yahoo.com/v7/finance/download/" #insert ticker and add secondhalf
 secondhalf = ("?period1=" + str(int(day) - dayseconds)  + "&period2=" + day +
            "&interval=1d&events=history&crumb=" + artificialcrumb) #1950 - most recent
 secondhalf1 = ("?period1=" + str(longtimeago)  + "&period2=" + day +
 "&interval=1d&events=history&crumb=" + artificialcrumb) #1950 - most recent
+
+#URLs in DataFrame column
 df['URL'] = firsthalf + df['Symbol'] + secondhalf
+
+#For all tickers in directory
 for i in ranger:
     try: 
+        #Ticker name assignment
         ticker = str(df.Symbol[i])
+        #Download URL assignment
         downloadurl = df['URL'][i]
 #        mainurl = ("https://finance.yahoo.com/quote/" + ticker + "/history?p=" + ticker)
+        #Making POST request
         response = requests.post(downloadurl)#, data=CookieDict)
+        #Formatting
         datastr = response.text
         formatter = StringIO(datastr)
         strdf = pd.read_csv(formatter, sep = ',')
+        #Check for invalid URL
         if strdf.columns[0] == '{"chart":{"result":null':
             print('The URL failed for ' + ticker)
             continue
+        #More formatting
         strdf = strdf.set_index('Date')
         strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
+        #Save DataFrame to CSV
         strdf.to_csv(("F:\\Users\\UserName\\DirectoryLocation\\"+ ticker + ".csv"))
+        #Confirming at end of loop
         print(ticker)
     except CParserError:
         print('Parser failed for ' + ticker)
         continue    
-    # you may now write to file
 
+#List of items in directory
 location = 'F:\\Users\\UserName\\DirectoryLocation'
 midlist = os.listdir(location)
-idle1 = 0
+
+#If there's tables in directory
 if len(midlist) > 0:
+    #split string to get ticker names
     endlist = [x[:-4] for x in midlist]
     startlist = list(df['Symbol'])
+    #tickers that need to be added that weren't added on first parse
     Needed = [x for x in startlist if x not in endlist]
     needf = pd.DataFrame(Needed, columns=['Symbol'])
-    
-#    needf['URL'] = firsthalf + needf['Symbol'] + secondhalf
-#    needf['MainURL'] = 'https://finance.yahoo.com/quote/' + needf['Symbol'] + '/history?p='+ needf['Symbol']
+    #Iterable for tickers needed   
     ranger1 = range(0,len(needf))
+           
+    #For all tickers that failed first parse, try again
     for j in ranger1:
         try:
             ticker = df['Symbol'][j]
@@ -88,59 +117,78 @@ if len(midlist) > 0:
         except CParserError:
             print("The parser failed for" + ticker)
             continue
-        
-            
+           
+#List missing tickers from original parse
 newmidlist = os.listdir(location)
 newendlist = [x[:-4] for x in newmidlist]
 newNeeded = [x for x in startlist if x not in newendlist]
 print(str(len(newNeeded)) + ' Unimported Stocks Exist')
 print("Missing symbols are --- > " + str(newNeeded))
-        
+
+#List all tickers in directory location
 CSVlist = os.listdir("F:\\Users\\UserName\\DirectoryLocation\\")
+#Iterable assignment
 ranger = range(0,len(CSVlist))
 ranger2 = range(0,len(os.listdir('F:\\Users\\UserName\\DirectoryLocation\\')))
+
+#If there is files in Directory
 if len(os.listdir('F:\\Users\\UserName\\DirectoryLocation\\')) > 1:
+    #For each file
     for i in ranger:
         try:
-            #temp = read_csv('F:\\Users\\UserName\\DirectoryLocation\\' +
-           #              (CSV['CSVname'][i]), sep = ',')
+            #Read file and store in temp varialbe
             temp = read_csv('F:\\Users\\UserName\\DirectoryLocation\\' +
             (CSVlist[i]), sep = ',')
+            #Assign index to Date
             temp = temp.set_index('Date') 
+            #Format
             temp.index = pd.to_datetime(temp.index, format = "%Y/%m/%d")
+            #Save to pickle
             pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' + 
                   CSVlist[i][:-4] + 'addition')
+            #Read pickle
             glaze = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' +
                          (CSVlist[i][:-4] + 'addition'))
-            for x in glaze.columns:
-                glaze[x] =  pd.to_numeric(glaze[x], errors='coerce')
-            pd.to_pickle(glaze, 'F:\\Users\\UserName\\DirectoryLocation\\' +
+            #For all columns in pickle
+            for x in file.columns:
+                #Make columns numeric type
+                file[x] =  pd.to_numeric(file[x], errors='coerce')
+            #Save file to pickle
+            pd.to_pickle(file, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                           CSVlist[i][:-4] + 'addition')      
+            #Concatenating two separate files -- this is likely redundant
             bigpickle = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' + 
                   CSVlist[i][:-4] + '\\' + CSVlist[i][:-4])
             littlepickle = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' + 
                   CSVlist[i][:-4] + 'addition')
             newdata = pd.concat([bigpickle, littlepickle])
+            #Save file to pickle
             pd.to_pickle(newdata, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                           CSVlist[i][:-4] + '\\' + CSVlist[i][:-4])
         except OSError:
             continue                   
-    
+#Location variable assingment
 tempPickle = 'F:\\Users\\UserName\\DirectoryLocation\\'
 fileList2 = os.listdir(tempPickle)
+
+#Removing all files from temp CSV folder -- clean up
 for ff in fileList2:
     os.remove(tempPickle + "\\" + ff)
-    
+
+#Start timer for statistical data calculations
 start = t.time()
-#
-#if len(os.listdir('F:\\Users\\UserName\\DirectoryLocation\\')) > 1:
+
+#For all files in directory location
 for ii in ranger2:
     try:
+        #Read pickle to variable
         temp = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' +
                 CSVlist[ii][:-4]+ '\\' + CSVlist[ii][:-4])
-#
+        #For all columns
         for x in temp.columns:
+            #Make tonumeric data type          
             temp[x] =  pd.to_numeric(temp[x], errors='coerce')
+            #Then run all statistic and technical analysis
 #                
 #
 #            temp['LogRet'] = np.log(temp['Adj Close']/temp['Adj Close'].shift(1)) 
@@ -298,14 +346,17 @@ for ii in ranger2:
 #                                              ) / temp['Adj Close'].shift(lag)         
 #               
 #    #           #temp = temp.drop('column_name', axis =  1) #drop function
+            #Delete duplicate rows
             temp = temp[~temp.index.duplicated(keep='first')]
+            #Save to pickle
             pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                         CSVlist[ii][:-4] + '\\' + CSVlist[ii][:-4])
     except OSError:
         continue
 
-#Good work
+#Stop timers
 end = t.time()
 end1 = t.time()
+#Timer stats
 print('Reupdate across nonstandard columns took' + str(end - start) + 'seconds')
 print('Whole script took' + str(end1 - start1) +'seconds')
