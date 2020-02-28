@@ -8,33 +8,43 @@
 #This is a directory management tool that adds qualitative data 
 #from external source to existing database as well as many technical calculations
 
-#Modify existing items
+
+#Import modules
 import pandas as pd
 import time as t
 #from datetime import date
 #import datetime
 import os
 import numpy as np
+
+#Start timer
 start = t.time()
 
+#All ticker names in directory
 DatabaseTickers = os.listdir('F:\\Users\\UserName\\DirectoryLocation')
 
+#Adding .csv to end for csv read
 DatabaseCSV = [s + '.csv' for s in DatabaseTickers]
 
+#Iteration tracking
 ranger = range(0,len(DatabaseCSV))
 
-#Load the CSV
+#Load the CSVs
 QualitativeData = pd.read_csv('C:\\Users\\UserName\\DirectoryLocation\\PretrimQualitativeData.csv', sep = ',')
 QualitativeDataTickers = list(QualitativeData['Symbol'])
 
+#For all CSVs in directory
 for i in ranger:
     try:
+        #Progress tracking
         print(DatabaseCSV[i])
+        #Temporary variable assignment
         temp = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' +
             DatabaseCSV[i][:-4]+ '\\' + DatabaseCSV[i][:-4])
         #Are the next two lines necessary? They convert any non numeric data in original CSV to numerical data type
         for x in temp.columns:
-            temp[x] =  pd.to_numeric(temp[x], errors='coerce')                   
+            temp[x] =  pd.to_numeric(temp[x], errors='coerce')  
+           
         #Basic Date information
         temp['Ticker'] = DatabaseCSV[i][:-4] #type = string
         temp['Age'] = len(temp['Adj Close'])
@@ -43,7 +53,7 @@ for i in ranger:
         temp['Day'] = temp.index.day
         temp['DayOfWeek'] = temp.index.dayofweek
         
-        #Daily Log Returns (subtract 1!!!)
+        #Daily Log Returns
         temp['LogRet'] = np.log(temp['Adj Close']/temp['Adj Close'].shift(1)) 
         temp['LogRet'] = temp['LogRet'].fillna(0)
         
@@ -1056,11 +1066,14 @@ for i in ranger:
 #               'AnnualStandardDeviation','CoefficientOfVaration',
 #               'CoefficientOfVaration', '4wkOver52wkStandardDeviationRatio'],
 #                axis = 1) #drop column function
-        #Remove duplicate columns
+
+        #Remove duplicate rows
         temp = temp[~temp.index.duplicated(keep='first')]
+        
         #Save DF to database in folders
         pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                         DatabaseCSV[i][:-4] + '\\' + DatabaseCSV[i][:-4])
+        
     except IndexError: #If there is no qualitative data for given ticker
                        #Fill N/A to missing data from Remote Source
         temp['Name'] = np.nan
@@ -1072,7 +1085,9 @@ for i in ranger:
         temp['SharesOutstanding'] = np.nan
         #Perhaps make a proxy for market cap and insert here
         temp['MarketCap'] = np.nan
+        #Remove duplicate rows
         temp = temp[~temp.index.duplicated(keep='first')]
+        
         #Save DF to database in folders
         pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                         DatabaseCSV[i][:-4] + '\\' + DatabaseCSV[i][:-4])
@@ -1080,5 +1095,7 @@ for i in ranger:
         continue
     except ValueError:
         continue
+#End timer
 end = t.time()
+#Timer stats
 print('Whole update took ', str(end - start), 'seconds.')
