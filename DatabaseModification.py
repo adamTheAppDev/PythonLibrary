@@ -7,6 +7,7 @@
 
 #This is a directory management/creation tool with many technical indicator calculations
 
+#Import modules
 import pandas as pd
 import time as t
 #from datetime import date
@@ -15,18 +16,26 @@ import os
 import numpy as np
 start = t.time()
 
+#Tickers in directory location
 DatabaseTickers = os.listdir('F:\\Users\\UserName\\DirectoryLocation')
 
+#Adding .csv to tickers 
 DatabaseCSV = [s + '.csv' for s in DatabaseTickers]
 
+#Iterable for all tickers
 ranger = range(0,len(DatabaseCSV))
 
+#For all tickers
 for i in ranger:
     try:
+        #Progress tracking
         print(DatabaseCSV[i])
+        
+        #Read pickle to temp variable
         temp = pd.read_pickle('F:\\Users\\UserName\\DirectoryLocation\\' +
             DatabaseCSV[i][:-4]+ '\\' + DatabaseCSV[i][:-4])
-        #Are the next two lines necessary?
+        
+        #Convert all columns to numeric data type
         for x in temp.columns:
             temp[x] =  pd.to_numeric(temp[x], errors='coerce')                   
         #Basic Date information
@@ -35,9 +44,11 @@ for i in ranger:
         temp['Month'] = temp.index.month
         temp['Day'] = temp.index.day
         temp['DayOfWeek'] = temp.index.dayofweek
+        
         #Daily Log Returns
         temp['LogRet'] = np.log(temp['Adj Close']/temp['Adj Close'].shift(1)) 
         temp['LogRet'] = temp['LogRet'].fillna(0)
+        
         #Min/Max & RangePoints/RangePercent
         temp['AllTimeLow'] = temp['Adj Close'].min()
         temp['AllTimeHigh'] = temp['Adj Close'].max()
@@ -408,8 +419,7 @@ for i in ranger:
         temp['3dayRollingAverageReturn'] = temp['LogRet'].rolling(
                                          center=False, window = 3).mean()
         temp['2dayRollingAverageReturn'] = temp['LogRet'].rolling(
-                                         center=False, window = 2).mean()                                         
-                                         
+                                         center=False, window = 2).mean()                                                            
                                          
         #Over rolling period, Average Std Dev during period; DYNAMIC
         temp['100wkRollingStdDev'] = temp['LogRet'].rolling(
@@ -472,6 +482,7 @@ for i in ranger:
                                          center=False, window = 3).std()
         temp['2dayRollingStdDev'] = temp['LogRet'].rolling(
                                          center=False, window = 2).std()
+        
         #Rate of Change (ROC) in %
         temp['100wkRateOfChange'] = (temp['Adj Close'] - temp['Adj Close'].shift(500)
                                           ) / temp['Adj Close'].shift(500)  
@@ -956,7 +967,7 @@ for i in ranger:
         temp['2dayAverageRollingVolume'] = temp['Volume'].rolling(center=False, 
                                                             window=2).mean()
                                                              
-        #Make also a float estimation
+        #Make a floatation estimate
         temp['Float'] = 0
         
         #Simple Moving Average
@@ -1021,22 +1032,23 @@ for i in ranger:
         temp['2daySMA'] = temp['Adj Close'].rolling(window=2, center=False).mean()
         temp['2daySMA'] = temp['2daySMA'].fillna(0)     
             
-        #Market Range Analysis
-        #ATR/Range             
-            
 #        #Drop Column Function
 #        temp = temp.drop(['Age','AverageAnnualReturn','AverageAnnualRollingVolume',
 #               'AnnualStandardDeviation','CoefficientOfVaration',
 #               'CoefficientOfVaration', '4wkOver52wkStandardDeviationRatio'],
 #                axis = 1) #drop column function
-        
+        #Delete duplicate rows
         temp = temp[~temp.index.duplicated(keep='first')]
-        
+        #Save pickle 
         pd.to_pickle(temp, 'F:\\Users\\UserName\\DirectoryLocation\\' +
                         DatabaseCSV[i][:-4] + '\\' + DatabaseCSV[i][:-4])
+        
     except OSError:
         continue
     except ValueError:
         continue
+        
+#End timer
 end = t.time()
+#Timer stats
 print('Whole update took ', str(end - start), 'seconds.')
