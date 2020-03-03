@@ -1,39 +1,51 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Dec 19 19:17:24 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#doji finder, its sketchy.
+#Doji candle finded
 #This is a techincal analysis tool and strategy tester
 
-#modules
+#Import modules
 from YahooGrabber import YahooGrabber
 import numpy as np
 import random as rand
 import pandas as pd
-#define tickers
-Ticker1 = 'MS'
+
+#Input ticker
+Ticker = 'MS'
+#Variable assignment
 iterations = range(0, 2000)
-Asset1 = YahooGrabber(Ticker1)
 Counter = 0
 Empty = []
 Dataset = pd.DataFrame()
-#trimmer
+#Data request
+Asset1 = YahooGrabber(Ticker)
+#Trimmer
 #Asset1 = Asset1[-2000:]
+#Random number for trailing position - can use .ffill(limit = n) instead
 trail = rand.randint(3,40)
 trailrange = range(1,trail)
-#statistics
+#For number of iterations in brute force optimization
 for i in iterations:
+    #SMA window assignment
     window = rand.randint(3,100)
+    #Magnitude AKA doji sensitivity
     mag = rand.random()/500
+    #Calculate log returns
     Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
     Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
+    #SMA calculation
     Asset1['SMA'] = Asset1['Adj Close'].rolling(window=window, center=False).mean()
+    #Price to SMA ratio
     Asset1['Trend'] = (Asset1['Adj Close']/Asset1['SMA']) - 1
+    #Open to close ratio
     Asset1['DojiFactor'] = Asset1['Open']/Asset1['Adj Close'] 
+    #Absolute value of open to close return
     Asset1['MAGN'] = abs(1 - Asset1['DojiFactor'])
+    #Is Doji -- does return hit sensitivity threshold
     Asset1['Doji?'] = np.where(Asset1['MAGN'] < mag, 1, 0)
     Asset1['Sign'] = np.where(Asset1['Trend'].shift(1) < 0, 1, -1)
     Asset1['Position'] = (Asset1['Doji?'] * Asset1['Sign'])  
