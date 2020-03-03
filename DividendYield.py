@@ -1,20 +1,27 @@
+Learn more or give us feedback
 # -*- coding: utf-8 -*-
 """
-Created on Thu Oct 12 00:29:28 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-
 #This is a technical analysis tool based on last dividend
-#Div Yield Approximation
+#Dividend Yield Approximation
 
+#Define function - input ticker
 def DividendYield(ticker):
+    #Import modules
     from YahooGrabber import YahooGrabber
     from YahooDivGrabber import YahooDivGrabber
+    #Data requests
     priceInfo = YahooGrabber(ticker)
     dividendInfo = YahooDivGrabber(ticker)
+    #Get last price
     lastPrice = priceInfo['Adj Close'][-1]
+    #Get last dividend
     lastDividend = dividendInfo['Dividends'][-1]
+    #Calculate dividend yield based on last price
     divYield = lastDividend/lastPrice
+    #Output dividend yield
     return divYield
