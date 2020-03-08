@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 11 09:04:55 2018
 
-@author: Adam Reinhold Von Fisher
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
 #Developed in Python 3.5 
 
 #Model output for multiple issues with single frequency - saves to model output
@@ -23,7 +24,7 @@ from YahooSourceDailyGrabber import YahooSourceDailyGrabber
 import warnings 
 
 #Inputs - OHLC data
-Dailies = os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource' + 
+Dailies = os.listdir('F:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource' + 
                      '\\ProcessedData\\DAY\\')
 DailiesTickers = [tkr[4:] for tkr in Dailies]
 
@@ -35,7 +36,7 @@ for dt in DailiesTickers[:]:
     #Asset1 = YahooSourceDailyGrabber(DailiesTickers[0])
     
     #Tasty OHLC; ***ATTN*** insert path for OHLC data
-    #Asset1 = pd.read_pickle('C:\\Users\\Tasty\\Desktop\\WorkingDirectory\\GLD')
+    #Asset1 = pd.read_pickle('C:\\Users\\Username\\DirectoryLocation\\WorkingDirectory\\GLD')
     
     #Don't display warnings
     warnings.filterwarnings("ignore",category =RuntimeWarning) 
@@ -434,7 +435,7 @@ for dt in DailiesTickers[:]:
     Asset1['DollarPL'] = Asset1['StrategyDollarReturns'].cumsum()
     ReturnStreams['StrategyPercentReturns'] = Asset1['StrategyPercentReturns']
     ReturnStreams['StrategyDollarReturns'] = Asset1['StrategyDollarReturns']
-    pd.to_pickle(ReturnStreams, 'F:\\Users\\AmatVictoriaCuram\\FDL\\ModelOutput\\' + 
+    pd.to_pickle(ReturnStreams, 'F:\\Users\\Username\\DirectoryLocation\\ModelOutput\\' + 
         'YahooSource\\DAY\\DonchianTrend\\ReturnStreams\\' + dt)
     #This is supposed to be a graph of the equity curve from trade exits
 #    Asset1['DollarPL'].plot()
@@ -459,7 +460,7 @@ for dt in DailiesTickers[:]:
 
 ModelOutput = ModelOutput.rename(index={0: "sharpe", 1: "MaxDD", 2: "Expectancy",
     3: "WinRate", 4: "LossRate", 5: "NumberOfDoubleDays", })
-pd.to_pickle(ModelOutput, 'F:\\Users\\AmatVictoriaCuram\\FDL\\ModelOutput\\' + 
+pd.to_pickle(ModelOutput, 'F:\\Users\\Username\\DirectoryLocation\\ModelOutput\\' + 
         'YahooSource\\DAY\\DonchianTrend\\ModelOutput\\YahooDailyDonchianTrendModelOutput')
 Expectancies = ModelOutput.iloc[2].sort_values()
 Expectancies = Expectancies.dropna()
@@ -468,7 +469,7 @@ print(Expectancies.tail(10))
 BestExpectancies = Expectancies.tail(10)
 #graph best ones.. 
 for best in BestExpectancies.index:
-    temp = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\FDL\\ModelOutput\\' + 
+    temp = pd.read_pickle('F:\\Users\\Username\\DirectoryLocation\\ModelOutput\\' + 
         'YahooSource\\DAY\\DonchianTrend\\ReturnStreams\\' + best)
     temp['StrategyDollarReturns'].cumsum().plot()
 
