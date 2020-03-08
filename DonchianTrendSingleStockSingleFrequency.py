@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 11 09:04:55 2018
 
-@author: Adam Reinhold Von Fisher
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
 #Developed in Python 3.5 
 
 #This is a trading model/single asset strategy tester
@@ -24,7 +25,7 @@ Ticker1 = 'GLD'
 Asset1 = YahooGrabber(Ticker1)
 
 #Tasty OHLC; ***ATTN*** insert path for OHLC data
-#Asset1 = pd.read_pickle('C:\\Users\\Tasty\\Desktop\\WorkingDirectory\\GLD')
+#Asset1 = pd.read_pickle('C:\\Users\\Username\\DirectoryLocation\\WorkingDirectory\\GLD')
 
 #Don't display warnings
 warnings.filterwarnings("ignore",category =RuntimeWarning) 
@@ -392,6 +393,7 @@ Asset1['StrategyDollarReturns'] = 0
 for d in Trades:
     Asset1['StrategyPercentReturns'].loc[(Asset1['SubIndex'] == Trades[d]['SubIndexOfExit'])] = 1 + Trades[d]['TradePercentReturn']
     Asset1['StrategyDollarReturns'].loc[(Asset1['SubIndex'] == Trades[d]['SubIndexOfExit'])] = 1 + Trades[d]['TradeDollarReturn']
+
 #System statistics    
 #Number Win/Loss
 NumWinningTrades = len(Asset1['StrategyPercentReturns'][Asset1['StrategyPercentReturns'] > 1])
@@ -404,20 +406,20 @@ RewardRisk = AvgWin/AvgLoss
 #Win and Loss rate
 WinRate = NumWinningTrades / (NumWinningTrades + NumLosingTrades)
 LossRate = NumLosingTrades / (NumWinningTrades + NumLosingTrades)
+
 #Expectancy Calculation
 Expectancy = (WinRate * RewardRisk) - (LossRate)
 #Make a DataFrame that stores just R multiples from the Trades DataFrame
 RMultiples = pd.DataFrame(data = Trades.loc['RMultiple',:])
+
 #Return stream modification for graphing
 Asset1['Multiplier'] = Asset1['StrategyPercentReturns'].cumprod()
 Asset1['DollarPL'] = Asset1['StrategyDollarReturns'].cumsum()
 #This is supposed to be a graph of the equity curve from trade exits
 Asset1['DollarPL'].plot()
+
 #See if there are any double days that would call for spurious return stream
 print(sum(Asset1['DoubleDay']), ' Double signal days exist')
+#System stats
 print('The expectancy of the system is ', Expectancy)
 print(RMultiples)
-##Need to make histogram
-#plt.hist(RMultiples['RMultiple'], normed=True, bins=10
-#plt.ylabel('RMultiple')
-#plt.show()
