@@ -8,7 +8,7 @@
 #This is a scanning tool with technical analysis modules inside
 #There is a more efficient way to do this process somewhere in the MasterLibrary
 
-#Get modules to filter
+#Import modules
 from SAge import SAge
 from SAverageReturn import SAverageReturn
 from SCoeffVar import SCoeffVar
