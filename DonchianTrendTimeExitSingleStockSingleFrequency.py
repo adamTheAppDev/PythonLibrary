@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 11 09:04:55 2018
 
-@author: Adam Reinhold Von Fisher
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
 #Developed in Python 3.5 
 
-#This is a trading model/single asset strategy tester
+#This is a trading model/single asset strategy tester using time exits - .ffill(limit = t)
 #R Multiple Finder; Trade Data Tracking
 
 #Import libraries
@@ -24,7 +25,7 @@ Ticker1 = 'GLD'
 Asset1 = YahooGrabber(Ticker1)
 
 #Tasty OHLC; ***ATTN*** insert path for OHLC data
-#Asset1 = pd.read_pickle('C:\\Users\\Tasty\\Desktop\\WorkingDirectory\\GLD')
+#Asset1 = pd.read_pickle('C:\\Users\\Username\\DirectoryLocation\\WorkingDirectory\\GLD')
 
 #Don't display warnings
 warnings.filterwarnings("ignore",category =RuntimeWarning) 
@@ -103,6 +104,8 @@ SignalDates = list(Asset1['Signal'].loc[(Asset1['Signal'] != 0)].index)
 
 #Trade ATR on signal day
 Asset1['TradeATR'] = np.where(Asset1['Signal'] != 0, Asset1['ATR'].shift(1), np.nan)
+
+#Under construction below..
 
 #Exits other than initial 2 ATR stop, stopwindow is used here
 ##Asset1['LimitExitPrice'] = np.nan 
