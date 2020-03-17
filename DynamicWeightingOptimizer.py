@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Sep  4 23:29:15 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a two asset strategy tester with a brute force optimization and 
@@ -11,35 +11,35 @@ Created on Mon Sep  4 23:29:15 2017
 
 #Dynamic Weighting
 
+#Import modules
 import numpy as np
 import random as rand
 import pandas as pd
 import time as t
 from DatabaseGrabber import DatabaseGrabber
-from YahooGrabber import YahooGrabber
+from YahooGrabberII import YahooGrabberII
+
+#Variable assignment
 Empty = []
 Dataset = pd.DataFrame()
 Portfolio = pd.DataFrame()
 Start = t.time()
 Counter = 0
 
-#Input
-
+#Ticker Assignment - input
 Ticker1 = 'UVXY' #Short Position
 Ticker2 = 'VXX' #Long Position
 
 #Grab local data
-
 Asset1 = DatabaseGrabber(Ticker1)
 Asset2 = DatabaseGrabber(Ticker2)
 
-##Grab data post request
 
-#Asset1 = YahooGrabber(Ticker1)
-#Asset2 = YahooGrabber(Ticker2)
+#Request data
+#Asset1 = YahooGrabberII(Ticker1)
+#Asset2 = YahooGrabberII(Ticker2)
 
-#Match lengths
-
+#Trim time serioes to match lengths
 trim = abs(len(Asset1) - len(Asset2))
 if len(Asset1) == len(Asset2):
     pass
@@ -49,23 +49,25 @@ else:
     else:
         Asset2 = Asset2[trim:]
 
-#Trimmer
-
+#In/out sample trimmer
 #Asset1 = Asset1[-100:]
 #Asset2 = Asset2[-100:]
 
-#Log Returns
-#
+#Calculate log Returns
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
 Asset2['LogRet'] = np.log(Asset2['Adj Close']/Asset2['Adj Close'].shift(1))
 Asset2['LogRet'] = Asset2['LogRet'].fillna(0)
-#
-##Brute Force Optimization
-#
+
+#Brute Force Optimization
+#Number of loops for optimization
 iterations = range(0, 200)
+
+#For each iteration
 for i in iterations:
+    #Iteration tracking
     Counter = Counter + 1
+    #Random variable generation and assignment
     a = rand.random()
     b = 1 - a
     c = 1.5 - (rand.random() * 3 )
@@ -73,57 +75,68 @@ for i in iterations:
     e = 4 - (rand.random() * 8 )
     f = b - rand.random()
     
+    #Constraint
     if abs(c) > abs(e):
         continue
-
+    #Position sizing
     Asset1['Position'] = a
+    #Apply returns to position size
     Asset1['Pass'] = (Asset1['LogRet'] * Asset1['Position'])
+    #Position sizing
     Asset2['Position'] = b
+    #Apply returns to position size
     Asset2['Pass'] = (Asset2['LogRet'] * Asset2['Position'])
+    #Variable assignment of position size
     Asset1Position = a
     Asset2Position = b
+    #Pass position sizes to portfolio
     Portfolio['Asset1Pass'] = (Asset1['Pass']) 
     Portfolio['Asset2Pass'] = (Asset2['Pass'])
+    #Portfolio returns
     Portfolio['LongShort'] = (Portfolio['Asset1Pass'] * -1) + (Portfolio['Asset2Pass']) #Pass a short position
+    #Returns on $1
     Portfolio['Multiplier'] = Portfolio['LongShort'].cumsum().apply(np.exp)
 
-#Stats
+    #Performance statistics
     DailyReturn = Portfolio['LongShort'].mean()
+    #Constraint
 #    if DailyReturn < .0025:
 #        continue
+    #Performance statistics
     DailyVol = Portfolio['LongShort'].std()
+    #Constraint
     if Portfolio['LongShort'].std() == 0:
         continue
+    #Performance statistics
     Sharpe = (DailyReturn/DailyVol)
+    #Incorrectly calculated drawdown metric - pls fix
     DrawDown =  1 - Portfolio['Multiplier'].div(Portfolio['Multiplier'].cummax())
     Portfolio['DrawDown'] = DrawDown
     MaxDD = max(DrawDown)
+    #Constraint
 #    if MaxDD > .25:
 #        continue
 #    if MaxDD < .05:
 #        continue
+    #Incorrectly calculated drawdown metric - pls fix
     AvgDrawDown = Portfolio['DrawDown'].mean()
     StdDrawDown = Portfolio['DrawDown'].std()
 
-#Graph
-#Portfolio['LongShort'][:].cumsum().apply(np.exp).plot(grid=True,
-#                                 figsize=(8,5))
-
-#New Allocation 
+    #New allocation weights during regime change - looks like it gets written over in next couple lines
     Portfolio['NewAsset1Position'] = np.where(Portfolio['DrawDown'].shift(1) > (AvgDrawDown + #c (+/-c*StdDrawDown), 
                    (c * StdDrawDown)), (Asset1Position + d), Asset1['Position']) #d
+    #This will be subtracted from 1 to get Portfolio['Asset2NewPosition']
     Portfolio['NewAsset1Position'] = np.where(Portfolio['DrawDown'].shift(1) > (AvgDrawDown + #e (+/-e*StdDrawDown), 
                    (e * StdDrawDown)), (Asset1Position + f), Asset1['Position'])
-
-
-
+    #Complement of position 1 to portfolio - all capital is allocated
     Portfolio['NewAsset2Position'] = 1 - Portfolio['NewAsset1Position'] #    np.where(Portfolio['DrawDown'].shift(1) > (AvgDrawDown + #c (AvgDrawDown (+/-c*StdDrawDown)), 
 #                    (c * StdDrawDown)), (Asset2Position + e), Asset2['Position']) #e
-    
+    #Passing new positions to portfolio
     Portfolio['Asset1NewPass'] = (Asset1['LogRet'] * Portfolio['NewAsset1Position'])                            
     Portfolio['Asset2NewPass'] = (Asset2['LogRet'] * Portfolio['NewAsset2Position'])
-    
+    #Apply position to return steam
     Portfolio['NewLongShort'] = (Portfolio['Asset1NewPass'] * -1) + (Portfolio['Asset2NewPass']) #Pass a short position
+    #Returns on $1
     Portfolio['NewMultiplier'] = Portfolio['NewLongShort'].cumsum().apply(np.exp)
 
 #Stats
