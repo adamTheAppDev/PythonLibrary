@@ -139,31 +139,39 @@ for i in iterations:
     #Returns on $1
     Portfolio['NewMultiplier'] = Portfolio['NewLongShort'].cumsum().apply(np.exp)
 
-#Stats
+    #Performance statistics
     NewDailyReturn = Portfolio['NewLongShort'].mean()
+    #Constraints
 #    if NewDailyReturn < DailyReturn:
 #        continue
 #    if NewDailyReturn < .0025:
 #        continue
+    #Performance statistics
     NewDailyVol = Portfolio['NewLongShort'].std()
+    #Constraints
 #    if Portfolio['NewLongShort'].std() == 0:    
 #        continue
+    #Performance statistics
     NewSharpe =(NewDailyReturn/(NewDailyVol))
+    #Incorrectly calculated drawdown statistic
     NewDrawDown =  1 - Portfolio['NewMultiplier'].div(Portfolio['NewMultiplier'].cummax())
     Portfolio['NewDrawDown'] = NewDrawDown
     NewMaxDD = max(NewDrawDown)
+    #Constraints
 #    if NewMaxDD > .25:
 #        continue
 #    if NewMaxDD < .12:
 #        continue
+    #Spurious, incorrect until fixes
     NewAvgDrawDown = Portfolio['NewDrawDown'].mean()
     NewStdDrawDown = Portfolio['NewDrawDown'].std()
 
-#Graph
+#Graphical display
 #Portfolio['NewLongShort'][:].cumsum().apply(np.exp).plot(grid=True,
 #                                 figsize=(8,5))
-                                 
+    #Iteration tracking                             
     print(Counter) 
+    #Save params/metrics to list
     Empty.append(a)
     Empty.append(b)
     Empty.append(c)
@@ -178,59 +186,86 @@ for i in iterations:
     Empty.append(NewSharpe/NewMaxDD)
     Empty.append(NewDailyReturn/NewMaxDD)
     Empty.append(NewMaxDD)
+    #List to series
     Emptyseries = pd.Series(Empty)
+    #Store series in dataset
     Dataset[i] = Emptyseries.values
     Empty[:] = [] 
-#    
-#Out of Loop Data Arrangement
+    
+#Find all entries of desired performance metric
 z1 = Dataset.iloc[11]
+#Find Nth percentile threshold
 w1 = np.percentile(z1, 80)
-v1 = [] #this variable stores the Nth percentile of top performers
-DS1W = pd.DataFrame() #this variable stores your financial advisors for specific dataset
+v1 = [] #this variable stores the Nth percentile of top params
+DS1W = pd.DataFrame() #this variable stores your params for specific dataset
+#For metric in all desired metrics
 for h in z1:
+    #If metric above threshold
     if h > w1:
+      #Add metric to list
       v1.append(h)
+#For all metrics above threshold
 for j in v1:
-      r = Dataset.columns[(Dataset == j).iloc[11]]    
-      DS1W = pd.concat([DS1W,Dataset[r]], axis = 1)
+    #Get column number of specific metric
+    r = Dataset.columns[(Dataset == j).iloc[11]]    
+    #Add metric to parameter table
+    DS1W = pd.concat([DS1W,Dataset[r]], axis = 1)
+#Top parameter    
 y = max(z1)
 k = Dataset.columns[(Dataset == y).iloc[11]] #this is the column number
+#Param set
 kfloat = float(k[0])
+#End timer
 End = t.time()
+#Timer stats
 print(End-Start, 'seconds later')
+#Top param set
 print(Dataset[k])
                                  
-#Out of Loop Testing                    
+#Testing based on top param set
+#Position sizing
 Asset1['Position'] = (Dataset[kfloat][0]) #a
+#Apply position size to returns
 Asset1['Pass'] = (Asset1['LogRet'] * Asset1['Position'])
+#Position sizing
 Asset2['Position'] = (Dataset[kfloat][1]) #b
+#Apply position size to returns
 Asset2['Pass'] = (Asset2['LogRet'] * Asset2['Position'])
+#Position size from top params
 Asset1Position = Dataset[kfloat][0]#a
 Asset2Position = Dataset[kfloat][1]#b
+#Pass to portfolio
 Portfolio['Asset1Pass'] = (Asset1['Pass']) 
 Portfolio['Asset2Pass'] = (Asset2['Pass'])
+#Combined returns 
 Portfolio['LongShort'] = (Portfolio['Asset1Pass'] * -1) + (Portfolio['Asset2Pass']) #Pass a short position
+#Returns on $1
 Portfolio['Multiplier'] = Portfolio['LongShort'].cumsum().apply(np.exp)
 
-#Stats
+#Performance metric
 DailyReturn = Portfolio['LongShort'].mean()
+#Constraint
 #    if dailyreturn < .0015:
 #        continue
+#Performance metric
 DailyVol = Portfolio['LongShort'].std()
+#Constraint
 #   if Portfolio['LongShort'].std() == 0:    
 #        continue
+#Performance metric
 Sharpe = (DailyReturn/DailyVol)
+#Incorrectly calculated drawdown stat, pls fix
 DrawDown =  1 - Portfolio['Multiplier'].div(Portfolio['Multiplier'].cummax())
 Portfolio['DrawDown'] = DrawDown
 MaxDD = max(DrawDown)
 AvgDrawDown = Portfolio['DrawDown'].mean()
 StdDrawDown = Portfolio['DrawDown'].std()
 
-#Graph
+#Graphical display
 Portfolio['LongShort'][:].cumsum().apply(np.exp).plot(grid=True,
                                  figsize=(8,5))
 
-#New Allocation 
+#Dynamic weighting from regime change
 Portfolio['NewAsset1Position'] = np.where(Portfolio['DrawDown'].shift(1) > (AvgDrawDown + #c (+/-Dataset[kfloat][2]*StdDrawDown), 
                 (Dataset[kfloat][2]*StdDrawDown)
                 ), (Asset1Position + Dataset[kfloat][3]), Asset1['Position'])#d, Dataset[kfloat][3]
@@ -241,43 +276,37 @@ Portfolio['NewAsset2Position'] = 1 - Portfolio['NewAsset1Position'] #np.where(Po
                 #(Dataset[kfloat][4]*StdDrawDown)
                 #), (Asset2Position + Dataset[kfloat][5]), Asset2['Position']) #Dataset[kfloat][5]
 
+#Pass to portfolio
 Portfolio['Asset1NewPass'] = (Asset1['LogRet'] * Portfolio['NewAsset1Position'])                            
 Portfolio['Asset2NewPass'] = (Asset2['LogRet'] * Portfolio['NewAsset2Position'])
-
+#Combine for return stream
 Portfolio['NewLongShort'] = (Portfolio['Asset1NewPass'] * -1) + (Portfolio['Asset2NewPass']) #Pass a short position
 Portfolio['NewMultiplier'] = Portfolio['NewLongShort'].cumsum().apply(np.exp)
 
-#Stats
+#Performance metrics
 NewDailyReturn = Portfolio['NewLongShort'].mean()
+#Constraints
 #    if dailyreturn < .0015:
 #        continue
+#Performance metrics
 NewDailyVol = Portfolio['NewLongShort'].std()
+#Constraints
 #   if Portfolio['NewLongShort'].std() == 0:    
 #        continue
+#Performance metrics
 NewSharpe =(NewDailyReturn/(NewDailyVol))
+#Incorrectly calculated drawdown metric, pls fix
 NewDrawDown =  1 - Portfolio['NewMultiplier'].div(Portfolio['NewMultiplier'].cummax())
 Portfolio['NewDrawDown'] = NewDrawDown
 NewMaxDD = max(NewDrawDown)
 NewAvgDrawDown = Portfolio['NewDrawDown'].mean()
 NewStdDrawDown = Portfolio['NewDrawDown'].std()
 
-#Ratios
+#Ratios // metrics
 Portfolio['VXXDeltaWeight'] = Portfolio['NewAsset1Position'] / (
                  Portfolio['NewAsset1Position']+Portfolio['NewAsset2Position'])
 Portfolio['ScaleFactor'] = (Portfolio['NewAsset1Position']+
                             Portfolio['NewAsset2Position'])
-#Graph
+#Graphical display
 Portfolio['NewLongShort'][:].cumsum().apply(np.exp).plot(grid=True,
                                  figsize=(8,5))    
-                
-##pd.to_pickle(Portfolio, 'DynamicVolArb')
-                
-#Tester
-#tester = pd.DataFrame()
-#tester['BWeight'] = Portfolio['VXXDeltaWeight']
-#tester['AWeight'] = 1 - tester['BWeight'] 
-#tester['BPass'] = tester['BWeight'] * Asset2['LogRet']
-#tester['APass'] = tester['AWeight'] * Asset1['LogRet']
-#tester['LongShort'] = tester['APass'] + tester['BPass']
-#tester['LongShort'][:].cumsum().apply(np.exp).plot(grid=True,
-#                                 figsize=(8,5))    
