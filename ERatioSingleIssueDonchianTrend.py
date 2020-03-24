@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Feb 23 18:13:31 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is an Edge Ratio calculator for single issue
 #May be deprecated see ERatioSingleIssueDonchianTrendIII.py
 #N Period Edge Ratio Computation
 
-#Import-ant
+#Import modules
 from YahooGrabber import YahooGrabber
 import numpy as np
 import time as t
@@ -18,28 +18,28 @@ import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
  
-#Let's go
+#Start timer
 start = t.time()
 
-#Empty structures
+#Empty variables
 tempdf = pd.DataFrame()
 edgelist = []
 
 #Variable assignment
-
 #Issue selection
 ticker = 'UVXY'
 
-#Data import
+#Request data
 Asset = YahooGrabber(ticker)
 
 #Params
 atrwindow = 20
 donchianwindow = 20
+
 #N Period selection // range(2,3) = day after trade is entered 'on close'
 iterations = range(2, 5) 
 
-#Trimmer for convenience
+#Trimmer for convenience - in/out sample
 Asset = Asset[:]
 
 #Represent index as column in Asset the DataFrame
@@ -176,30 +176,37 @@ for z in iterations:
 #        print('--------------------------------------------')    
 #        print('--------------------------------------------')    
 #        print('--------------------------------------------')    
-            
+    #Adjust MFE/MFA for volatility        
     tradedates['VolAdjMFE'] = tradedates['MFEpoints']/tradedates['AverageTrueRangePoints']
     tradedates['VolAdjMAE'] = tradedates['MAEpoints']/tradedates['AverageTrueRangePoints']
-    
+    #Add values
     sumMFE = sum(tradedates['VolAdjMFE'])
     sumMAE = sum(tradedates['VolAdjMAE'])
-    
+    #Divide by signals
     AvgVolAdjMFE = sumMFE/numsignals
     AvgVolAdjMAE = sumMAE/numsignals 
-    
+    #N period edge ratio
     edgeratio = AvgVolAdjMFE/AvgVolAdjMAE
-
+    #Print results
     print('The ', z, ' day edge ratio is', edgeratio)
+    #Add to list
     edgelist.append(edgeratio)
-              
+   
+#Time series length   
 Length = len(Asset['LogRet'])
+#Iterable
 Range = range(0,Length)
 
+#Populate dataframe with edgeratio data
 edgeratioframe = pd.DataFrame(index = iterations)
 edgeratioframe['EdgeRatio'] = edgelist
-
+#Graphical display
 edgeratioframe['EdgeRatio'].plot(grid=True, figsize=(8,5))
+#End timer
 end = t.time()
+#Timer statistics 
 print((end - start), ' seconds later.')
+#Display results
 print('Max eRatio is', max(edgeratioframe['EdgeRatio']))
 
 #Graphics
@@ -225,9 +232,12 @@ axe.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 #For ATR
 figure2, axe2 = plt.subplots(figsize = (10,2))
+#Labels
 plt.ylabel(ticker + ' ATR Percent')
 plt.xlabel('Date')
+#ATR line graph
 axe2.plot(AssetCopy['IndexToNumber'], Asset ['AverageTrueRangePercent'], color = 'black', label = '4wkATRPercent')
 #axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMax'], color = 'green', label = 'ATRRollingMax')
 #axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMin'], color = 'red', label = 'ATRRollingMin')
+#Date formatting
 axe2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
