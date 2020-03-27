@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Feb 23 18:13:31 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #N Period Edge Ratio Computation for single issue with graphical displays
@@ -17,7 +17,7 @@ from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
 from pandas.parser import CParserError
  
-#Empty structures
+#Empty data structure assignment
 tempdf = pd.DataFrame()
 edgelist = []
 MFEpoints = None
@@ -33,13 +33,13 @@ ticker = 'NUGT'
 #For ATR + MFE/MFA calculation
 atrwindow = 20
 
-#For signal generation
+#For directional signal generation
 donchianwindow = 20
 
 #How many days to calculate e-ratio for
 LengthOfTest = range(2, 50) #(2,3) = 2 day Eratio // assuming fill at "Entry Price"
 
-#Get data
+#Request data
 while True: 
     try:
         #Get data
@@ -189,22 +189,24 @@ for z in LengthOfTest:
 
     #Rotating column name        
     nDay = str(z)
-
+    
+    #Display results
     print(MFElist)
     print(MAElist)   
     
     #To Series
     MFESeries = pd.Series(MFElist, index = tradedates.index)
     MAESeries = pd.Series(MAElist, index = tradedates.index)
-
+    
+    #Display
     print(MFESeries)
     print(MAESeries)   
     
-    #assign MFE/MAE to tradedates
+    #Assign MFE/MAE to tradedates
     tradedates[nDay + 'DayMFE'] = MFESeries
     tradedates[nDay + 'DayMAE'] = MAESeries
     
-    #clear lists
+    #Clear lists
     MFElist = []
     MAElist = []
     
@@ -217,19 +219,25 @@ for z in LengthOfTest:
     #Divide by number of signals
     AvgVolAdjMFE = sumMFE/numsignals
     AvgVolAdjMAE = sumMAE/numsignals 
-        
+    
+    #Calculate edge ratio
     edgeratio = AvgVolAdjMFE/AvgVolAdjMAE
     
+    #Display results
     print('The ', z, ' day edge ratio is', edgeratio)
+    #Add results to list
     edgelist.append(edgeratio)
 
 #Get calculations ready for graphing
 edgeratioframe = pd.DataFrame(index = range(2, len(edgelist) + 2))
 edgeratioframe['EdgeRatio'] = edgelist
-#plot edge ratio
+#Plot edge ratio
 edgeratioframe['EdgeRatio'].plot(grid=True, figsize=(8,5))
+#End timer
 end = t.time()
+#Timer stats
 print((end - start), ' seconds later.')
+#Display results
 print('Max eRatio is', max(edgeratioframe['EdgeRatio']))
 
 #Graphics
@@ -249,13 +257,17 @@ axe.scatter(Asset.loc[Asset['OriginalTrade'] == 1, 'IndexToNumber'].values,
 axe.scatter(Asset.loc[Asset['OriginalTrade'] == -1, 'IndexToNumber'].values, 
             Asset.loc[Asset['OriginalTrade'] == -1, 'EntryPrice'].values, label='skitscat', color='red', s=75, marker="v")
 
-##Plot the DF values with the figure, object
+#Plot the DF candlestick values with the figure, object
 candlestick_ohlc(axe, AssetCopy.values, width=.6, colorup='green', colordown='red')
+#Date formatting
 axe.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 #For ATR
 figure2, axe2 = plt.subplots(figsize = (10,2))
+#Add labels
 plt.ylabel(ticker + ' ATR Percent')
 plt.xlabel('Date')
+#ATR line graph
 axe2.plot(AssetCopy['IndexToNumber'], Asset['AverageTrueRangePercent'], color = 'black', label = '4wkATRPercent')
+#Date formatting
 axe2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
