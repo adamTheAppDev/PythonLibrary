@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Feb 23 18:13:31 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is an Edge Ratio calculator for single issue
 #May be deprecated see ERatioSingleIssueDonchianTrendIII.py
 #N Period Edge Ratio Computation
 
-#Imports 
+#Import modules 
 from YahooGrabber import YahooGrabber
 import numpy as np
 import time as t
@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
  
-#Empty structures
+#Empty data structures
 tempdf = pd.DataFrame()
 edgelist = []
 
@@ -32,10 +32,10 @@ lag = 5
 #How many days to calculate e-ratio for
 LengthOfTest = range(2, 120) #(2,3) = 1 day Eratio // assuming fill on close
 
-#Get data
+#Request data
 Asset = YahooGrabber(ticker)
 
-#In sample Trimmer
+#In sample trimmer
 Asset = Asset[:]
 
 #Make column that represents X axis 
@@ -50,7 +50,7 @@ AssetCopy = Asset[['IndexToNumber', 'Open', 'High', 'Low', 'Close', 'Adj Close']
 #Timer begin
 start = t.time()
 
-#log returns
+#Calculate log returns
 Asset['LogRet'] = np.log(Asset['Adj Close']/Asset['Adj Close'].shift(1)) 
 Asset['LogRet'] = Asset['LogRet'].fillna(0)
 
@@ -154,22 +154,25 @@ for z in LengthOfTest:
     #Divide by number of signals
     AvgVolAdjMFE = sumMFE/numsignals
     AvgVolAdjMAE = sumMAE/numsignals 
-        
+    
+    #Edge ratio calculation for period
     edgeratio = AvgVolAdjMFE/AvgVolAdjMAE
     
+    #Display results
     print('The ', z, ' day edge ratio is', edgeratio)
+    #Add data to list
     edgelist.append(edgeratio)
-#              
-#Length = len(Asset1['LogRet'])
-#Range = range(0,Length)
-#print(MaxDD*100, '% = Max Drawdown')
-#
+
+#Create dataframe to store data    
 edgeratioframe = pd.DataFrame(index = LengthOfTest)
 edgeratioframe['EdgeRatio'] = edgelist
-#
+#Display
 edgeratioframe['EdgeRatio'].plot(grid=True, figsize=(8,5))
+#End timer
 #end = t.time()
+#Timer stats
 #print((end - start), ' seconds later.')
+#Highest Eratio
 #print('Max eRatio is', max(edgeratioframe['EdgeRatio']))
 
 #Graphics
@@ -189,14 +192,17 @@ axe.scatter(Asset.loc[Asset['OriginalTrade'] == 1, 'IndexToNumber'].values,
 axe.scatter(Asset.loc[Asset['OriginalTrade'] == -1, 'IndexToNumber'].values, 
             Asset.loc[Asset['OriginalTrade'] == -1, 'Adj Close'].values, label='skitscat', color='red', s=75, marker="v")
 
-##Plot the DF values with the figure, object
+#Plot the DF values with the figure, object
 candlestick_ohlc(axe, AssetCopy.values, width=.6, colorup='green', colordown='red')
+#Format dates
 axe.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 #For ATR
 figure2, axe2 = plt.subplots(figsize = (10,2))
+#Labels
 plt.ylabel(ticker + ' ATR Percent')
 plt.xlabel('Date')
+#ATR line graph
 axe2.plot(AssetCopy['IndexToNumber'], Asset ['AverageTrueRangePercent'], color = 'black', label = '4wkATRPercent')
 #axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMax'], color = 'green', label = 'ATRRollingMax')
 #axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMin'], color = 'red', label = 'ATRRollingMin')
