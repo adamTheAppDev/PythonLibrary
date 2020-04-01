@@ -1,15 +1,16 @@
+  
 # -*- coding: utf-8 -*-
 """
-Created on Sat Feb 23 18:13:31 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is an Edge Ratio calculator for single issue
 #May be deprecated see ERatioSingleIssueDonchianTrendIII.py
 #N Period Edge Ratio Computation
 
-#Imports 
+#Import module
 from YahooGrabber import YahooGrabber
 import numpy as np
 import time as t
@@ -18,7 +19,7 @@ import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
  
-#Empty structures
+#Empty data structures
 tempdf = pd.DataFrame()
 edgelist = []
 
@@ -153,22 +154,25 @@ for z in LengthOfTest:
     #Divide by number of signals
     AvgVolAdjMFE = sumMFE/numsignals
     AvgVolAdjMAE = sumMAE/numsignals 
-        
+    #Calculate edge ratio
     edgeratio = AvgVolAdjMFE/AvgVolAdjMAE
-    
+    #Print results
     print('The ', z, ' day edge ratio is', edgeratio)
+    #Add stats to dataframe
     edgelist.append(edgeratio)
-#              
-#Length = len(Asset1['LogRet'])
-#Range = range(0,Length)
-#print(MaxDD*100, '% = Max Drawdown')
-#
+
+#Assign data structure
 edgeratioframe = pd.DataFrame(index = LengthOfTest)
+#Add data to structure
 edgeratioframe['EdgeRatio'] = edgelist
-#
+#Graphical display
 edgeratioframe['EdgeRatio'].plot(grid=True, figsize=(8,5))
+
+#End timer
 #end = t.time()
+#Timer stats
 #print((end - start), ' seconds later.')
+#Display highest eratio
 #print('Max eRatio is', max(edgeratioframe['EdgeRatio']))
 
 #Graphics
@@ -188,15 +192,18 @@ axe.scatter(Asset.loc[Asset['OriginalTrade'] == 1, 'IndexToNumber'].values,
 axe.scatter(Asset.loc[Asset['OriginalTrade'] == -1, 'IndexToNumber'].values, 
             Asset.loc[Asset['OriginalTrade'] == -1, 'Adj Close'].values, label='skitscat', color='red', s=75, marker="v")
 
-##Plot the DF values with the figure, object
+#Plot the DF values with the figure, object
 candlestick_ohlc(axe, AssetCopy.values, width=.6, colorup='green', colordown='red')
 axe.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 #For ATR
 figure2, axe2 = plt.subplots(figsize = (10,2))
+#Labels
 plt.ylabel(ticker + ' ATR Percent')
 plt.xlabel('Date')
+#ATR line graph
 axe2.plot(AssetCopy['IndexToNumber'], Asset ['AverageTrueRangePercent'], color = 'black', label = '4wkATRPercent')
 #axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMax'], color = 'green', label = 'ATRRollingMax')
 #axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMin'], color = 'red', label = 'ATRRollingMin')
+#Date formatting
 axe2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
