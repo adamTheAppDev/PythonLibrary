@@ -225,15 +225,19 @@ for ticker in tickerlist:
         #Divide by number of signals
         AvgVolAdjMFE = sumMFE/numsignals
         AvgVolAdjMAE = sumMAE/numsignals 
-            
+        #Calculate edge ratio
         edgeratio = AvgVolAdjMFE/AvgVolAdjMAE
-        
+        #Display results
         print('The ', z, ' day edge ratio is', edgeratio)
+        #Add data to list
         edgelist.append(edgeratio)
-    
+    #Make issue specific dataframe
     edgeratioframe[ticker + '_EdgeRatio'] = edgelist
-    
+    #Graph edge ratio for specific issue
     edgeratioframe[ticker + '_EdgeRatio'].plot(grid=True, figsize=(8,5))
+    #Clear list
     edgelist = []
+    #End timer
     end = t.time()
+    #Timer stats
     print((end - start), ' seconds later..')
