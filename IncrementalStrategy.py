@@ -129,6 +129,6 @@ drawdown =  1 - Asset2['Multiplier'].div(Asset2['Multiplier'].cummax())
 drawdown = drawdown.fillna(0)
 #s['drawdown'] =  1 - s['Multiplier'].div(s['Multiplier'].cummax())
 MaxDD = max(drawdown)
-#Performance metric
+#Performance metrics
 dailyreturn = Asset2['Strategy'].mean()
 dailyvol = Asset2['Strategy'].std()
