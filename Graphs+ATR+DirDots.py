@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb  5 19:50:19 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a graphical display tool for candlestick charts + indicators
-#It has a trading model inside, nice.
+#It has a trading model inside.
 
-#Graphs
+#Import modules
 from YahooGrabber import YahooGrabber
 from YahooSourceDailyGrabber import YahooSourceDailyGrabber
 import matplotlib.pyplot as plt
@@ -16,8 +16,9 @@ from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
 import numpy as np
 
-#Acquire input data
+#Assign ticker
 string = 'STX'
+#Request data
 Asset = YahooGrabber(string)
 #Trimmer
 Asset = Asset[-100:]
@@ -30,7 +31,7 @@ AssetCopy = Asset[['IndexToNumber', 'Open', 'High', 'Low', 'Close', 'Adj Close']
 
 #Create axe and define X and Y axis scale
 figure, axe = plt.subplots(figsize = (10,5))
-#Assign titles
+#Assign labels
 plt.ylabel(string + ' Price')
 plt.xlabel('Date') 
 
@@ -144,11 +145,14 @@ axe.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 #For ATR
 figure2, axe2 = plt.subplots(figsize = (10,2))
+#Labels
 plt.ylabel(string + ' ATR')
 plt.xlabel('Date')
+#ATR line graphs and rolling min/max
 axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['4wkATRPercent'], color = 'black', label = '4wkATRPercent')
 axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMax'], color = 'green', label = 'ATRRollingMax')
 axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMin'], color = 'red', label = 'ATRRollingMin')
+#Date formatting
 axe2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 #Save image to CWD..
 #plt.savefig('TestingTesting.png')
