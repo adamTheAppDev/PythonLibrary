@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jul 22 19:13:12 2018
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a brute force optimizer for a short only, martingale style, volatility trading strategy
 #that takes incrementally larger positions
 
+#Import modules
 import numpy as np
 import random as rand
 import pandas as pd
@@ -15,18 +16,22 @@ import time as t
 from DatabaseGrabber import DatabaseGrabber
 from YahooGrabber import YahooGrabber
 
-#Inputs - OHLC data
+#Ticker assignment
 Ticker1 = 'UVXY'
+#Request data
 Asset1 = DatabaseGrabber(Ticker1)
 Asset1 = Asset1[:] #In
+#Iterable
 Iterations = range(0,50)
 Counter = 1
-#Numbered subindex 
+#Range index 
 Asset1['SubIndex'] = range(1,len(Asset1)+1)
+#Empty data structures
 Empty = []
 Dataset = pd.DataFrame()
+#For number of iterations in optimization
 for n in Iterations:
-    #Variable windows
+    #Generate variable windows
     ROCWindow = rand.randint(5,200)
     HoldPeriod = rand.randint(25,200)
     ATRWindow = 20
@@ -36,15 +41,7 @@ for n in Iterations:
     #Log Returns
     Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
     Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
-#    Asset1['Method1'] = Asset1['High'] - Asset1['Low']
-#    Asset1['Method2'] = abs((Asset1['High'] - Asset1['Close'].shift(1)))
-#    Asset1['Method3'] = abs((Asset1['Low'] - Asset1['Close'].shift(1)))
-#    Asset1['Method1'] = Asset1['Method1'].fillna(0)
-#    Asset1['Method2'] = Asset1['Method2'].fillna(0)
-#    Asset1['Method3'] = Asset1['Method3'].fillna(0)
-#    Asset1['TrueRange'] = Asset1[['Method1','Method2','Method3']].max(axis = 1)
-#    Asset1['ATR'] = Asset1['TrueRange'].rolling(window = ATRWindow,
-#                                    center=False).mean()
+    #ROC calculations
     Asset1['RateOfChange'] = (Asset1['Adj Close'] - Asset1['Adj Close'].shift(ROCWindow)
                                       ) / Asset1['Adj Close'].shift(ROCWindow)
     Bottom = Asset1['RateOfChange'].min()
@@ -104,20 +101,27 @@ for n in Iterations:
     for i in range(0,HoldPeriod):
         Asset1['UnitEleven'] = np.where(Asset1['UnitEleven'].shift(1) == PositionSize, PositionSize, Asset1['UnitEleven'])
     
-    
+    #Adding position sizes
     Asset1['SumUnits'] = Asset1[['UnitOne','UnitTwo','UnitThree','UnitFour',#]].sum(axis = 1)
         'UnitFive','UnitSix','UnitSeven','UnitEight','UnitNine','UnitTen','UnitEleven']].sum(axis = 1)
-    
+    #Exposure methodology
     Asset1['Regime'] = np.where(Asset1['SumUnits'] >= 1, -1,0)
+    #Apply weights to returns
     Asset1['Strategy'] = Asset1['Regime'].shift(1) * Asset1['LogRet'] * (Asset1['SumUnits']/100)
     #Asset1['Strategy'].cumsum().apply(np.exp).plot(grid=True,
     #                                 figsize=(8,5))
+    #Returns on $1
     Asset1['Multiplier'] = Asset1['Strategy'].cumsum().apply(np.exp)
+    
+    #Incorrectly calculated drawdown statistic
     drawdown =  1 - Asset1['Multiplier'].div(Asset1['Multiplier'].cummax())
     drawdown = drawdown.fillna(0)
     #s['drawdown'] =  1 - s['Multiplier'].div(s['Multiplier'].cummax())
     MaxDD = max(drawdown)
+    
+    #Iteration tracking
     Counter = Counter + 1
+    #Constraints
     if MaxDD > .5:
         continue
     dailyreturn = Asset1['Strategy'].mean()
@@ -126,8 +130,10 @@ for n in Iterations:
     dailyvol = Asset1['Strategy'].std()
     if dailyvol == 0:
         continue
+    #Performance metrics    
     Sharpe = dailyreturn/dailyvol
     SharpeOverMaxDD = Sharpe/MaxDD
+    #Save params and metrics to list
     Empty.append(ROCWindow)
     Empty.append(HoldPeriod)
     Empty.append(PositionSize)
@@ -138,30 +144,45 @@ for n in Iterations:
     Empty.append(Sharpe)
     Empty.append(SharpeOverMaxDD)
     Empty.append(MaxDD)
+    #List to Series
     Emptyseries = pd.Series(Empty)
+    #Series to dataframe column
     Dataset[n] = Emptyseries.values
-    Empty[:] = [] 
+    #Clear list
+    Empty[:] = []
+    #Iteration tracking
     print(Counter)
-    
-
-    
-    
+   
+#Rename columns
 #Trades = Trades.rename(index={0: "ExitTaken", 1: "LengthOfTrade", 2: "EntryPriceUnitOne",
 #                3: "StopPriceUnitOne", 4: "SubIndexOfEntry", 5: "SubIndexOfExit",
 #                6: "TradeDirection", 7: "OpenPriceOnGap", 8: "TradeReturn"})
+#Desired metric to sort
 z1 = Dataset.iloc[7]
+#Percentile threshold
 w1 = np.percentile(z1, 80)
-v1 = [] #this variable stores the Nth percentile of top performers
-DS1W = pd.DataFrame() #this variable stores your financial advisors for specific dataset
+v1 = [] #this variable stores the Nth percentile of top params
+DS1W = pd.DataFrame() #this variable stores your params for specific dataset
+#For all metrics
 for h in z1:
+    #If metric greater than threshold
     if h > w1:
+      #Add to list
       v1.append(h)
+#For top metrics
 for j in v1:
-      r = Dataset.columns[(Dataset == j).iloc[7]]    
+      #Find column ID 
+      r = Dataset.columns[(Dataset == j).iloc[7]]
+      #Add to dataframe
       DS1W = pd.concat([DS1W,Dataset[r]], axis = 1)
+#Optimal param
 y = max(z1)
 k = Dataset.columns[(Dataset == y).iloc[7]] #this is the column number
+#Param set
 kfloat = float(k[0])
+#End timer
 End = t.time()
+#Timer stats
 #print(End-Start, 'seconds later')
+#Display params
 print(Dataset[k])
