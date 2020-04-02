@@ -5,7 +5,6 @@
 
 """
 
-
 #pandas_datareader is deprecated use YahooGrabber
 #Information ratio is a summary statistic
 
@@ -46,6 +45,5 @@ for s in symbols:
     try:
         #Print ticker and info ratio
         print(s, (InfoRat(s)))
-    
     except OSError:
         pass
