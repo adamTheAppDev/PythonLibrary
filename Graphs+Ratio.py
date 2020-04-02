@@ -1,24 +1,26 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb  5 19:50:19 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a graphical display tool with a trading model inside
 
-#Graphs
+#Import modules
 #from YahooGrabber import YahooGrabber
 from YahooSourceDailyGrabber import YahooSourceDailyGrabber
 import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
 
-#Acquire input data
+#Assign ticker
 string = '^GSPC'
+#Request data
 Asset = YahooSourceDailyGrabber(string)
 #Trimmer
 Asset = Asset[-150:]
+
 #Make column that represents X axis 
 Asset['Index'] = Asset.index
 #Format for mpl
@@ -30,6 +32,7 @@ figure, axe = plt.subplots(figsize = (10,5))
 #Assign titles
 plt.ylabel(string + ' Price')
 plt.xlabel('Date') 
+
 #Technical calculations
 #Donchian Channel
 AssetCopy['RollingMax'] = AssetCopy['High'].rolling(20).max()
@@ -49,7 +52,7 @@ AssetCopy['4wkATRPoints'] = AssetCopy['TrueRange'].rolling(window = 20, center=F
 AssetCopy['4wkATRPercent'] = AssetCopy['4wkATRPoints'] / AssetCopy['Close']
 AssetCopy['ATRRollingMax'] = AssetCopy['4wkATRPercent'].rolling(20).max()
 AssetCopy['ATRRollingMin'] = AssetCopy['4wkATRPercent'].rolling(20).min()
- #STATIC Total Average ATR
+#STATIC Total Average ATR
 AssetCopy['4wkTotalAverageATR'] = AssetCopy['4wkATRPercent'].mean() * 20 
 
 #DYNAMIC Rolling Average ATR
@@ -75,24 +78,31 @@ axe.plot(AssetCopy['IndexToNumber'], AssetCopy['SMA5'], color = 'black', label =
 axe.plot(AssetCopy['IndexToNumber'], AssetCopy['SMA20'], color = 'yellow', label = 'SMA20')
 #Plot the DF values with the figure, object 
 candlestick_ohlc(axe, AssetCopy.values, width=.6, colorup='green', colordown='red')
+#Date formatting
 axe.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 #For ATR to Range
 figure2, axe2 = plt.subplots(figsize = (10,2))
+#Labels
 plt.ylabel(string + ' 4wkRATRTRtoAATRTR')
 plt.xlabel('Date')
+#Line graph
 axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['4wkRAATRtoRangetoAATRtoRange'], color = 'black', label = '4wkRATRTRtoAATRTR')
 #axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMax'], color = 'green', label = 'ATRRollingMax')
 #axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMin'], color = 'red', label = 'ATRRollingMin')
+#Date formatting
 axe2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 #For ATR 
 figure3, axe3 = plt.subplots(figsize = (10,2))
+#Labels
 plt.ylabel(string + ' 4wkATRPercent')
 plt.xlabel('Date')
+#ATR line graph and rolling min/max
 axe3.plot(AssetCopy['IndexToNumber'], AssetCopy['4wkATRPercent'], color = 'black', label = '4wkATRPercent')
 axe3.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMax'], color = 'green', label = 'ATRRollingMax')
 axe3.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMin'], color = 'red', label = 'ATRRollingMin')
+#Date formatting
 axe3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 #Save image to CWD..
