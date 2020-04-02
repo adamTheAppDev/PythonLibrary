@@ -1,24 +1,26 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb  5 19:50:19 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a graphical display tool
 
-#Graphs
+#Import modules
 from YahooGrabber import YahooGrabber
 from YahooSourceDailyGrabber import YahooSourceDailyGrabber
 import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
 
-#Acquire input data
+#Assign ticker
 string = 'STX'
+#Request data
 Asset = YahooGrabber(string)
 #Trimmer
 Asset = Asset[-150:]
+
 #Make column that represents X axis 
 Asset['Index'] = Asset.index
 #Format for mpl
@@ -30,6 +32,7 @@ figure, axe = plt.subplots(figsize = (10,5))
 #Assign titles
 plt.ylabel(string + ' Price')
 plt.xlabel('Date') 
+
 #Technical calculations
 #Donchian Channel
 AssetCopy['RollingMax'] = AssetCopy['High'].rolling(20).max()
@@ -60,11 +63,14 @@ axe.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 #For ATR
 figure2, axe2 = plt.subplots(figsize = (10,2))
+#Labels
 plt.ylabel(string + ' ATR')
 plt.xlabel('Date')
+#ATR line graph and rolling min/max lines
 axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['4wkATRPercent'], color = 'black', label = '4wkATRPercent')
 axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMax'], color = 'green', label = 'ATRRollingMax')
 axe2.plot(AssetCopy['IndexToNumber'], AssetCopy['ATRRollingMin'], color = 'red', label = 'ATRRollingMin')
+#Date formatting
 axe2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 #Save image to CWD..
 #plt.savefig('TestingTesting.png')
