@@ -14,8 +14,6 @@ import pandas as pd
 from pandas_datareader import data
 import os
 
-#Check working directory
-os.chdir('C:\\Users\\AmatVictoriaCuramIII\\Desktop\\Python')
 #import pandas as pd
 #Read in data
 Aggregate = pd.read_pickle('SP500NCAGGSHARPE0205')
