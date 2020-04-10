@@ -5,7 +5,6 @@
 
 """
 
-
 #This is a brute force optimizer for a donchian trend strategy
 
 #Import modules
@@ -42,24 +41,30 @@ for i in iterations:
     nday = rand.randint(3,150)
     hold = rand.randint(3,150)
     ranger = range(0, hold)   
+    
     #Calculate rolling market top and bottom
     s['ndaymin'] = s['Adj Close'].rolling(window=nday, center=False).min()
     s['ndaymax'] = s['Adj Close'].rolling(window=nday, center=False).max()
+
     #Directional methodology
     s['Regime'] = np.where(s['Adj Close'] > s['ndaymax'].shift(1), 1, 0)
     s['Regime'] = np.where(s['Adj Close'] < s['ndaymin'].shift(1), -1, 0)
+
     #Zeros
     s['OriginalTrade'] = 0
     #If directional assumption in period and no directional assumption in previous period then is original trade
     s['OriginalTrade'].loc[(s['Regime'].shift(1) == 0) & (s['Regime'] == 1)] = 1 
     s['OriginalTrade'].loc[(s['Regime'].shift(1) == 0) & (s['Regime'] == -1)] = -1 
+
     #ffill(limit = r)
     for r in ranger:
         s['Regime'] = np.where(s['Regime'].shift(1) == -1, -1, s['Regime'])
+
     #Apply position to returns
     s['Strategy'] = s['Regime'].shift(1) * s['LogRet']
     #Returns on $1
     s['Multiplier'] = s['Strategy'].cumsum().apply(np.exp)
+    
     #Incorrectly calculated max drawdown stat
     drawdown =  1 - s['Multiplier'].div(s['Multiplier'].cummax())
     drawdown = drawdown.fillna(0)
@@ -68,6 +73,7 @@ for i in iterations:
     #Constraint
     if MaxDD > .6:
         continue
+        
     #Performance metrics
     dailyreturn = s['Strategy'].mean()
     dailyvol = s['Strategy'].std()
@@ -76,8 +82,10 @@ for i in iterations:
         continue
     #Performance metrics
     sharpe =(dailyreturn/dailyvol)
+    
     #Iteration tracking
     print(Counter)
+    
     #Save params and metrics to list
     Empty.append(nday)
     Empty.append(hold)
@@ -98,6 +106,7 @@ z1 = Dataset.iloc[2]
 w1 = np.percentile(z1, 80)
 v1 = [] #this variable stores the Nth percentile of top params
 DS1W = pd.DataFrame() #this variable stores your params for specific dataset
+
 #For all metrics
 for h in z1:
     #If metric greater than threshold 
@@ -110,6 +119,7 @@ for j in v1:
       r = Dataset.columns[(Dataset == j).iloc[2]]    
       #Add param set to dataframe by column ID
       DS1W = pd.concat([DS1W,Dataset[r]], axis = 1)
+    
 #Top metric
 y = max(z1)
 #Column ID of top metric
@@ -127,16 +137,19 @@ print(Dataset[k])
 nday = int(Dataset[kfloat][0])
 hold = int(Dataset[kfloat][1])
 ranger = range(0, hold)
+
 #Calculate rolling market top and bottom
 s['ndaymin'] = s['Adj Close'].rolling(window=nday, center=False).min()
 s['ndaymax'] = s['Adj Close'].rolling(window=nday, center=False).max()\
 #Directional methodology
+
 s['Regime'] = np.where(s['Adj Close'] > s['ndaymax'].shift(1), 1, 0)
 s['Regime'] = np.where(s['Adj Close'] < s['ndaymin'].shift(1), -1, 0)
 #If directional assumption in period and no directional assumption in previous period then is original trade
 s['OriginalTrade'] = 0
 s['OriginalTrade'].loc[(s['Regime'].shift(1) == 0) & (s['Regime'] == 1)] = 1 
 s['OriginalTrade'].loc[(s['Regime'].shift(1) == 0) & (s['Regime'] == -1)] = -1 
+
 #ffill(limit = r)
 for r in ranger:
     s['Regime'] = np.where(s['Regime'].shift(1) == -1, -1, s['Regime'])
@@ -144,17 +157,20 @@ for r in ranger:
 s['Strategy'] = s['Regime'].shift(1) * s['LogRet']
 #Returns on $1
 s['Multiplier'] = s['Strategy'].cumsum().apply(np.exp)
+
 #Incorrectly calculated drawdown stat
 drawdown =  1 - s['Multiplier'].div(s['Multiplier'].cummax())
 drawdown = drawdown.fillna(0)
 #s['drawdown'] =  1 - s['Multiplier'].div(s['Multiplier'].cummax())
 MaxDD = max(drawdown)
+
 #Performance metrics
 dailyreturn = s['Strategy'].mean()
 dailyvol = s['Strategy'].std()
 sharpe =(dailyreturn/dailyvol)    
 #Incorrectly calculated
 print(MaxDD)
+
 #Graphical display
 s['Strategy'].cumsum().apply(np.exp).plot(grid=True,
                                      figsize=(8,5))
