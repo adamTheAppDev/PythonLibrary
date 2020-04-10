@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct  6 19:04:59 2019
 
-@author: AmatVictoriaCuramIII
+@author: https://github.com/amueller and Guido
+
 """
 
 #This is from the https://github.com/amueller and Guido Python ML book
 #Supervised Learning Binary Classification Wisconsin Data Linear Regression
 
+#Import modules
 #import sys
 #import sklearn
 #import numpy as np
