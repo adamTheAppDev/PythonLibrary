@@ -1,59 +1,66 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jun 11 19:26:12 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is mostly a technical analysis tool
 #provides the basic structure/idea for Database Modification
 
+#Import modules
 import numpy as np
 import pandas as pd
 
-temp = pd.read_pickle('/Users/AmatVictoriaCuramIII/Desktop/PythonFiles/QQQAGGAdvice07_50')
+#Read in data
+temp = pd.read_pickle('/Users/Username/DirectoryLocation/PythonFiles/QQQAGGAdvice07_50')
+#Iterable
 ranger = range(0,len(temp['Adj Close']))
 index = temp.index
-#transfer to database modification
 
+#Calculate log returns
 temp['LogRet'] = np.log(temp['Adj Close']/temp['Adj Close'].shift(1)) 
 temp['LogRet'] = temp['LogRet'].fillna(0)
 
+#52 wk range
 temp['52wkLow'] = temp['Adj Close'].rolling(252).min()
 temp['52wkMax'] = temp['Adj Close'].rolling(252).max()
 
+#Number of periods in time series
 temp['Age'] = len(temp['Open'])
 
+#Total average annual return
 temp['TotalAverageAnnualReturn'] = temp['LogRet'].mean() * 252
-
+#Total average annual stdDev
 temp['TotalAverageAnnualStandardDeviation'] = temp['LogRet'].std(
                                                      )*np.sqrt(252)
-
+#Coefficient of variation
 temp['CoefficientOfVaration'] = (
 temp['TotalAverageAnnualStandardDeviation']/temp['TotalAverageAnnualReturn'])
 
-temp['Rolling52wkMockReturn'] = temp['LogRet'].rolling(
+#Rolling daily average return
+temp['Rolling52wkDailyAverageReturn'] = temp['LogRet'].rolling(
                                  center=False, window = 252).mean()
-
+#252 period ROC
 temp['Rolling52wkReturn'] = np.log(temp['Adj Close']/
                                      temp['Adj Close'].shift(252))
-
+#Rolling annual average daily stdDev
 temp['Rolling52wkStandardDeviation'] = temp['LogRet'].rolling(
                                 center = False, window = 252).std()
-
+#Rolling annual 4wk stdDev
 temp['Rolling4wkStandardDeviation'] = temp['LogRet'].rolling(
                                  center = False, window = 20).std()
-
+#Rolling annual average daily volume
 temp['AverageAnnualRollingVolume'] = temp['Volume'].rolling(
                                    center=False, window=252).mean()
-
+#Rolling coefficient of variation
 temp['Rolling52wkCoefficientOfVariation'] = (
     temp['Rolling52wkStandardDeviation']/temp['Rolling52wkReturn'])
-
+#Rolling STDev of STDev
 temp['Rolling52wkDoubleStandardDeviation'] = (
     temp['Rolling52wkStandardDeviation'].rolling(
     center = False, window = 252))
-
+#Relative standard deviation 
 temp['4wkOver52wkStandardDeviationRatio'] = (
     temp['Rolling4wkStandardDeviation']/temp['Rolling52wkStandardDeviation'])    
 
@@ -137,6 +144,7 @@ temp['SmallSMA'] = temp['Adj Close'].rolling(window=littlewindow, center=False).
 temp['LargeSMA'] = temp['Adj Close'].rolling(window=bigwindow, center=False).mean()
 temp['4wkOver52wk'] = (temp['SmallSMA'] - temp['LargeSMA'])/temp['Adj Close']
 temp['priceOver4wk'] = (temp['Adj Close'] - temp['SmallSMA'])/temp['Adj Close']
+
 #RSI
 closeprice = temp['Adj Close']
 RSIwindow = 14  
@@ -169,4 +177,7 @@ temp['GapDown'] = temp['GapDown'].fillna(0)
 lag = 12
 temp['RateOfChange'] = (temp['Adj Close'] - temp['Adj Close'].shift(lag)
                                   ) / temp['Adj Close'].shift(lag)        
+
+#Save data to pickle
+temp.to_pickle('/Users/Username/DirectoryLocation/PythonFiles/PickleName')
         
