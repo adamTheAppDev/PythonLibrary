@@ -5,7 +5,6 @@
 
 """
 
-
 #This is a brute force optimization, portfolio analysis, and trading strategy based on a 'remote' signal
 
 #Import modules
