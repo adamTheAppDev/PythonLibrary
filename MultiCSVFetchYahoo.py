@@ -1,12 +1,13 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
-Created on Fri May 19 16:53:41 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is an HTML scraper and formatting tool for time series database construction
 
+#Import modules
 from pandas import read_csv 
 import requests
 import pandas as pd
@@ -16,6 +17,8 @@ from io import StringIO
 from CrumbCatcher import CrumbCatcher
 from pandas.parser import CParserError
 from requests.exceptions import ConnectionError
+
+#Read in data
 #df = read_csv('refdfser.csv', sep = ',')
 df = pd.read_pickle('C:\\Users\\AmatVictoriaCuramIII\\Desktop\\Python\\Universe2018')
 #ticker finder
@@ -32,59 +35,87 @@ nocrumb = "?period1=-630950400&period2=1592694000&interval=1d&events=history&cru
 
 #https://query1.finance.yahoo.com/v7/finance/download/%5EGSPC?period1=-631123200&period2=1542873600&interval=1wk&events=history&crumb=DoJbYX/6Mee
 
+#Iterable
 ranger = range(0,len(df))
 #artificialcrumb = str(CrumbCatcher(ticker))
+#For number of tickers
 for i in ranger:
     try: 
+        #Assign ticker
         ticker = str(df[i][:-4])
-#        print(ticker)
 #        time.sleep(2)
+        #Generate crumb
         artificialcrumb = str(CrumbCatcher(str(ticker)))
+        #Generate download url
         downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
         + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
+    
+        #Get response
         response = requests.post(downloadurl)#, data=CookieDict)
+        #Format text
         datastr = response.text
         formatter = StringIO(datastr)
         strdf = pd.read_csv(formatter, sep = ',')
-#        print(ticker)
+ 
+        #Bad response
         if strdf.columns[0] == '{"chart":{"result":null':
             print('The URL failed for ' + ticker)
             continue
-#        print(strdf)
+      
+        #Set date as index
         strdf = strdf.set_index('Date')
+        #Format date
         strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
+        
+        #Save to CSV
         strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\" + ticker + ".csv"))
+        #Iteration tracking
         print(ticker)
         continue
+    #From bad response
     except CParserError:
         print('Parser failed for ' + ticker)
         continue
+    #From timeout
     except ConnectionError:
         try:
             #Sleep, then retry last ticker, continue loop.
             print('ConnectionError on ' + str(ticker) + '.')
             print('Sleeping for 5 min.')        
             time.sleep(301)
-            print('Parsing for ' + ticker + '.')
             #Retrying parse
+            print('Parsing for ' + ticker + '.')
+            
+            #Generate crumb
             artificialcrumb = str(CrumbCatcher(str(ticker)))
+            #Generate download url
             downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
             + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
+            
+            #Get response
             response = requests.post(downloadurl)#, data=CookieDict)
+            #Format text
             datastr = response.text
             formatter = StringIO(datastr)
             strdf = pd.read_csv(formatter, sep = ',')
-    #        print(ticker)
+            
+            #Bad response
             if strdf.columns[0] == '{"chart":{"result":null':
                 print('The URL failed for ' + ticker)
                 continue
-    #        print(strdf)
+               
+            #Set date as index   
             strdf = strdf.set_index('Date')
+            #Format date
             strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
+            
+            #Save to CSV
             strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\" + ticker + ".csv"))
+            #Iteration tracking
             print(ticker)
             #Moving on to next ticker
             continue
+        #From bad response    
         except CParserError:
             print('Parser failed for ' + ticker + '.')
             continue
@@ -97,29 +128,41 @@ for i in ranger:
                 print('Parsing for ' + ticker + '.')
                 #Retrying parse
                 artificialcrumb = str(CrumbCatcher(str(ticker)))
+                #Generate download url
                 downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
                 + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
+                
+                #Get response
                 response = requests.post(downloadurl)#, data=CookieDict)
+                #Format text
                 datastr = response.text
                 formatter = StringIO(datastr)
                 strdf = pd.read_csv(formatter, sep = ',')
-        #        print(ticker)
+                
+                #Bad response
                 if strdf.columns[0] == '{"chart":{"result":null':
                     print('The URL failed for ' + ticker)
                     continue
-        #        print(strdf)
+                   
+                #Set date as index   
                 strdf = strdf.set_index('Date')
+                #Format date
                 strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
+                
+                #Save to CSV
                 strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\" + ticker + ".csv"))
+                #Iteration tracking
                 print(ticker)
                 #Moving on to next ticker
                 continue    
+            #From bad response    
             except CParserError:
                 print('Parser failed for ' + ticker + '.')
                 continue
             except requests.exceptions.SSLError:
                 print('Double SSLError after ConnectionError for ' + ticker + '.')
                 continue            
+            #From timeout   
             except ConnectionError:
                 print('Double ConnectionError for ' + ticker + '.')
                 continue
@@ -131,30 +174,43 @@ for i in ranger:
             time.sleep(61)
             print('Parsing for ' + ticker + '.')
             #Retrying parse
+            
+            #Generate crumb
             artificialcrumb = str(CrumbCatcher(str(ticker)))
+            #Generate download url
             downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
             + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
+            
+            #Get response
             response = requests.post(downloadurl)#, data=CookieDict)
+            #Format text
             datastr = response.text
             formatter = StringIO(datastr)
             strdf = pd.read_csv(formatter, sep = ',')
-    #        print(ticker)
+            #Bad response
             if strdf.columns[0] == '{"chart":{"result":null':
                 print('The URL failed for ' + ticker)
                 continue
-    #        print(strdf)
+
+            #Set date as index   
             strdf = strdf.set_index('Date')
+            #Format date
             strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
+            
+            #Save to CSV
             strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\" + ticker + ".csv"))
+            #Iteration tracking
             print(ticker)
             #Moving on to next ticker
             continue    
+        #From bad response    
         except CParserError:
             print('Parser failed for ' + ticker + '.')
             continue
         except requests.exceptions.SSLError:
             print('Double SSLError for ' + ticker + '.')
             continue
+        #From timeout   
         except ConnectionError:
             try:
                 #Sleep, then retry last ticker, continue loop.
@@ -163,191 +219,52 @@ for i in ranger:
                 time.sleep(61)
                 print('Parsing for ' + ticker + '.')
                 #Retrying parse
+                
+                #Generate crumb
                 artificialcrumb = str(CrumbCatcher(str(ticker)))
+                #Generate download url
                 downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
                 + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
+                
+                #Get response
                 response = requests.post(downloadurl)#, data=CookieDict)
+                #Format text
                 datastr = response.text
                 formatter = StringIO(datastr)
                 strdf = pd.read_csv(formatter, sep = ',')
-        #        print(ticker)
+                
+                #Bad response
                 if strdf.columns[0] == '{"chart":{"result":null':
                     print('The URL failed for ' + ticker)
                     continue
-        #        print(strdf)
+                   
+                #Set date as index
                 strdf = strdf.set_index('Date')
+                #Format date
                 strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
+                
+                #Save to CSV
                 strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\" + ticker + ".csv"))
+                #Iteration tracking
                 print(ticker)
                 #Moving on to next ticker
                 continue
+            #From bad response    
             except CParserError:
                 print('Parser failed after SSLError and ConnectionError for ' + ticker + '.')
                 continue
             except requests.exceptions.SSLError:
                 print('SSLError after SSLError and ConnectionEror for ' + ticker + '.')
                 continue  
-    
-location = 'F:/Users/AmatVictoriaCuram/TemporaryCSV'
+               
+#Directory location    
+location = 'F:/Users/Username/TemporaryCSVLocation'
+#List files in directory
 midlist = os.listdir(location)
-#idle1 = 0
-#if len(midlist) > 0:
-#    endlist = [x[:-4] for x in midlist]
-#    startlist = list(df)
-#    Needed = [x for x in startlist if x not in endlist]
-#    needf = pd.DataFrame(Needed, columns=['Symbol'])
-#    ranger1 = range(0,len(needf))
-#    for j in ranger1:
-#        try:
-#            ticker = needf['Symbol'][j][:-4]
-#            artificialcrumb = str(CrumbCatcher(str(ticker)))
-#            downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#            + "?period1=-631123200&period2=1598374000&interval=1wk&events=history&crumb=" + artificialcrumb)
-#            mainurl = "https://finance.yahoo.com/quote/" + ticker + "/history?p=" + ticker
-#            response = requests.post(downloadurl)#, data=CookieDict)
-#            datastr = response.text
-#            formatter = StringIO(datastr)
-#            strdf = pd.read_csv(formatter, sep = ',')
-#            if strdf.columns[0] == '{"chart":{"result":null':
-#                print('The URL failed for ' + ticker)                
-#                continue
-#            strdf = strdf.set_index('Date')
-#            strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
-#            strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\"+ ticker + ".csv"))
-#        except CParserError:
-#            print('Parser failed for ' + ticker)
-#            continue
-#        except ConnectionError:
-#            try:
-#                #Sleep, then retry last ticker, continue loop.
-#                print('ConnectionError on ' + str(ticker) + '.')
-#                print('Sleeping for 61 seconds.')        
-#                time.sleep(61)
-#                print('Parsing for ' + ticker + '.')
-#                #Retrying parse
-#                artificialcrumb = str(CrumbCatcher(str(ticker)))
-#                downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
-#                response = requests.post(downloadurl)#, data=CookieDict)
-#                datastr = response.text
-#                formatter = StringIO(datastr)
-#                strdf = pd.read_csv(formatter, sep = ',')
-#        #        print(ticker)
-#                if strdf.columns[0] == '{"chart":{"result":null':
-#                    print('The URL failed for ' + ticker)
-#                    continue
-#        #        print(strdf)
-#                strdf = strdf.set_index('Date')
-#                strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
-#                strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\" + ticker + ".csv"))
-#                print(ticker)
-#                #Moving on to next ticker
-#                continue
-#            except CParserError:
-#                print('Parser failed for ' + ticker + '.')
-#                continue
-#            except requests.exceptions.SSLError:
-#                try:
-#                    print('SSLError after Connection Error for ' + ticker + '.')
-#                    #Sleep, then retry last ticker, continue loop.
-#                    print('Sleeping for 61 seconds.')        
-#                    time.sleep(61)
-#                    print('Parsing for ' + ticker + '.')
-#                    #Retrying parse
-#                    artificialcrumb = str(CrumbCatcher(str(ticker)))
-#                    downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                    + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
-#                    response = requests.post(downloadurl)#, data=CookieDict)
-#                    datastr = response.text
-#                    formatter = StringIO(datastr)
-#                    strdf = pd.read_csv(formatter, sep = ',')
-#            #        print(ticker)
-#                    if strdf.columns[0] == '{"chart":{"result":null':
-#                        print('The URL failed for ' + ticker)
-#                        continue
-#            #        print(strdf)
-#                    strdf = strdf.set_index('Date')
-#                    strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
-#                    strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\" + ticker + ".csv"))
-#                    print(ticker)
-#                    #Moving on to next ticker
-#                    continue    
-#                except CParserError:
-#                    print('Parser failed for ' + ticker + '.')
-#                    continue
-#                except requests.exceptions.SSLError:
-#                    print('Double SSLError after ConnectionError for ' + ticker + '.')
-#                    continue            
-#                except ConnectionError:
-#                    print('Double ConnectionError for ' + ticker + '.')
-#                    continue
-#        except requests.exceptions.SSLError:
-#            try:
-#                #Sleep, then retry last ticker, continue loop.
-#                print('SSLError on ' + str(ticker) + '.')
-#                print('Sleeping for 61 seconds.')        
-#                time.sleep(61)
-#                print('Parsing for ' + ticker + '.')
-#                #Retrying parse
-#                artificialcrumb = str(CrumbCatcher(str(ticker)))
-#                downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
-#                response = requests.post(downloadurl)#, data=CookieDict)
-#                datastr = response.text
-#                formatter = StringIO(datastr)
-#                strdf = pd.read_csv(formatter, sep = ',')
-#        #        print(ticker)
-#                if strdf.columns[0] == '{"chart":{"result":null':
-#                    print('The URL failed for ' + ticker)
-#                    continue
-#        #        print(strdf)
-#                strdf = strdf.set_index('Date')
-#                strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
-#                strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\" + ticker + ".csv"))
-#                print(ticker)
-#                #Moving on to next ticker
-#                continue    
-#            except CParserError:
-#                print('Parser failed for ' + ticker + '.')
-#                continue
-#            except requests.exceptions.SSLError:
-#                print('Double SSLError for ' + ticker + '.')
-#                continue
-#            except ConnectionError:
-#                try:
-#                    #Sleep, then retry last ticker, continue loop.
-#                    print('ConnectionError after SSLError on ' + str(ticker) + '.')
-#                    print('Sleeping for 61 seconds.')        
-#                    time.sleep(61)
-#                    print('Parsing for ' + ticker + '.')
-#                    #Retrying parse
-#                    artificialcrumb = str(CrumbCatcher(str(ticker)))
-#                    downloadurl = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                    + "?period1=-631123200&period2=1598374000&interval=1d&events=history&crumb=" + artificialcrumb)
-#                    response = requests.post(downloadurl)#, data=CookieDict)
-#                    datastr = response.text
-#                    formatter = StringIO(datastr)
-#                    strdf = pd.read_csv(formatter, sep = ',')
-#            #        print(ticker)
-#                    if strdf.columns[0] == '{"chart":{"result":null':
-#                        print('The URL failed for ' + ticker)
-#                        continue
-#            #        print(strdf)
-#                    strdf = strdf.set_index('Date')
-#                    strdf.index = pd.to_datetime(strdf.index, format = "%Y/%m/%d") 
-#                    strdf.to_csv(("F:\\Users\\AmatVictoriaCuram\\TemporaryCSV\\" + ticker + ".csv"))
-#                    print(ticker)
-#                    #Moving on to next ticker
-#                    continue
-#                except CParserError:
-#                    print('Parser failed after SSLError and ConnectionError for ' + ticker + '.')
-#                    continue
-#                except requests.exceptions.SSLError:
-#                    print('SSLError after SSLError and ConnectionEror for ' + ticker + '.')
-#                    continue
-            
 newmidlist = os.listdir(location)
+#Strip '.csv'
 newendlist = [x[:-4] for x in newmidlist]
+#Tickers that did not make save to file
 newNeeded = [x for x in startlist if x not in newendlist]
+#Display results
 print(str(len(newNeeded)) + ' Unimported Stocks Exist')
-
