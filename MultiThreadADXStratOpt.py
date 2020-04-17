@@ -1,32 +1,42 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Apr  9 16:36:25 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#This is part of a multithreading tool to speed up brute force optimization - may be unfinished.
 
+#This is part of a multithreading tool to speed up brute force optimization
+ #Import modules
 from numba import jit
+#Decorator
 @jit
-
+#Define function
 def multithreadADXStratOpt():
+    #Import modules
     import pandas as pd
     from pandas_datareader import data
     import numpy as np
     import time as t
     import random as rand
+    #Assign ticker
     ticker = '^GSPC'
+    #Request data
     s = data.DataReader(ticker, 'yahoo', start='01/01/2016', end='01/01/2050')
+    #Number of iterations
     iterations = range(0,800)
+    #Empty data structures
     counter = 0
     empty = []
     dataset = pd.DataFrame()
+    #Start timer
     start = t.time()
-    s['UpMove'] = s['High'] - s['High'].shift(1)
-    s['DownMove'] = s['Low'] - s['Low'].shift(1)
+    #Calculate log returns
     s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1)) 
     s['LogRet'] = s['LogRet'].fillna(0)
+    #Calculate ATR
+    s['UpMove'] = s['High'] - s['High'].shift(1)
+    s['DownMove'] = s['Low'] - s['Low'].shift(1)
     s['Method1'] = s['High'] - s['Low']
     s['Method2'] = abs((s['High'] - s['Adj Close'].shift(1)))
     s['Method3'] = abs((s['Low'] - s['Adj Close'].shift(1)))
@@ -34,24 +44,30 @@ def multithreadADXStratOpt():
     s['Method2'] = s['Method2'].fillna(0)
     s['Method3'] = s['Method3'].fillna(0)
     s['TrueRange'] = s[['Method1','Method2','Method3']].max(axis = 1)
+    #Calculate ADX
     s['PDM'] = (s['High'] - s['High'].shift(1))
     s['MDM'] = (s['Low'].shift(1) - s['Low'])
     s['PDM'] = s['PDM'][s['PDM'] > 0]
     s['MDM'] = s['MDM'][s['MDM'] > 0]
     s['PDM'] = s['PDM'].fillna(0)
     s['MDM'] = s['MDM'].fillna(0)
+    #For number of iterations
     for x in iterations:
+        #Iteration tracking
         counter = counter + 1    
+        #Generate random params
         a = rand.randint(1,30)
         b = 100 - rand.random() * 200
         c = 100 - rand.random() * 200
         d = 100 - rand.random() * 200
         e = 100 - rand.random() * 200
         window = a
+        #Calculate ATR
         s['AverageTrueRange'] = s['TrueRange'].rolling(window = window,
                                         center=False).sum()
         s['AverageTrueRange'] = ((s['AverageTrueRange'].shift(1)*(window-1
                                      ) + s['TrueRange']) / window)
+        #Calculate ADX
         s['SmoothPDM'] = s['PDM'].rolling(window = window,
                                         center=False).sum()
         s['SmoothPDM'] = ((s['SmoothPDM'].shift(1)*(window-1
@@ -69,6 +85,7 @@ def multithreadADXStratOpt():
         s['DX'] = s['DX'].fillna(0)
         s['ADX'] = s['DX'].rolling(window = window, center = False).mean()
         s['ADXmean'] = s['ADX'].mean()
+        #Directional methodology
         s['Touch'] = np.where(s['DIdivergence'] < b, 1,0) #long signal
         s['Touch'] = np.where(s['DIdivergence'] > c, -1, s['Touch']) #short signal
         s['Sustain'] = np.where(s['Touch'].shift(1) == 1, 1, 0) # never actually true when optimized
@@ -80,16 +97,21 @@ def multithreadADXStratOpt():
         s['Sustain'] = np.where(s['DIdivergence'] > d, 0, s['Sustain']) #if RSI is greater than threshold, sustain is forced to 0
         s['Sustain'] = np.where(s['DIdivergence'] < e, 0, s['Sustain']) #never actually true when optimized
         s['Regime'] = s['Touch'] + s['Sustain']
+        #Apply position to returns
         s['Strategy'] = (s['Regime']).shift(1)*s['LogRet']
         s['Strategy'] = s['Strategy'].fillna(0)
+        #Constraint
         if s['Strategy'].std() == 0:    
             continue
+        #Performance metric    
         s['sharpe'] = (s['Strategy'].mean()-s['LogRet'].mean())/s['Strategy'].std()
+        #Constraints
         if s['sharpe'][-1] < 0.01:     
             continue
         if s['LogRet'].cumsum().apply(np.exp)[-1] > s['Strategy'].cumsum(
                                 ).apply(np.exp)[-1]:     
             continue                                
+        #Save params and metric to dataframe    
         print(counter)
         empty.append(a)
         empty.append(b)
@@ -97,21 +119,37 @@ def multithreadADXStratOpt():
         empty.append(d)
         empty.append(e)
         empty.append(s['sharpe'][-1])
+        #List to Series
         emptyseries = pd.Series(empty)
-        dataset[x] = emptyseries.values
+        #Series to dataframe
+        dataset[x] = emptysesies.values
+        #Clear list
         empty[:] = []      
+    #Metric of choice    
     z1 = dataset.iloc[5]
+    #Threshold
     w1 = np.percentile(z1, 80)
-    v1 = [] #this variable stores the Nth percentile of top performers
-    DS1W = pd.DataFrame() #this variable stores your financial advisors for specific dataset
+    v1 = [] #this variable stores the Nth percentile of top params
+    DS1W = pd.DataFrame() #this variable stores your params for specific dataset
+    #For all metrics
     for h in z1:
+        #If greater than threshold
         if h > w1:
+          #Add to list
           v1.append(h)
+    #For top metrics        
     for j in v1:
+          #Column ID of metric
           r = dataset.columns[(dataset == j).iloc[5]]    
+          #Add param set to dataframe
           DS1W = pd.concat([DS1W,dataset[r]], axis = 1)
+    #Top metric    
     y = max(z1)
-    k = dataset.columns[(dataset == y).iloc[5]] #this is the column number
+    #Column ID of top param set
+    k = dataset.columns[(dataset == y).iloc[5]] 
+    #End timer
     end = t.time()
+    #Timer stats
     print(end-start, 'seconds later')
+    #Output top param set
     return dataset[k]
