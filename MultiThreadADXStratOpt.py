@@ -5,7 +5,6 @@
 
 """
 
-
 #This is part of a multithreading tool to speed up brute force optimization
  #Import modules
 from numba import jit
