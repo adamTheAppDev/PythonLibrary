@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jun 14 14:36:11 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a PCA model for volatility analysis, need to add a trading model behind it.
