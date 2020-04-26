@@ -25,7 +25,7 @@ AssetCopy['12wkFWDRateOfChange'] = (Asset['Adj Close'].shift(-60
 AssetCopy = AssetCopy[:-60]
 #Calculate sample size
 SampleSize = len(AssetCopy)
-
+#Indicators
 NwkROC = np.array(AssetCopy['4wkRateOfChange'])
 NwkFWDROC = np.array(AssetCopy['12wkFWDRateOfChange'])
 
@@ -34,9 +34,10 @@ ComponentsObject = np.column_stack([NwkROC, NwkFWDROC])
 PCAObject = PCA(n_components = ComponentsObject.shape[1]) 
 PCAObject.fit(ComponentsObject) 
 print(PCAObject.explained_variance_ratio_)
-
+#Object transformation
 PCTransform = PCAObject.transform(ComponentsObject)
 
+#Graphical display params
 plt.subplot(121) 
 plt.scatter(ComponentsObject[:, 0], ComponentsObject[:, 1]) 
 plt.xlabel("4 wk ROC"); plt.ylabel("12 wk FWD ROC")
