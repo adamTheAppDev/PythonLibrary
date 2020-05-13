@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 11 09:04:55 2018
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a trading strategy model
@@ -16,25 +16,27 @@ import time as t
 from DatabaseGrabber import DatabaseGrabber
 from YahooGrabber import YahooGrabber
 
-##Empty sets used for optimization
+#Empty lists used for optimization
 Empty = []
 somelist = []
 #Empty Dataframes
 Dataset = pd.DataFrame()
 TradeSubIndex = pd.DataFrame()
 Trades = pd.DataFrame()
-##Timing statistics and iteration counter for optimization
+
+#Timing statistics and iteration counter for optimization
 #Start = t.time()
 #Counter = 0
-#start = t.time()
 
-#Inputs - OHLC data
+#Assign ticker
 Ticker1 = 'SOYB'
+#Request data
 Asset1 = YahooGrabber(Ticker1)
-#Tasty OHLC; ***ATTN*** insert path for OHLC data
+
+#Read in data; ***ATTN*** insert path for OHLC data
 #Asset1 = pd.read_pickle('C:\\Users\\Tasty\\Desktop\\WorkingDirectory\\UVXY')
 
-#In percentages
+#Variable assignment
 LongStopLoss = .05
 LongProfitTake = .3
 ShortStopLoss = .05
@@ -45,10 +47,11 @@ Slippage = .01
 #Time series trimmer for in/out sample data
 #Asset1a = Asset1[-1250:] #Out
 Asset1 = Asset1[:] #In
-#
+
 #Numbered subindex
 Asset1['SubIndex'] = range(1,len(Asset1)+1)
-#Log Returns
+
+#Calculate log Returns
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
 
@@ -65,7 +68,7 @@ Asset1['Price/MA'] = Asset1['Adj Close']/Asset1['MA'].shift(1)
 Asset1['MA'] = Asset1['MA'].fillna(0)
 Asset1['Price/MA'] = Asset1['Price/MA'].fillna(0)
 
-#Signal = Price to Moving Average 
+#Signal = Price to Moving Average -- Directional methodology
 #if price is greater than the MA go long w/ brackets
 #if price is less than the MA go short w/ brackets
 Asset1['Signal'] = np.where(Asset1['Price/MA'] >= 1, 1, -1)
@@ -73,17 +76,18 @@ Asset1['Signal'] = np.where(Asset1['Price/MA'] >= 1, 1, -1)
 #if MA is still being computed, stay out of market
 Asset1['Signal'] = np.where(Asset1['Price/MA'] == 0, 0, Asset1['Signal'])
 
-#Find the first trade of the signal period, so we can document entry price
+#Find the first trade of the signal period and document entry price
 Asset1['OriginalSignal'] = 0
 Asset1['OriginalSignal'].loc[Asset1['Signal'] != Asset1['Signal'].shift(1)] = Asset1['Signal']
 numsignals = sum(abs(Asset1['OriginalSignal']))
+
 #Declare column to record entry price
 Asset1['EntryPrice'] = np.nan
 
 #If it's the original signal, record entry price
 Asset1['EntryPrice'].loc[(Asset1['OriginalSignal'] != 0)] = Asset1['Adj Close']
 
-#Assess spread/unfavorable fills here!
+#Assess spread/slippage on fills here
 #Asset1['EntryPriceSlippage'] = Asset1['EntryPrice']
 #Long slippage
 #Asset1['EntryPriceSlippage'].loc[(Asset1['EntryPrice'] != 0) & (
@@ -92,7 +96,7 @@ Asset1['EntryPrice'].loc[(Asset1['OriginalSignal'] != 0)] = Asset1['Adj Close']
 #Asset1['EntryPriceSlippage'].loc[(Asset1['EntryPrice'] != 0) & (
 #    Asset1['Signal'] == -1)] = Asset1['EntryPrice'] * (1 - Slippage)
 #
-#Run the entry price DOWN the column until new position is taken
+#.ffill() entry price DOWN the column until new position is taken 
 #Asset1['EntryPriceSlippage'] = Asset1['EntryPriceSlippage'].ffill(inplace=False)
 #Fill nan with 0 for entry price
 #Asset1['EntryPriceSlippage'] = Asset1['EntryPriceSlippage'].fillna(0)
@@ -121,8 +125,9 @@ Asset1['ProfitPrice'].loc[(Asset1['EntryPrice'] != 0) & (
 Asset1['ProfitPrice'] = Asset1['ProfitPrice'].ffill(inplace=False)
 Asset1['ProfitPrice'] = Asset1['ProfitPrice'].fillna(0)
 
+#Zeros
 Asset1['Exit'] = 0
-#This will be the final return stream. Generally I use a regime of 
+#This will be the final return stream. Use a regime of 
 #(-1, or 0, or +1) multiplied by the next day's log return to get equity curve
 Asset1['BracketReturns'] = 1
 
@@ -150,7 +155,7 @@ Asset1['GapLSL'] = 0
 #will run down the column even though the trade should be closed
 Asset1['STG'].loc[(Asset1['Signal'] == -1) & (
     Asset1['OriginalSignal'] == 0) & (Asset1['Low'] < Asset1['ProfitPrice'])] = 1    
-#find initial exit 
+#Find initial exit 
 #Asset1['OriginalSTG'].loc[Asset1['STG'] != Asset1['STG'].shift(1)] = Asset1['STG']
 
 Asset1['LTG'].loc[(Asset1['Signal'] == 1) & (
@@ -181,7 +186,7 @@ Asset1['ShortDD'] = np.where((Asset1['STG'] + Asset1['SSL']) == 2, 1, 0)
 Asset1['DoubleDay'] = Asset1['LongDD'] + Asset1['ShortDD']
 
 #Exit on DoubleDays - 1 & 2; LTG - 3; LSL - 4; STG - 5, SSL - 6.
-#Preference given to stoploss on 'expensive' days
+#Preference given to stoploss on Double signal days
 Asset1['Exit'].loc[(Asset1['LTG'] == 1)] = 1 #exit as gain
 Asset1['Exit'].loc[(Asset1['STG'] == 1)] = 2 #exit as gain
 Asset1['Exit'].loc[(Asset1['GapSTG'] == 1)] = 3 #exit as gain
@@ -202,7 +207,7 @@ try:
 except IndexError:
     pass
 
-#quick reference matrix for exits
+#Reference matrix for exits
 ExitReturns = pd.Series(index=range(0,10))
 ExitReturns[0] = 0
 ExitReturns[1] = 1 + LongProfitTake
@@ -255,25 +260,30 @@ for ii in TradeDates.columns:
         TradeReturn = 1 + ((TradeData['Open'][TradeDuration] - TradeData['Adj Close'][0])/TradeData['Adj Close'][0])
     else:
         pass
-
+    #Save metrics to list
     Empty.append(ExitTaken)
     Empty.append(SubIndexOfExit)
     Empty.append(TradeDuration)
     Empty.append(TradeDirection)
     Empty.append(TradeReturn)
+    #List to series 
     Emptyseries = pd.Series(Empty)
+    #Series to dataframe
     Dataset[ii] = Emptyseries.values
     Empty[:] = [] 
-#
+#Rename rows
 Dataset = Dataset.rename(index={0: "ExitTaken", 1: "SubIndex", 2: "TradeDuration",
                                 3: "TradeDirection", 4: "TradeReturn"})
-
+#Ones
 Asset1['Brackets'] = 1
 Asset1['SlippageCommissionBrackets'] = 1
+#Adding slippage and commission 
 for d in Dataset:
     Asset1['SlippageCommissionBrackets'].loc[(Asset1['SubIndex'] == Dataset[d]['SubIndex'])] = Dataset[d]['TradeReturn'] - Slippage - Commission
+#Define trade returns
 for d in Dataset:
     Asset1['Brackets'].loc[(Asset1['SubIndex'] == Dataset[d]['SubIndex'])] = Dataset[d]['TradeReturn']
+#Performance statistics
 NumWinningTrades = len(Asset1['Brackets'][Asset1['Brackets'] > 1])
 NumLosingTrades = len(Asset1['Brackets'][Asset1['Brackets'] < 1])
 AvgWin = Asset1['Brackets'][Asset1['Brackets'] > 1].mean()
@@ -282,55 +292,9 @@ RewardRisk = AvgWin/AvgLoss
 WinRate = NumWinningTrades / (NumWinningTrades + NumLosingTrades)
 LossRate = NumLosingTrades / (NumWinningTrades + NumLosingTrades)
 Expectancy = (WinRate * RewardRisk) - (LossRate)
-
+#Returns on $1
 Asset1['Multiplier'] = Asset1['Brackets'].cumprod().plot()
+#Display results
 print(Expectancy)
+#Graphical display
 Asset1['Brackets'].plot()
-#TradeData = Asset1[TradeDates[0][0]:TradeDates[0][1]]
-##the 'next' function yields index position of first non 0 exit
-#TradeData['ReIndex'] = range(0,len(TradeData))
-#ExitTaken = TradeData['Exit'][next((n for n, x in enumerate(TradeData['Exit']) if x), 0)]
-#SubIndexOfExit = TradeData['SubIndex'][next((n for n, x in enumerate(TradeData['Exit']) if x), 0)]
-#TradeDuration = TradeData['ReIndex'][next((n for n, x in enumerate(TradeData['Exit']) if x), 0)]
-#TradeDirection = TradeData['Signal'][0]
-#TradeReturn = ExitReturns[ExitTaken]
-#
-##If no stops are hit and there is a signal change, take P/L and switch position
-#if ExitTaken == 0:
-#    SubIndexOfExit = TradeData['SubIndex'][-1]
-#    if TradeDirection == 1:
-#        TradeReturn = 1 + ((TradeData['Adj Close'][-1] - TradeData['Adj Close'][0])/TradeData['Adj Close'][0])
-#    elif TradeDirection == -1:
-#        TradeReturn = 1 + ((TradeData['Adj Close'][0] - TradeData['Adj Close'][-1])/TradeData['Adj Close'][0])
-#else:
-#    pass
-##Assess Gaps
-##GAP STG
-#if ExitTaken == 3:
-#    TradeReturn = 1 + ((TradeData['Adj Close'][0] - TradeData['Open'][TradeDuration])/TradeData['Adj Close'][0])
-#else:
-#    pass
-##GAP LTG
-#if ExitTaken == 4:
-#    TradeReturn = 1 + ((TradeData['Open'][TradeDuration] - TradeData['Adj Close'][0])/TradeData['Adj Close'][0])
-#else:
-#    pass
-##GAP SSL
-#if ExitTaken == 9:
-#    TradeReturn = 1 + ((TradeData['Adj Close'][0] - TradeData['Open'][TradeDuration])/TradeData['Adj Close'][0])
-#else:
-#    pass
-##GAP LSL    
-#if ExitTaken == 10:
-#    TradeReturn = 1 + ((TradeData['Open'][TradeDuration] - TradeData['Adj Close'][0])/TradeData['Adj Close'][0])
-#else:
-#    pass
-#Empty.append(ExitTaken)
-#Empty.append(SubIndexOfExit)
-#Empty.append(TradeDuration)
-#Empty.append(TradeDirection)
-#Empty.append(TradeReturn)
-#Emptyseries = pd.Series(Empty)
-##Dataset[ii] = Emptyseries.values
-##Empty[:] = [] 
-#print(Emptyseries)
