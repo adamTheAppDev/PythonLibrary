@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 11 09:04:55 2018
 
-@author: Adam Reinhold Von Fisher
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
 #Developed in Python 3.5 
 
 #This is a trading strategy model
@@ -12,7 +13,7 @@ Created on Wed Jul 11 09:04:55 2018
 
 #R Multiple Finder; Trade Data Tracking
 
-#Import libraries
+#Import modules
 import numpy as np
 #import random as rand
 import pandas as pd
@@ -22,11 +23,12 @@ from YahooGrabber import YahooGrabber
 #import matplotlib.pyplot as plt
 import warnings 
 
-#Inputs - OHLC data
+#Assign ticker
 Ticker1 = 'GLD'
+#Request data
 Asset1 = YahooGrabber(Ticker1)
 
-#Tasty OHLC; ***ATTN*** insert path for OHLC data
+#Read in data ***ATTN*** insert path for OHLC data
 #Asset1 = pd.read_pickle('C:\\Users\\Tasty\\Desktop\\WorkingDirectory\\GLD')
 
 #Don't display warnings
@@ -63,7 +65,7 @@ Counter = 0
 #SubIndex column is a secondary index, it only exists to help identify exits
 Asset1['SubIndex'] = range(0,len(Asset1))
 
-#Log Returns
+#Calculate log Returns
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
 
@@ -85,9 +87,9 @@ Asset1['RollingMin'] = Asset1['Low'].rolling(window=donchianwindow, center=False
 #Asset1[['RollingMax','RollingMin','Close']].plot()
 
 #Signal = Price </> min/max
-#if price is greater than the max go long
+#If price is greater than the max go long
 Asset1['LongSignal'] = np.where(Asset1['High'] >= Asset1['RollingMax'].shift(1), 1, 0)
-#if price is less than the min go short
+#If price is less than the min go short
 Asset1['ShortSignal'] = np.where(Asset1['Low'] <= Asset1['RollingMin'].shift(1), 1, 0)
 
 #If double signal days exist, then entry and P/L on those days will not be reflected correctly, spurious return stream
@@ -98,7 +100,7 @@ Asset1['DoubleDay'] = np.where(Asset1['LongSignal'] + Asset1['ShortSignal'] == 2
 Asset1['Signal'] = np.where(Asset1['LongSignal'] == 1, 1, 0)
 Asset1['Signal'] = np.where(Asset1['ShortSignal'] == 1, -1, Asset1['Signal'])
 
-#if Rolling Min/Max is still being computed, stay out of market
+#If Rolling Min/Max is still being computed, stay out of market
 Asset1['Signal'] = np.where(Asset1['RollingMax'] == np.nan, 0, Asset1['Signal'])
 
 #Index values for segmenting data for trade analysis
@@ -117,10 +119,9 @@ Asset1['LongExitPrice'] =  Asset1['Low'].rolling(window=stopwindow, center=False
 Asset1['EntryPriceUnitOne'] = np.nan
 Asset1['StopPriceUnitOne'] = np.nan
 
-#Be sure to check for double signal days, gaps on first unit entry, and gaps on exits.
-
+#Check for double signal days, gaps on first unit entry, and gaps on exits.
 #Default stops and entries 
-#Find the first trade of the signal period, so we can document entry prices
+#Find the first trade of the signal period, document entry prices
 #Long entry first unit // enter one cent above previous high
 Asset1['EntryPriceUnitOne'] = np.where(Asset1['Signal'] == 1, 
                               Asset1['RollingMax'].shift(1) + .01, np.nan)
@@ -145,7 +146,6 @@ for s in ShortGapEntryIndexList:
     Asset1.set_value(s, 'EntryPriceUnitOne', Asset1.loc[s]['Open'])
 
 #Entry prices are defined, calculate stop based on direction and entry price
-
 #Fixed long stop first unit
 Asset1['StopPriceUnitOne'] = np.where(Asset1['Signal'] == 1, 
                 Asset1['EntryPriceUnitOne'] - (Asset1['TradeATR'] * 2), np.nan)
@@ -153,18 +153,15 @@ Asset1['StopPriceUnitOne'] = np.where(Asset1['Signal'] == 1,
 Asset1['StopPriceUnitOne'] = np.where(Asset1['Signal'] == -1, 
               Asset1['EntryPriceUnitOne'] + (Asset1['TradeATR'] * 2), Asset1['StopPriceUnitOne'])
               
-
-#Experimental exits - combine fixed stop with trailing max high/min low once 
-#In a long trade, when a 13 day low becomes higher than the initial 2 ATR stop, that is the new stop, otherwise, initial 2 ATR stop
+#Experimental exits - combine fixed stop with trailing max high/min low
+#Once in a long trade, when a 13 day low becomes higher than the initial 2 ATR stop, that is the new stop, otherwise, initial 2 ATR stop
 Asset1['HybridLongExitPrice'] = np.where(Asset1['LongExitPrice'] > Asset1['StopPriceUnitOne'], 
                           Asset1['LongExitPrice'], Asset1['StopPriceUnitOne'])
 Asset1['HybridLongExitPrice'] = Asset1['HybridLongExitPrice'].ffill()
 #In a short trade, when a 13 day high becomes lower than the initial 2 ATR stop, that is the new stop, otherwise, initial 2 ATR stop
 Asset1['HybridShortExitPrice'] = np.where(Asset1['ShortExitPrice'] < Asset1['StopPriceUnitOne'],
                           Asset1['ShortExitPrice'], Asset1['StopPriceUnitOne'])  
-Asset1['HybridShortExitPrice'] = Asset1['HybridShortExitPrice'].ffill()
-
-               
+Asset1['HybridShortExitPrice'] = Asset1['HybridShortExitPrice'].ffill()       
 
 #On the first signal we record entry, record  exit, record trade details, and then
 #trim the time series to the next signal after exit. This process repeats.    
@@ -217,15 +214,13 @@ while sum(abs(TradeSubset['Signal'])) != 0:
         #Set values for gap long exits
         for l in GapLongExitIndexList:
             TradeSubset.set_value(l, 'GapLongExit', 1)
-                 
+    #Assess Gaps on days where open short trade closes           
     if TradeDirection == -1:             
         #Change the value of TradeSubset['GapShortExit'] to 1 on the days that there is a short exit signal
         #Find days for gap short exits
-#Next 4 lines is 'df.set_value()' way of assignment 
-#Compare that to the df[].loc[()] = way of assignment 4 lines after that. Which is best?
         GapShortExitIndexList = list(TradeSubset['GapShortExit'].loc[(TradeSubset['ShortExit'] == 1) & (
                 TradeSubset['Open'] > TradeSubset['HybridShortExitPrice'])].index)
-        ##Set values for gap short exits
+        #Set values for gap short exits
         for s in GapShortExitIndexList:
             TradeSubset.set_value(s, 'GapShortExit', 1)
     #Set TradeSubset['Exit'] column to the specific exit recorded
@@ -258,7 +253,6 @@ while sum(abs(TradeSubset['Signal'])) != 0:
     #This is referenced for execution on gap days
     OpenPriceOnGap = TradeSubset['Open'][LengthOfTrade]
     #Calculate dollar and percent return on exit days based on exit taken
-    #Is this an appropriate place to add slippage and commission?
     if ExitTaken == 1: # if exiting short trade, exit during market day
         TradePercentReturn = (EntryPriceUnitOne - StopPriceUnitOne)/EntryPriceUnitOne
         TradeDollarReturn = (EntryPriceUnitOne - StopPriceUnitOne) * numshares
@@ -275,7 +269,7 @@ while sum(abs(TradeSubset['Signal'])) != 0:
     #R Multiple calculation, return based on initial risk
     RMultiple = TradeDollarReturn / RiskPerTrade
 
-    #Log individual trade details in the Trade dataframe
+    #Save metrics to list
     Empty.append(ExitTaken)
     Empty.append(numshares)
     Empty.append(LengthOfTrade)
@@ -350,7 +344,7 @@ if sum(abs(TradeSubset['Signal'])) != 0:
         TradeDollarReturn = (EntryPriceUnitOne - TradeSubset['Adj Close'][-1]) * numshares
     #Based on latest close price even though trade is still open
     RMultiple = TradeDollarReturn / RiskPerTrade
-    #Readjust equity for dollar returns on latest trade
+    #Equity for dollar returns on latest trade
     Equity = Equity + TradeDollarReturn
     #Log Trade details in Trade dataframe
     Empty.append(ExitTaken)
@@ -387,8 +381,7 @@ Trades = Trades.rename(index={0: "ExitTaken", 1: "NumberOfShares", 2: "LengthOfT
 Asset1['StrategyPercentReturns'] = 1   
 Asset1['StrategyDollarReturns'] = 0   
 
-#The next two lines are the only reason keep track of 'SubIndexOfExit'
-#This is where I apply the returns on the trade close date to get the trade by trade return stream
+#Apply the returns on the trade close date to get the trade by trade return stream
 for d in Trades:
     Asset1['StrategyPercentReturns'].loc[(Asset1['SubIndex'] == Trades[d]['SubIndexOfExit'])] = 1 + Trades[d]['TradePercentReturn']
     Asset1['StrategyDollarReturns'].loc[(Asset1['SubIndex'] == Trades[d]['SubIndexOfExit'])] = 1 + Trades[d]['TradeDollarReturn']
@@ -415,9 +408,6 @@ Asset1['DollarPL'] = Asset1['StrategyDollarReturns'].cumsum()
 Asset1['DollarPL'].plot()
 #See if there are any double days that would call for spurious return stream
 print(sum(Asset1['DoubleDay']), ' Double signal days exist')
+#Display results                                        
 print('The expectancy of the system is ', Expectancy)
 print(RMultiples)
-##Need to make histogram
-#plt.hist(RMultiples['RMultiple'], normed=True, bins=10
-#plt.ylabel('RMultiple')
-#plt.show()
