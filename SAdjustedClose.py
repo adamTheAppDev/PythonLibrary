@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue May  2 11:09:20 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a database query tool
-
+#Define function
 def SAdjustedClose(s):
+    #Output
     return s['Adj Close'].tail(1)
