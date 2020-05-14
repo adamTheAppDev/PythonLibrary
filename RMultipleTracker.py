@@ -33,9 +33,6 @@ Ticker1 = 'SOYB'
 #Request data
 Asset1 = YahooGrabber(Ticker1)
 
-#Read in data; ***ATTN*** insert path for OHLC data
-#Asset1 = pd.read_pickle('C:\\Users\\Tasty\\Desktop\\WorkingDirectory\\UVXY')
-
 #Variable assignment
 LongStopLoss = .05
 LongProfitTake = .3
