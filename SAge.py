@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb 28 13:03:32 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a summary statistic + database query tool
 
+#Define function
 def SAge(s):
+    #Output
     return int(len(s['Adj Close']))
