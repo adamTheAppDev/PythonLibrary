@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 
-@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
-
+@author: IB API docs
 """
 
 #This is an API app for Interactive Brokers API, it requests and prints line by line data to screen.
