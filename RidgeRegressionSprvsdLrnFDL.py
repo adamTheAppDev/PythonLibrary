@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct  6 19:04:59 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/ + Andreas Mueller and Guido
+
 """
 
 #This is a ML model applied to price/technical data 
 #Supervised Learning FDL Data Ridge Regression
 
+#Import modules
 #import sys
 #import sklearn
 import numpy as np
@@ -22,12 +23,12 @@ from sklearn.linear_model import LinearRegression
 #from YahooGrabber import YahooGrabber
 from YahooSourceDailyGrabber import YahooSourceDailyGrabber
 
-#load data; 
+#Load data 
 data = YahooSourceDailyGrabber('TQQQ')
-
+#Assign tuple
 columntuple = tuple(data.columns[25:])
-#X is features n OG features and nn interactions, y is price 
 
+#X is features n OG features and nn interactions, y is price 
 X = np.array(data[['8wkBreakOutRatio', '8wkBreakDownRatio', '4wkBreakOutRatio', 
 '4wkBreakDownRatio', '2wkBreakOutRatio', '2wkBreakDownRatio', 'HigherOpen', 'LowerOpen',
 'HigherHigh', 'LowerHigh', 'HigherLow', 'LowerLow', 'HigherClose', 'LowerClose','GapUp',
@@ -44,58 +45,58 @@ X = np.array(data[['8wkBreakOutRatio', '8wkBreakDownRatio', '4wkBreakOutRatio',
 '4wkEfficiency', '2wkEfficiency']][50:].fillna(0))
 y = np.array(data['Adj Close'][50:])
 
-#display info
+#Display info
 print("Data shape: {}".format(X.shape))
 print("--------------------------------")
 
-#split train/test data
+#Split train/test data
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 
-#fit linear regression model
+#Fit linear regression model
 lr = LinearRegression().fit(X_train, y_train)
 
-#training dataset
+#Training dataset
 print("Linear Regression")
 print("Training set score: {:.2f}".format(lr.score(X_train, y_train)))
-#test set
+#Test set
 print("Test set score: {:.2f}".format(lr.score(X_test, y_test)))
 print("--------------------------------")
 
-#fit ridge regression model
+#Fit ridge regression model
 ridge = Ridge().fit(X_train, y_train)
 
-#training dataset
+#Training dataset
 print("Ridge A1 Regression")
 print("Training set score: {:.2f}".format(ridge.score(X_train, y_train)))
-#test set
+#Test set
 print("Test set score: {:.2f}".format(ridge.score(X_test, y_test)))
 print("--------------------------------")
 
-#alpha param 10
-#refit with new alpha param value
+#Alpha param 10
+#Refit with new alpha param value
 ridge10 = Ridge(alpha=10).fit(X_train, y_train)
 print("Ridge A10 Regression")
 print("Training set score: {:.2f}".format(ridge10.score(X_train, y_train)))
 print("Test set score: {:.2f}".format(ridge10.score(X_test, y_test)))
 print("--------------------------------")
 
-#alpha param .1
-#refit with new alpha param value
+#Alpha param .1
+#Refit with new alpha param value
 ridge01 = Ridge(alpha=0.1).fit(X_train, y_train)
 print("Ridge A.1 Regression")
 print("Training set score: {:.2f}".format(ridge01.score(X_train, y_train)))
 print("Test set score: {:.2f}".format(ridge01.score(X_test, y_test)))
 print("--------------------------------")
 
-#compare coefficient magnitudes for linear vs ridge with varying alpha
+#Compare coefficient magnitudes for linear vs ridge with varying alpha
 plt.plot(ridge.coef_, 's', label="Ridge alpha=1")
 plt.plot(ridge10.coef_, '^', label="Ridge alpha=10")
 plt.plot(ridge01.coef_, 'v', label="Ridge alpha=0.1")
 plt.plot(lr.coef_, 'o', label="LinearRegression")
-#labels
+#Labels
 plt.xlabel("Coefficient index")
 plt.ylabel("Coefficient magnitude")
-#horizontal black line
+#Horizontal black line
 plt.hlines(0, 0, len(lr.coef_))
 plt.ylim(-25, 25)
 plt.legend()
