@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 11 09:04:55 2018
 
-@author: Adam Reinhold Von Fisher
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
 #Developed in Python 3.5 
 
 #This is a trading strategy model
-#It looks like the stop logic and exit logic are correct
-#also see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
+#Also see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
 
 #R Multiple Finder; Trade Data Tracking; Graphs
 
-#Import libraries
+#Import modules
 import numpy as np
 #import random as rand
 import pandas as pd
@@ -26,13 +26,10 @@ import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
 
-
-#Inputs - OHLC data
+#Assign ticker
 Ticker1 = 'UVXY'
+#Request data
 Asset1 = YahooGrabber(Ticker1)
-
-#Tasty OHLC; ***ATTN*** insert path for OHLC data
-#Asset1 = pd.read_pickle('C:\\Users\\Tasty\\Desktop\\WorkingDirectory\\GLD')
 
 #Don't display warnings
 warnings.filterwarnings("ignore", category = RuntimeWarning) 
