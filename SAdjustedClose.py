@@ -6,6 +6,7 @@
 """
 
 #This is a database query tool
+
 #Define function
 def SAdjustedClose(s):
     #Output
