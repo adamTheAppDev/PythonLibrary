@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb 28 13:05:05 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a summary statistic + database query tool
 
+#Import modules
 import numpy as np
+#Define function
 def SAverageReturn(s):
+    #Calculate log returns
     s['LogRet'] = np.log(s['Adj Close']/s['Adj Close'].shift(1))
+    #Calculate average
     s['Mean'] = np.mean(s['LogRet'])*252
+    #Output
     return s['Mean'].tail(1)
