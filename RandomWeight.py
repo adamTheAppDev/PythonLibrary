@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 15 15:35:50 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#random (uniformly distributed) weighting tool...
+#Random (uniformly distributed) weighting tool...
 
 #Random Weights = 1
+#Define function
 def RandomWeight(num_assets):
+    #Import modules
     import numpy as np
+    #Assign random values
     Weight_Array = np.random.rand(num_assets)
+    #Output
     return Weight_Array / sum(Weight_Array)
