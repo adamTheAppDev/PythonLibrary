@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-@author: Muller and Guido
+@author: Andreas Meuller and Guido
 
 """
 
