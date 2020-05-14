@@ -28,9 +28,6 @@ Ticker1 = 'GLD'
 #Request data
 Asset1 = YahooGrabber(Ticker1)
 
-#Read in data ***ATTN*** insert path for OHLC data
-#Asset1 = pd.read_pickle('C:\\Users\\Tasty\\Desktop\\WorkingDirectory\\GLD')
-
 #Don't display warnings
 warnings.filterwarnings("ignore",category =RuntimeWarning) 
 pd.options.mode.chained_assignment = None 
