@@ -24,9 +24,6 @@ Ticker1 = 'VXX'
 #Request data
 Asset1 = YahooGrabber(Ticker1)
 
-#Read in data ***ATTN*** insert path for OHLC data
-#Asset1 = pd.read_pickle('C:\\Users\\Tasty\\Desktop\\WorkingDirectory\\UVXY')
-
 #Declaration/Assignment
 #Empty list
 Empty = []
