@@ -5,7 +5,7 @@
 
 """
 
-#This is a much faster EMA calculation using np.convolve - stolen from the depths of the internet. 
+#This is a much faster EMA calculation using np.convolve 
 #pandas_datareader is deprecated, use YahooGrabber
 
 #Import modules
