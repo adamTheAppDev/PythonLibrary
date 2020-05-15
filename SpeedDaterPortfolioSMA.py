@@ -5,7 +5,6 @@
 
 """
 
-
 #This is a massive two asset portfolio tester with a brute force optimizer
 #Takes all pair combos, tests, and sorts. 
 
