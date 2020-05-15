@@ -1,31 +1,38 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct 21 23:01:51 2018
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a database query tool, expand to make Executive Dashboard
 
-#Import 
+#Import modules
 import pandas as pd
 import os
 from DatabaseGrabber import DatabaseGrabber
-#Let's make a sortable table
+
+#Empty data structures
 Table = pd.DataFrame()
 List = []
-#Get names of all stocks in Universe
-UniverseList = os.listdir('F:\\Users\\AmatVictoriaCuram\\Database') 
-#List trim
+#Get names of all stocks in Universe // Read in universe list
+UniverseList = os.listdir('F:\\Users\\Username\\DatabaseLocation') 
+#List trimmer
 #UniverseList = UniverseList[:10]
 
-#We attach rows to master table
+#Attach rows to master table - For all tickers in universe
 for i in UniverseList:
+    #Request data
     Asset1 = DatabaseGrabber(i)
+    #Create dictionary
     Information = {"Ticker":i, "4wkRangeOverPrice" : Asset1['Age'][-1]}#, "Low": Asset1['Low'][-1]}
+    #Dict to list
     List = [Information]
+    #List to dataframe
     Table = Table.append(List)
+    #Iteration tracking
     print(i)
-    
+#Set index    
 Table = Table.set_index('Ticker')
+#Sort table
 Table = Table.sort_values(by = 'Age')
