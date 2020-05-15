@@ -17,15 +17,19 @@ from YahooGrabber import YahooGrabber
 from ListPairs import ListPairs
 from pandas.parser import CParserError
 
-#Variable assignment
+#Empty data structure
 Empty = []
-Start = t.time()
 Counter = 0
 Counter2 = 0
-iterations = range(0, 100)
 Dataset2 = pd.DataFrame()
 
-#Input tickers for study 
+#Iterable
+iterations = range(0, 100)
+
+#Start timer
+Start = t.time()
+
+#Assign tickers
 tickers = ('JNUG', 'TQQQ', 'TMF')#, 'AAPL', 'PBF', 'UVXY', '^VIX', 'TLT', 'SLV',
 #           'JO','CORN', 'DBC', 'SOYB')
 
@@ -37,9 +41,9 @@ for m in MajorList:
     #Ticker Assignment
     Ticker1 = m[0]
     Ticker2 = m[1]
-    #Combo name
+    #Two ticker ID
     TAG = m[0] + '/' + m[1]
-    #Clear data tables
+    #Clear dataframes
     Dataset = pd.DataFrame()
     Portfolio = pd.DataFrame()
     
@@ -219,8 +223,6 @@ kfloat = str(k[0])
 num = kfloat.find('/')
 num2 = num + 1
 
-#Need to request the top combo time series
-
 #Request data
 while True: 
     try:
@@ -283,7 +285,8 @@ sharpe =(dailyreturn/dailyvol)
 Portfolio2['Multiplier'] = Portfolio2['Returns'].cumsum().apply(np.exp)
 #Portfolio drawdown
 PortfolioDrawdown =  1 - Portfolio2['Multiplier'].div(Portfolio2['Multiplier'].cummax())
-#conversionfactor = Portfolio['PriceRelative'][-1]
+
+#Display results
 print(kfloat)
 print('--------')
 print(Dataset2[kfloat])
