@@ -55,8 +55,9 @@ AroonDownSeries = pd.Series(AroonDown, index=s.index)
 #Series to dataframe
 s['AroonUp'] = AroonUpSeries
 s['AroonDown'] = AroonDownSeries
-#Difference between up and down
+#Difference between up and down indicators
 s['Divergence'] = s['AroonUp'] - s['AroonDown']
+#Directional methodology
 s['Touch'] = np.where(s['Divergence'] < 86.065983, 1, 0) #long signal
 s['Touch'] = np.where(s['Divergence'] > 92.797133, -1, s['Touch']) #short signal
 s['Sustain'] = np.where(s['Touch'].shift(1) == 1, 1, 0) 
