@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug 30 19:07:37 2017
 
-@author: Adam Reinhold Von Fisher
-linkedin.com/in/adamrvfisher
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
+
 
 #This is a massive two asset portfolio tester with a brute force optimizer
 #Takes all pair combos, tests, and sorts. 
 
-#Load your modules
+#Import modules
 import numpy as np
 import random as rand
 import pandas as pd
@@ -19,52 +19,51 @@ from DatabaseGrabber import DatabaseGrabber
 from ListPairs import ListPairs
 from SMAStrategyReturnStream import SMAStrategyReturnStream
 
-#Preliminary assignment
-
-Empty = [] #list
-Start = t.time() #timer
+#Empty data structures
+Empty = [] #listr
 Counter = 0
 Counter2 = 0
-iterations = range(0, 500) #Loop size
 Dataset2 = pd.DataFrame() #Extra DataFrame
 
-#Input
+#Iterable
+iterations = range(0, 500) #Loop size
 
+#Start timer
+Start = t.time() 
+
+#Assign tickers
 tickers = ('AA', 'AAME', 'AAN', 'AAON', 'AAPL', 'AB', 'ABAX', 'ABC', 'ABCB', 'ABEO', 'ABEV')
 
-#Make all pairs in final list by using the ListPairs function.
-
+#Make all pairs in final list
 MajorList = ListPairs(tickers)
 
-#choose number of asset pairs in final equal weighted portfolio
-
+#Choose number of asset pairs in final equal weighted portfolio
 listlen = len(MajorList)
 desiredlen = 2
 lenthreshold = abs(int(round((1 -(((desiredlen+1)/listlen) - .0000001) * 100))))
 
-#Here we go
-
-#Brute Force Optimization
-for m in MajorList: #Every pair in pairlist
+#For all pairs in Brute Force Optimization
+for m in MajorList: 
     try:
-        #preliminary set up and 
-        Dataset = pd.DataFrame()
+        #Read in tickers
         Ticker1 = m[0]
         Ticker2 = m[1]
         TAG = m[0] + '/' + m[1]
+        #Empty data structures
         Dataset = pd.DataFrame()
         Portfolio = pd.DataFrame()
-    #pull online data, change to local for testing
-    #    Asset1 = YahooGrabber(Ticker1)
-    #    Asset2 = YahooGrabber(Ticker2)  
+        
+        #Request data  
         Asset1 = DatabaseGrabber(Ticker1)
         Asset2 = DatabaseGrabber(Ticker2)  
-    #get log returns
+        
+        #Calculate log returns
         Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
         Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
         Asset2['LogRet'] = np.log(Asset2['Adj Close']/Asset2['Adj Close'].shift(1))
         Asset2['LogRet'] = Asset2['LogRet'].fillna(0)
-    #Match lengths
+        
+        #Time series trimmer
         trim = abs(len(Asset1) - len(Asset2))
         if len(Asset1) == len(Asset2):
             pass
@@ -74,10 +73,12 @@ for m in MajorList: #Every pair in pairlist
             else:
                 Asset2 = Asset2[trim:]
     
-    #Run random variables through model and acquire parameters
-    
+        #For number of iterations    
         for i in iterations:
+            #Iteration tracking
             Counter = Counter + 1
+            
+            #Generate random params
             aa = rand.random() * 2 #uniformly distributed random number 0 to 2
             a = aa - 1          #a > 1 indicating long position in a
             bb = rand.random()
@@ -86,9 +87,8 @@ for m in MajorList: #Every pair in pairlist
             else:
                 bb = -1
             b = bb * (1 - abs(a))
-    
-    #you can change c and d to 0 by default if you want to just go flat
-    
+            #Change c and d to 0 by default if you want to just go flat
+            #Generate random params
             cc = rand.random() * 2 #uniformly distributed random number 0 to 2
             c = cc - 1          #cc > 1 indicating long position in c
             dd = rand.random() * 2
@@ -101,55 +101,63 @@ for m in MajorList: #Every pair in pairlist
                 continue
             e = rand.randint(3,25)
             f = rand.randint(3,25)
-    
-            #SMA lookback window 
-    
+              
+            #Assign params
             window = int(e)
             window2 = int(f)
 
             #SMA calculation            
             Asset1['SMA'] = Asset1['Adj Close'].rolling(window=e, center=False).mean()
             Asset2['SMA'] = Asset2['Adj Close'].rolling(window=f, center=False).mean()        
-            
-            #fixed size position for a and b, alternative fixed positions of c and d 
-            
+           
+            #Position sizing
             Asset1['Position'] = a
+            #Alternative position sizing
             Asset1['Position'] = np.where(Asset1['Adj Close'].shift(1) > Asset1['SMA'].shift(1),
                                             c,a)                                    
-            Asset1['Pass'] = (Asset1['LogRet'] * Asset1['Position']) #position size * returns
-    
+            #Apply position to returns
+            Asset1['Pass'] = (Asset1['LogRet'] * Asset1['Position']) 
+            #Position sizing
             Asset2['Position'] = b
+            #Alternative position sizing
             Asset2['Position'] = np.where(Asset2['Adj Close'].shift(1) > Asset2['SMA'].shift(1),
                                             d,b)
+            #Apply position to returns
             Asset2['Pass'] = (Asset2['LogRet'] * Asset2['Position']) #position size * returns
 
-            #Pass individual adjusted return streams to dual asset portfolio
+            #Pass individual return streams to portfolio
             Portfolio['Asset1Pass'] = (Asset1['Pass']) 
             Portfolio['Asset2Pass'] = (Asset2['Pass']) 
 
-            #Add to make dual asset portfolio
+            #Portfolio returns
             Portfolio['ReturnStream'] = Portfolio['Asset1Pass'] + Portfolio['Asset2Pass'] 
-
+            #Constraint
             if Portfolio['ReturnStream'].std() == 0:    
                 continue
-            
+           
+            #Returns on $1
             Portfolio['Multiplier'] = Portfolio['ReturnStream'].cumsum().apply(np.exp) #cumulative returns
+            #Incorrectly calculated max drawdown
             drawdown =  1 - Portfolio['Multiplier'].div(Portfolio['Multiplier'].cummax()) #Max Drawdown calculation
             MaxDD = max(drawdown) 
+            #Constraint
             if MaxDD > float(.5): 
                 continue
-            
+            #Performance metric
             dailyreturn = Portfolio['ReturnStream'].mean()
+            #Constraint
             if dailyreturn < .0003:
                 continue
            
-            #statistics
+            #Performance metrics
             dailyvol = Portfolio['ReturnStream'].std()
             sharpe =(dailyreturn/dailyvol)
+            #Incorrectly calculated max drawdown
             MaxDD = max(drawdown)
+            #Iteration
             print(Counter)
 
-            #save parameters for further analysis
+            #Save parameters and metrics to list
             Empty.append(a)
             Empty.append(b)
             Empty.append(c)
@@ -163,72 +171,85 @@ for m in MajorList: #Every pair in pairlist
             Empty.append(m[0])
             Empty.append(m[1])
             Empty.append(len(Portfolio))
-            
+            #List to series
             Emptyseries = pd.Series(Empty)
-            Dataset[0] = Emptyseries.values
+            #Series to dataframe
             Dataset[i] = Emptyseries.values
+            #Clear list
             Empty[:] = [] 
-    #find optimal parameters from pair
-        z1 = Dataset.iloc[7] #large row of specific statistic
-        w1 = np.percentile(z1, 80) #nth percentile of specific statistic
-        v1 = [] #this variable stores the Nth percentile of top performers
+        #Metric of choice
+        z1 = Dataset.iloc[7] 
+        #Threshold
+        w1 = np.percentile(z1, 80)
+        v1 = [] #this variable stores the Nth percentile of top params
         DS1W = pd.DataFrame() #this variable stores top parameters for specific dataset
 
-        #populate v1 to make DS1W
+        #For all metrics
         for h in z1:
+            #If greater than threshold 
             if h > w1:
+              #Add to list  
               v1.append(h)
 
-        #populate DS1W with parameters
+        #For top metrics
         for j in v1:
+              #Get column ID of metric
               r = Dataset.columns[(Dataset == j).iloc[7]]    
+              #Add to list
               DS1W = pd.concat([DS1W,Dataset[r]], axis = 1)
         
-        #find 'optimal' parameters for model and pass to Dataset2
+        #Top metric
         y = max(z1)
-        k = Dataset.columns[(Dataset == y).iloc[7]] #this is the column number
+        #Column ID of top metric
+        k = Dataset.columns[(Dataset == y).iloc[7]] 
+        #Column ID of top metric - float
         kfloat = float(k[0])
+        #End timer
         End = t.time()
+        #Timer stats
         print(End-Start, 'seconds later')
+        #Assign params
         Dataset[TAG] = Dataset[kfloat]
         Dataset2[TAG] = Dataset[TAG]
+        #Rename dataframe columns
         Dataset2 = Dataset2.rename(columns = {Counter2:TAG})
+        #Iteration tracking
         Counter2 = Counter2 + 1
-#    print(Dataset[TAG])
+    #print(Dataset[TAG])
     except IndexError:
         continue
+#Create dataframe        
 Portfolio2 = pd.DataFrame()
-#find specified number of winning parameter sets 
-z1 = Dataset2.iloc[7] #risk and return metric of choice
-w1 = np.percentile(z1, (100 - lenthreshold)) #controls amount in winners DataFrame
-v1 = [] #this variable stores the Nth percentile of top performers
-winners = pd.DataFrame() #this variable stores your financial advisors for specific dataset
+#Metric of choice
+z1 = Dataset2.iloc[7] 
+#Threshold
+w1 = np.percentile(z1, (100 - lenthreshold))
+v1 = [] #this variable stores the Nth percentile of top params
+winners = pd.DataFrame() #this variable stores your params for specific dataset
+#For all metrics
 for h in z1:
+    #If greater than threshold
     if h > w1:
+      #Add to list  
       v1.append(h)
+#For top metrics        
 for j in v1:
+      #Get column ID of metric
       r = Dataset2.columns[(Dataset2 == j).iloc[7]]    
-      winners = pd.concat([winners,Dataset2[r]], axis = 1) #winners variable is the SuperPortfolio parameters
+      #Add to dataframe
+      winners = pd.concat([winners,Dataset2[r]], axis = 1)
 
-#y = max(z1)
-#k = Dataset2.columns[(Dataset2 == y).iloc[7]] #this is the name of the pair
-#kfloat = str(k[0])
-
-#print(Dataset[TAG])
-#num = kfloat.find('/')
-#num2 = num + 1
-
-#find length of shortest time series to trim the final portfolio
+#Find length of shortest time series to trim the final portfolio
 shortest = min(winners.iloc[12])
 
-#set up final portfolio
+#Set up final portfolio
 SuperPortfolio = pd.DataFrame()
 
-#use winners parameters to get returns streams for final portfolio 
+#Use winners parameters to get returns streams for final portfolio 
 for jj in winners.columns:
     SuperPortfolio[jj] = SMAStrategyReturnStream(winners[jj], shortest)
 
-#number of positions to distribute equal weights to
+#Number of positions to distribute equal weights to
 numpositions = len(SuperPortfolio.columns)
 equalweight = 1/numpositions
 AdjustedPortfolio = pd.DataFrame()
@@ -237,6 +258,7 @@ AdjustedPortfolio = pd.DataFrame()
 for jjj in SuperPortfolio.columns:
     AdjustedPortfolio[jjj] = SuperPortfolio[jjj] * equalweight
 
+#Empty series
 FinalReturnStream = pd.Series()
 
 #Sum it all up
@@ -244,9 +266,11 @@ FinalReturnStream = AdjustedPortfolio.sum(axis = 1)
 FinalReturnStream.cumsum().apply(np.exp).plot()
 FinalReturnStream[-1000:].cumsum().apply(np.exp).plot()
 
-#Statistics
+#Returns on $1
 PortfolioMultiplier = FinalReturnStream.cumsum().apply(np.exp)
+#Incorrectly calculated max drawdown
 PortfolioDrawdown =  1 - PortfolioMultiplier.div(PortfolioMultiplier.cummax())
 PortfolioMaxDrawdown = max(PortfolioDrawdown) 
+#Performance metrics
 Portfoliodailyreturn = FinalReturnStream.mean()
 Portfoliodailyvol = FinalReturnStream.std()
