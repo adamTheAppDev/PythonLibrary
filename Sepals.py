@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Sep 29 21:39:33 2019
 
-@author: AmatVictoriaCuramIII
+@author: Andreas Mueller and Guido
+
 """
 
-#This is from the Muller and Guido Python ML book
 #Supervised Learning - Multiclass Classification
 
+#Import modules
 #import sys
 #import sklearn
 import numpy as np
