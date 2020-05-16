@@ -666,7 +666,7 @@ for i in ranger:
         temp['SharesOutstanding'] = temp['GivenMarketCap']/temp['LastSale']
         temp['MarketCap'] = (temp['SharesOutstanding'] * temp['Adj Close'])/10**9          
         #Make folders inside quarternary folders - Choose frequency and save in frequency folder; For time series data
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        if not os.path.exists('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4]):
             os.makedirs('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4])
