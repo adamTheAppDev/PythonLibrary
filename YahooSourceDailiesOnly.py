@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jan  9 20:29:48 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a database creation tool, I/O, technical analysis tool, and formatting tool.
@@ -23,18 +23,19 @@ from CrumbCatcher import CrumbCatcher
 from pandas.parser import CParserError
 from requests.exceptions import ConnectionError
 
+#Start timer
 start = time.time()
 #Load universe list
-UniverseCSVList = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\FDL\\'+
+UniverseCSVList = pd.read_pickle('Z:\\Users\\Username\\DirectoryLocation\\'+
                       'DataSources\\NASDAQSource\\UniverseLists\\Universe2018')
 UniverseList =  [s[:-4] for s in UniverseCSVList]
-#Custom; to add to Universe
+#Manually add to Universe
 #UniverseList = ['SPY', 'GLD', 'TQQQ', 'SQQQ', 'VXXB', 'SLV']#, '''''']
 
 #Modify size
 UniverseList = UniverseList[:1]
 #Load the NASDAQ CSV
-NASDAQData = pd.read_csv('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'+
+NASDAQData = pd.read_csv('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'+
         'NASDAQSource\\QualitativeData\\PretrimQualitativeData.csv', sep = ',')
 NASDAQDataTickers = list(NASDAQData['Symbol'])
 
@@ -61,94 +62,31 @@ for i in ranger:
         #Download // capture response from post request
         DailyResponse = requests.post(DailyDownloadURL)
         
-#        #Rest before weekly crumb request
-#        time.sleep(2)
-#        #Get crumb for weekly download url
-#        WeeklyCrumb = str(CrumbCatcher(str(ticker)))
-#        #Generate weekly download URL
-#        WeeklyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#        + "?period1=-631123200&period2=1598374000&interval=1wk&events=history&crumb=" + WeeklyCrumb)
-#        #Download // capture response from post request
-#        WeeklyResponse = requests.post(WeeklyDownloadURL)
-#        
-#        #Rest before weekly crumb request
-#        time.sleep(2)
-#        #Get crumb for monthly download url
-#        MonthlyCrumb = str(CrumbCatcher(str(ticker)))
-#        #Generate monthly download URL
-#        MonthlyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#        + "?period1=-631123200&period2=1598374000&interval=1mo&events=history&crumb=" + MonthlyCrumb)
-#        #Download // capture response from post request
-#        MonthlyResponse = requests.post(MonthlyDownloadURL)
-#        
-#        #Rest before dividend crumb request
-#        time.sleep(2)
-#        #Get crumb for dividend download url
-#        DividendCrumb = str(CrumbCatcher(str(ticker)))
-#        #Generate dividend download URL
-#        DividendDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#        + "?period1=-631123200&period2=1598374000&interval=1d&events=div&crumb=" + DividendCrumb)
-#        #Download // capture response from post request
-#        DividendResponse = requests.post(DividendDownloadURL)
-#        
         #Formatting..
         DailyResponseText = DailyResponse.text
-#        WeeklyResponseText = WeeklyResponse.text
-#        MonthlyResponseText = MonthlyResponse.text
-#        DividendResponseText = DividendResponse.text
 
         #More formatting..
         FormattedDailyResponse = StringIO(DailyResponseText)
-#        FormattedWeeklyResponse = StringIO(WeeklyResponseText)
-#        FormattedMonthlyResponse = StringIO(MonthlyResponseText)
-#        FormattedDividendResponse = StringIO(DividendResponseText)
-#        
+
         #Put Response in Dataframe
         DailyResponseDataFrame = pd.read_csv(FormattedDailyResponse, sep = ',')
-#        WeeklyResponseDataFrame = pd.read_csv(FormattedWeeklyResponse, sep = ',')
-#        MonthlyResponseDataFrame = pd.read_csv(FormattedMonthlyResponse, sep = ',')
-#        DividendResponseDataFrame = pd.read_csv(FormattedDividendResponse, sep = ',')
-#        
+
         #Error detection
         if DailyResponseDataFrame.columns[0] == '{"chart":{"result":null':
             print('The URL failed for ' + ticker + ' on daily frequency')
             pass
         else: 
             print(ticker + ' Dailies secured.')
-#        if WeeklyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#            print('The URL failed for ' + ticker + ' on weely frequency')
-#            pass
-#        else: 
-#            print(ticker + ' Weeklies secured.')
-#        if MonthlyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#            print('The URL failed for ' + ticker + ' on monthly frequency')
-#            pass
-#        else: 
-#            print(ticker + ' Monthlies secured.')
-#        if DividendResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#            print('The URL failed for ' + ticker + ' dividends')
-#            pass        
-#        else: 
-#            print(ticker + ' Dividends secured.')
 
         #Set up date as primary key for preprocess storage
         DailyResponseDataFrame = DailyResponseDataFrame.set_index('Date')
-#        WeeklyResponseDataFrame = WeeklyResponseDataFrame.set_index('Date')
-#        MonthlyResponseDataFrame = MonthlyResponseDataFrame.set_index('Date')
-#        DividendResponseDataFrame = DividendResponseDataFrame.set_index('Date')
 
         #Change date to datetime data type
         DailyResponseDataFrame.index = pd.to_datetime(DailyResponseDataFrame.index, format = "%Y/%m/%d") 
-#        WeeklyResponseDataFrame.index = pd.to_datetime(WeeklyResponseDataFrame.index, format = "%Y/%m/%d") 
-#        MonthlyResponseDataFrame.index = pd.to_datetime(MonthlyResponseDataFrame.index, format = "%Y/%m/%d") 
-#        DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
-#        
+
         #Save to preprocess storage
-        DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-#        WeeklyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\WEK-" + ticker + ".csv"))
-#        MonthlyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\MON-" + ticker + ".csv"))
-#        DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
-#    
+        DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
+
         print(ticker + ' completed.')        
         continue
     except KeyError:
@@ -176,91 +114,32 @@ for i in ranger:
             #Rest before weekly crumb request
             time.sleep(2)
             #Get crumb for weekly download url
-#            WeeklyCrumb = str(CrumbCatcher(str(ticker)))
-#            #Generate weekly download URL
-#            WeeklyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#            + "?period1=-631123200&period2=1598374000&interval=1wk&events=history&crumb=" + WeeklyCrumb)
-#            #Download // capture response from post request
-#            WeeklyResponse = requests.post(WeeklyDownloadURL)
-#            
-#            #Rest before weekly crumb request
-#            time.sleep(2)
-#            #Get crumb for monthly download url
-#            MonthlyCrumb = str(CrumbCatcher(str(ticker)))
-#            #Generate monthly download URL
-#            MonthlyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#            + "?period1=-631123200&period2=1598374000&interval=1mo&events=history&crumb=" + MonthlyCrumb)
-#            #Download // capture response from post request
-#            MonthlyResponse = requests.post(MonthlyDownloadURL)
-#            
-#            #Rest before dividend crumb request
-#            time.sleep(2)
-#            #Get crumb for dividend download url
-#            DividendCrumb = str(CrumbCatcher(str(ticker)))
-#            #Generate dividend download URL
-#            DividendDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#            + "?period1=-631123200&period2=1598374000&interval=1d&events=div&crumb=" + DividendCrumb)
-#            #Download // capture response from post request
-#            DividendResponse = requests.post(DividendDownloadURL)
             
             #Formatting..
             DailyResponseText = DailyResponse.text
-#            WeeklyResponseText = WeeklyResponse.text
-#            MonthlyResponseText = MonthlyResponse.text
-#            DividendResponseText = DividendResponse.text
-#    
+
             #More formatting..
             FormattedDailyResponse = StringIO(DailyResponseText)
-#            FormattedWeeklyResponse = StringIO(WeeklyResponseText)
-#            FormattedMonthlyResponse = StringIO(MonthlyResponseText)
-#            FormattedDividendResponse = StringIO(DividendResponseText)
-#            
+
             #Put Response in Dataframe
             DailyResponseDataFrame = pd.read_csv(FormattedDailyResponse, sep = ',')
-#            WeeklyResponseDataFrame = pd.read_csv(FormattedWeeklyResponse, sep = ',')
-#            MonthlyResponseDataFrame = pd.read_csv(FormattedMonthlyResponse, sep = ',')
-#            DividendResponseDataFrame = pd.read_csv(FormattedDividendResponse, sep = ',')
-#            
+
             #Error detection
             if DailyResponseDataFrame.columns[0] == '{"chart":{"result":null':
                 print('The URL failed for ' + ticker + ' on daily frequency')
                 pass
             else: 
                 print(ticker + ' Dailies secured.')
-#            if WeeklyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                print('The URL failed for ' + ticker + ' on weely frequency')
-#                pass
-#            else: 
-#                print(ticker + ' Weeklies secured.')
-#            if MonthlyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                print('The URL failed for ' + ticker + ' on monthly frequency')
-#                pass
-#            else: 
-#                print(ticker + ' Monthlies secured.')
-#            if DividendResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                print('The URL failed for ' + ticker + ' dividends')
-#                pass        
-#            else: 
-#                print(ticker + ' Dividends secured.')
     
             #Set up date as primary key for preprocess storage
             DailyResponseDataFrame = DailyResponseDataFrame.set_index('Date')
-#            WeeklyResponseDataFrame = WeeklyResponseDataFrame.set_index('Date')
-#            MonthlyResponseDataFrame = MonthlyResponseDataFrame.set_index('Date')
-#            DividendResponseDataFrame = DividendResponseDataFrame.set_index('Date')
-#    
-            #Change date to datetime data type
+
+           #Change date to datetime data type
             DailyResponseDataFrame.index = pd.to_datetime(DailyResponseDataFrame.index, format = "%Y/%m/%d") 
-#            WeeklyResponseDataFrame.index = pd.to_datetime(WeeklyResponseDataFrame.index, format = "%Y/%m/%d") 
-#            MonthlyResponseDataFrame.index = pd.to_datetime(MonthlyResponseDataFrame.index, format = "%Y/%m/%d") 
-#            DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
-#            
+
             #Save to preprocess storage
-            DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-#            WeeklyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\WEK-" + ticker + ".csv"))
-#            MonthlyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\MON-" + ticker + ".csv"))
-#            DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
-#        
+            DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
+
             print(ticker + ' completed.')        
             continue
         except CParserError:
@@ -283,53 +162,14 @@ for i in ranger:
                 #Download // capture response from post request
                 DailyResponse = requests.post(DailyDownloadURL)
                 
-#                #Rest before weekly crumb request
-#                time.sleep(2)
-#                #Get crumb for weekly download url
-#                WeeklyCrumb = str(CrumbCatcher(str(ticker)))
-#                #Generate weekly download URL
-#                WeeklyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                + "?period1=-631123200&period2=1598374000&interval=1wk&events=history&crumb=" + WeeklyCrumb)
-#                #Download // capture response from post request
-#                WeeklyResponse = requests.post(WeeklyDownloadURL)
-#                
-#                #Rest before monthly crumb request
-#                time.sleep(2)
-#                #Get crumb for monthly download url
-#                Monthlycrumb = str(CrumbCatcher(str(ticker)))
-#                #Generate monthly download URL
-#                MonthlyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                + "?period1=-631123200&period2=1598374000&interval=1mo&events=history&crumb=" + MonthlyCrumb)
-#                #Download // capture response from post request
-#                MonthlyResponse = requests.post(MonthlyDownloadURL)
-#                
-#                #Rest before dividend crumb request
-#                time.sleep(2)
-#                #Get crumb for dividend download url
-#                DividendCrumb = str(CrumbCatcher(str(ticker)))
-#                #Generate dividend download URL
-#                DividendDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                + "?period1=-631123200&period2=1598374000&interval=1d&events=div&crumb=" + DividendCrumb)
-#                #Download // capture response from post request
-#                DividendResponse = requests.post(DividendDownloadURL)
-#                
                 #Formatting..
                 DailyResponseText = DailyResponse.text
-#                WeeklyResponseText = WeeklyResponse.text
-#                MonthlyResponseText = MonthlyResponse.text
-#                DividendResponseText = DividendResponse.text
-        
+
                 #More formatting..
                 FormattedDailyResponse = StringIO(DailyResponseText)
-#                FormattedWeeklyResponse = StringIO(WeeklyResponseText)
-#                FormattedMonthlyResponse = StringIO(MonthlyResponseText)
-#                FormattedDividendResponse = StringIO(DividendResponseText)
-#                
+
                 #Put Response in Dataframe
                 DailyResponseDataFrame = pd.read_csv(FormattedDailyResponse, sep = ',')
-#                WeeklyResponseDataFrame = pd.read_csv(FormattedWeeklyResponse, sep = ',')
-#                MonthlyResponseDataFrame = pd.read_csv(FormattedMonthlyResponse, sep = ',')
-#                DividendResponseDataFrame = pd.read_csv(FormattedDividendResponse, sep = ',')
                 
                 #Error detection
                 if DailyResponseDataFrame.columns[0] == '{"chart":{"result":null':
@@ -337,40 +177,16 @@ for i in ranger:
                     pass
                 else: 
                     print(ticker + ' Dailies secured.')
-#                if WeeklyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                    print('The URL failed for ' + ticker + ' on weely frequency')
-#                    pass
-#                else: 
-#                    print(ticker + ' Weeklies secured.')
-#                if MonthlyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                    print('The URL failed for ' + ticker + ' on monthly frequency')
-#                    pass
-#                else: 
-#                    print(ticker + ' Monthlies secured.')
-#                if DividendResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                    print('The URL failed for ' + ticker + ' dividends')
-#                    pass        
-#                else: 
-#                    print(ticker + ' Dividends secured.')
-#        
+
                 #Set up date as primary key for preprocess storage
                 DailyResponseDataFrame = DailyResponseDataFrame.set_index('Date')
-#                WeeklyResponseDataFrame = WeeklyResponseDataFrame.set_index('Date')
-#                MonthlyResponseDataFrame = MonthlyResponseDataFrame.set_index('Date')
-#                DividendResponseDataFrame = DividendResponseDataFrame.set_index('Date')
-#        
+
                 #Change date to datetime data type
                 DailyResponseDataFrame.index = pd.to_datetime(DailyResponseDataFrame.index, format = "%Y/%m/%d") 
-#                WeeklyResponseDataFrame.index = pd.to_datetime(WeeklyResponseDataFrame.index, format = "%Y/%m/%d") 
-#                MonthlyResponseDataFrame.index = pd.to_datetime(MonthlyResponseDataFrame.index, format = "%Y/%m/%d") 
-#                DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
-#                
+
                 #Save to preprocess storage
-                DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-#                WeeklyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\WEK-" + ticker + ".csv"))
-#                MonthlyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\MON-" + ticker + ".csv"))
-#                DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
-#            
+                DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
+
                 print(ticker + ' completed.')        
                 continue   
             except CParserError:
@@ -382,9 +198,10 @@ for i in ranger:
             except ConnectionError:
                 print('Double ConnectionError for ' + ticker + '.')
                 continue
+                
     except requests.exceptions.SSLError:
         try:
-#            Sleep, then retry last ticker, continue loop.
+            #Sleep, then retry last ticker, continue loop.
             print('SSLError on ' + str(ticker) + '.')
             print('Sleeping for 61 seconds.')        
             time.sleep(61)
@@ -402,91 +219,32 @@ for i in ranger:
             #Rest before weekly crumb request
             time.sleep(2)
             #Get crumb for weekly download url
-#            WeeklyCrumb = str(CrumbCatcher(str(ticker)))
-#            #Generate weekly download URL
-#            WeeklyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#            + "?period1=-631123200&period2=1598374000&interval=1wk&events=history&crumb=" + WeeklyCrumb)
-#            #Download // capture response from post request
-#            WeeklyResponse = requests.post(WeeklyDownloadURL)
-#            
-#            #Rest before weekly crumb request
-#            time.sleep(2)
-#            #Get crumb for monthly download url
-#            Monthlycrumb = str(CrumbCatcher(str(ticker)))
-#            #Generate monthly download URL
-#            MonthlyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#            + "?period1=-631123200&period2=1598374000&interval=1mo&events=history&crumb=" + MonthlyCrumb)
-#            #Download // capture response from post request
-#            MonthlyResponse = requests.post(MonthlyDownloadURL)
-#            
-#            #Rest before dividend crumb request
-#            time.sleep(2)
-#            #Get crumb for dividend download url
-#            DividendCrumb = str(CrumbCatcher(str(ticker)))
-#            #Generate dividend download URL
-#            DividendDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#            + "?period1=-631123200&period2=1598374000&interval=1d&events=div&crumb=" + DividendCrumb)
-#            #Download // capture response from post request
-#            DividendResponse = requests.post(DividendDownloadURL)
-#            
+
             #Formatting..
             DailyResponseText = DailyResponse.text
-#            WeeklyResponseText = WeeklyResponse.text
-#            MonthlyResponseText = MonthlyResponse.text
-#            DividendResponseText = DividendResponse.text
     
             #More formatting..
             FormattedDailyResponse = StringIO(DailyResponseText)
-#            FormattedWeeklyResponse = StringIO(WeeklyResponseText)
-#            FormattedMonthlyResponse = StringIO(MonthlyResponseText)
-#            FormattedDividendResponse = StringIO(DividendResponseText)
             
             #Put Response in Dataframe
             DailyResponseDataFrame = pd.read_csv(FormattedDailyResponse, sep = ',')
-#            WeeklyResponseDataFrame = pd.read_csv(FormattedWeeklyResponse, sep = ',')
-#            MonthlyResponseDataFrame = pd.read_csv(FormattedMonthlyResponse, sep = ',')
-#            DividendResponseDataFrame = pd.read_csv(FormattedDividendResponse, sep = ',')
-#            
+
             #Error detection
             if DailyResponseDataFrame.columns[0] == '{"chart":{"result":null':
                 print('The URL failed for ' + ticker + ' on daily frequency')
                 pass
             else: 
                 print(ticker + ' Dailies secured.')
-#            if WeeklyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                print('The URL failed for ' + ticker + ' on weely frequency')
-#                pass
-#            else: 
-#                print(ticker + ' Weeklies secured.')
-#            if MonthlyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                print('The URL failed for ' + ticker + ' on monthly frequency')
-#                pass
-#            else: 
-#                print(ticker + ' Monthlies secured.')
-#            if DividendResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                print('The URL failed for ' + ticker + ' dividends')
-#                pass        
-#            else: 
-#                print(ticker + ' Dividends secured.')
-#    
+
             #Set up date as primary key for preprocess storage
             DailyResponseDataFrame = DailyResponseDataFrame.set_index('Date')
-#            WeeklyResponseDataFrame = WeeklyResponseDataFrame.set_index('Date')
-#            MonthlyResponseDataFrame = MonthlyResponseDataFrame.set_index('Date')
-#            DividendResponseDataFrame = DividendResponseDataFrame.set_index('Date')
-#    
+
             #Change date to datetime data type
             DailyResponseDataFrame.index = pd.to_datetime(DailyResponseDataFrame.index, format = "%Y/%m/%d") 
-#            WeeklyResponseDataFrame.index = pd.to_datetime(WeeklyResponseDataFrame.index, format = "%Y/%m/%d") 
-#            MonthlyResponseDataFrame.index = pd.to_datetime(MonthlyResponseDataFrame.index, format = "%Y/%m/%d") 
-#            DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
-#            
+
             #Save to preprocess storage
-            DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-#            WeeklyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\WEK-" + ticker + ".csv"))
-#            MonthlyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\MON-" + ticker + ".csv"))
-#            DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
-#        
+            DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
+
             print(ticker + ' completed.')        
             continue   
         except CParserError:
@@ -515,90 +273,31 @@ for i in ranger:
                 #Rest before weekly crumb request
                 time.sleep(2)
                 #Get crumb for weekly download url
-#                WeeklyCrumb = str(CrumbCatcher(str(ticker)))
-#                #Generate weekly download URL
-#                WeeklyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                + "?period1=-631123200&period2=1598374000&interval=1wk&events=history&crumb=" + WeeklyCrumb)
-#                #Download // capture response from post request
-#                WeeklyResponse = requests.post(WeeklyDownloadURL)
-#                
-#                #Rest before weekly crumb request
-#                time.sleep(2)
-#                #Get crumb for monthly download url
-#                Monthlycrumb = str(CrumbCatcher(str(ticker)))
-#                #Generate monthly download URL
-#                MonthlyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                + "?period1=-631123200&period2=1598374000&interval=1mo&events=history&crumb=" + MonthlyCrumb)
-#                #Download // capture response from post request
-#                MonthlyResponse = requests.post(MonthlyDownloadURL)
-#                
-#                #Rest before dividend crumb request
-#                time.sleep(2)
-#                #Get crumb for dividend download url
-#                DividendCrumb = str(CrumbCatcher(str(ticker)))
-#                #Generate dividend download URL
-#                DividendDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
-#                + "?period1=-631123200&period2=1598374000&interval=1d&events=div&crumb=" + DividendCrumb)
-#                #Download // capture response from post request
-#                DividendResponse = requests.post(DividendDownloadURL)
-#                
+
                 #Formatting..
                 DailyResponseText = DailyResponse.text
-#                WeeklyResponseText = WeeklyResponse.text
-#                MonthlyResponseText = MonthlyResponse.text
-#                DividendResponseText = DividendResponse.text
-        
+
                 #More formatting..
                 FormattedDailyResponse = StringIO(DailyResponseText)
-#                FormattedWeeklyResponse = StringIO(WeeklyResponseText)
-#                FormattedMonthlyResponse = StringIO(MonthlyResponseText)
-#                FormattedDividendResponse = StringIO(DividendResponseText)
                 
                 #Put Response in Dataframe
                 DailyResponseDataFrame = pd.read_csv(FormattedDailyResponse, sep = ',')
-#                WeeklyResponseDataFrame = pd.read_csv(FormattedWeeklyResponse, sep = ',')
-#                MonthlyResponseDataFrame = pd.read_csv(FormattedMonthlyResponse, sep = ',')
-#                DividendResponseDataFrame = pd.read_csv(FormattedDividendResponse, sep = ',')
-#                
+
                 #Error detection
                 if DailyResponseDataFrame.columns[0] == '{"chart":{"result":null':
                     print('The URL failed for ' + ticker + ' on daily frequency')
                     pass
                 else: 
                     print(ticker + ' Dailies secured.')
-#                if WeeklyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                    print('The URL failed for ' + ticker + ' on weely frequency')
-#                    pass
-#                else: 
-#                    print(ticker + ' Weeklies secured.')
-#                if MonthlyResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                    print('The URL failed for ' + ticker + ' on monthly frequency')
-#                    pass
-#                else: 
-#                    print(ticker + ' Monthlies secured.')
-#                if DividendResponseDataFrame.columns[0] == '{"chart":{"result":null':
-#                    print('The URL failed for ' + ticker + ' dividends')
-#                    pass        
-#                else: 
-#                    print(ticker + ' Dividends secured.')
-#        
+  
                 #Set up date as primary key for preprocess storage
                 DailyResponseDataFrame = DailyResponseDataFrame.set_index('Date')
-#                WeeklyResponseDataFrame = WeeklyResponseDataFrame.set_index('Date')
-#                MonthlyResponseDataFrame = MonthlyResponseDataFrame.set_index('Date')
-#                DividendResponseDataFrame = DividendResponseDataFrame.set_index('Date')
         
                 #Change date to datetime data type
                 DailyResponseDataFrame.index = pd.to_datetime(DailyResponseDataFrame.index, format = "%Y/%m/%d") 
-#                WeeklyResponseDataFrame.index = pd.to_datetime(WeeklyResponseDataFrame.index, format = "%Y/%m/%d") 
-#                MonthlyResponseDataFrame.index = pd.to_datetime(MonthlyResponseDataFrame.index, format = "%Y/%m/%d") 
-#                DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
                 
                 #Save to preprocess storage
-                DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-#                WeeklyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\WEK-" + ticker + ".csv"))
-#                MonthlyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\MON-" + ticker + ".csv"))
-#                DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
+                DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
             
                 print(ticker + ' completed.')        
                 continue
@@ -609,12 +308,11 @@ for i in ranger:
                 print('SSLError after SSLError and ConnectionEror for ' + ticker + '.')
                 continue 
 
-            
 print('All source data is in preprocess storage as CSV; ready for processing.')
 #Processed data will be stored as FREQ-TICKER-YYYYMMDD(Timestamp??? Daily is smallest frequency for this source.)
             
 #CSV list for TimeSeries Data to put into processing
-TimeSeries = os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\')
+TimeSeries = os.listdir('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\')
 TimeSeriesTickers = [s[4:-4] for s in TimeSeries]
 
 #Iterable for every freqxstock
@@ -622,7 +320,7 @@ ranger = range(0,len(TimeSeries))
 
 for i in ranger[:1]:
     try:
-        temp = read_csv('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\' +
+        temp = read_csv('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\' +
                          (TimeSeries[i]), sep = ',')
         print('Basic TS processing for ' + TimeSeries[i] +'.')
         #Make index for frequency concatenation; ProcessedDataIndex            
@@ -664,11 +362,11 @@ for i in ranger[:1]:
         temp['SharesOutstanding'] = temp['GivenMarketCap']/temp['LastSale']
         temp['MarketCap'] = (temp['SharesOutstanding'] * temp['Adj Close'])/10**9          
         #Make folders inside quarternary folders - Choose frequency and save in frequency folder; For time series data
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        if not os.path.exists('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4]):
-            os.makedirs('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+            os.makedirs('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4])
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
             temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4] + '\\' + TimeSeries[i][:-4])
         print(temp['Ticker'][0] + ' time series pickles saved.')
     except OSError:
@@ -685,23 +383,23 @@ for i in ranger[:1]:
         #Perhaps make a proxy for market cap and insert here
         temp['MarketCap'] = np.nan
         #Make folders inside quarternary folders - Choose frequency and save in frequency folder; For time series data
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        if not os.path.exists('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4]):
-            os.makedirs('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+            os.makedirs('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4])
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
             temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4] + '\\' + TimeSeries[i][:-4])
 
 print('TS data stored in ProcessedData')
 
 #Contents of dividend parse
-Dividends = os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\')
+Dividends = os.listdir('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\DividendData\\')
 DividendsTickers = [s[4:-4] for s in Dividends]
 #Iterable for every divxstock
 ranger = range(0,len(Dividends))
 for i in ranger[:1]:
     try:
-        temp = read_csv('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\' +
+        temp = read_csv('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\DividendData\\' +
                          (Dividends[i]), sep = ',')
         print('Basic DIV processing for ' + DividendsTickers[i] +'.')
         #Make index for frequency concatenation; ProcessedDataIndex            
@@ -742,11 +440,11 @@ for i in ranger[:1]:
         temp['Industry'] = NASDAQDataRow.iloc[0][7]
         temp['SharesOutstanding'] = temp['GivenMarketCap']/temp['LastSale']         
         #Make folders inside quarternary folders - Choose frequency and save in frequency folder; For time series data
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        if not os.path.exists('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4]):
-            os.makedirs('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+            os.makedirs('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4])
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
             temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4] + '\\' + Dividends[i][:-4])
         print(temp['Ticker'][0] + ' time series pickles saved.')
     except OSError:
@@ -761,11 +459,11 @@ for i in ranger[:1]:
         temp['Industry'] = np.nan
         temp['SharesOutstanding'] = np.nan
         #Make folders inside quarternary folders - Choose frequency and save in frequency folder; For time series data
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        if not os.path.exists('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4]):
-            os.makedirs('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+            os.makedirs('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4])
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
             temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4] + '\\' + Dividends[i][:-4])
 
 print('DIV data stored in DividendData')
@@ -776,12 +474,12 @@ print('Adding DIV to DAY TS.')
 DividendAndTechnicalList = list(set([i for i in DividendsTickers if i in TimeSeriesTickers]))
 #For all stocks with div + dailies: Dividend based modifications made here. 
 for d in DividendAndTechnicalList[:1]:
-#    try:
+    #try:
         #Get DAY time series
-        DAY = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+        DAY = pd.read_pickle('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\' + 'DAY' + '\\' + 'DAY-' + d + '\\' + 'DAY-' + d)    
         #Get DIV 
-        DIV = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+        DIV = pd.read_pickle('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\' + 'DIV' + '\\' + 'DIV-' + d + '\\' + 'DIV-' + d)
         #For every dividend entry, populate daily TS['Dividends'] from DIV.T
         TimeStamps = [i for i in DAY.index if i in DIV.index]
@@ -794,24 +492,24 @@ for d in DividendAndTechnicalList[:1]:
         DAY['Dividends'] = DAY['Dividends'].fillna(0) 
         #Div Yield by unspecified frequency // Be aware of assumptions using AdjClose
         DAY['DividendYield'] = DAY['LastDividend']/DAY['Adj Close']
-        pd.to_pickle(DAY, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\' +
+        pd.to_pickle(DAY, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\' +
             'YahooSource\\ProcessedData\\' + 'DAY' + '\\' + 'DAY-' + d + '\\' + 'DAY-' + d)
         print('Dividends added to ' + d + ' dailies.')       
 #Populate set - DAY, WEK, MO - with custom database modifications for TA data.
 #Start with Yahoo dailies TA mod
 print('Processing for dailies.')
 #Get list to process
-ProcessedDailies = os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+ProcessedDailies = os.listdir('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\DAY\\')
 for p in ProcessedDailies[:1]:
     #Access data
-    temp = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+    temp = pd.read_pickle('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\DAY\\' + p + '\\' + p)
             #Daily Log Returns (subtract 1!!!)
     temp['LogRet'] = np.log(temp['Adj Close']/temp['Adj Close'].shift(1)) 
     temp['LogRet'] = temp['LogRet'].fillna(0)
     
-    #EasyData 
+    #Technical data 
     temp['HigherOpen'] = (np.where(temp['Open'] > temp['Open'].shift(1), 1,0))
     temp['LowerOpen'] = (np.where(temp['Open'] < temp['Open'].shift(1), 1,0))
     temp['HigherHigh'] = (np.where(temp['High'] > temp['High'].shift(1), 1,0))
@@ -987,6 +685,7 @@ for p in ProcessedDailies[:1]:
     temp['4dayTotalAverageRange'] = temp['4dayRangePercent'].mean() * 4
     temp['3dayTotalAverageRange'] = temp['3dayRangePercent'].mean() * 3
     temp['2dayTotalAverageRange'] = temp['2dayRangePercent'].mean() * 2
+    
     #DYNAMIC Rolling Average Range
     temp['100wkRollingAverageRange'] = temp['100wkRangePercent'].rolling(
                                      center=False, window = 500).mean()
@@ -1328,8 +1027,7 @@ for p in ProcessedDailies[:1]:
                                      center=False, window = 3).mean()
     temp['2dayRollingAverageReturn'] = temp['LogRet'].rolling(
                                      center=False, window = 2).mean()                                         
-                                     
-                                     
+                                                                          
     #Over rolling period, Average Std Dev during period; DYNAMIC
     temp['100wkRollingStdDev'] = temp['LogRet'].rolling(
                                      center=False, window = 500).std()
@@ -1391,6 +1089,7 @@ for p in ProcessedDailies[:1]:
                                      center=False, window = 3).std()
     temp['2dayRollingStdDev'] = temp['LogRet'].rolling(
                                      center=False, window = 2).std()
+    
     #Rate of Change (ROC) in %
     temp['100wkRateOfChange'] = (temp['Adj Close'] - temp['Adj Close'].shift(500)
                                       ) / temp['Adj Close'].shift(500)  
@@ -1834,7 +1533,6 @@ for p in ProcessedDailies[:1]:
     temp['2dayRollingAverageATR'] = temp['2dayATRPercent'].rolling(
                                      center=False, window = 2).mean()            
 
-
     #DYNAMIC RAATR/TAATR - 1   
     temp['100wkRAATRtoTAATR'] = (temp['100wkRollingAverageATR']/temp['100wkTotalAverageATR']) - 1
                
@@ -1847,11 +1545,7 @@ for p in ProcessedDailies[:1]:
     temp['100wkRollingAverageATRtoRange'] = temp['100wkATRtoRange'].rolling(
                                      center=False, window = 500).mean()
     #DYNAMIC RAATRtoRangetoAATRtoRange 
-#    temp['100wkRAATRtoRangetoAATRtoRange'] = (temp['100wkRollingAverageATRtoRange']/temp['100wkTotalAverageATRtoRange']) - 1
-    
- 
-
-
+    #temp['100wkRAATRtoRangetoAATRtoRange'] = (temp['100wkRollingAverageATRtoRange']/temp['100wkTotalAverageATRtoRange']) - 1
 
     #Efficiency (is normalized across markets by Diff/ATR)                                          
     temp['100wkCloseDiff'] = temp['Adj Close'] - temp['Adj Close'].shift(500)
@@ -1915,7 +1609,7 @@ for p in ProcessedDailies[:1]:
     temp['2dayCloseDiff'] = temp['Adj Close'] - temp['Adj Close'].shift(2)
     temp['2dayEfficiency'] = temp['2dayCloseDiff'] / temp['2dayATRPoints'] 
   
-    #average rolling volume
+    #Average rolling volume
     temp['100wkAverageRollingVolume'] = temp['Volume'].rolling(center=False, 
                                                         window=500).mean() 
     temp['90wkAverageRollingVolume'] = temp['Volume'].rolling(center=False, 
@@ -2041,13 +1735,19 @@ for p in ProcessedDailies[:1]:
     temp['3daySMA'] = temp['3daySMA'].fillna(0)
     temp['2daySMA'] = temp['Adj Close'].rolling(window=2, center=False).mean()
     temp['2daySMA'] = temp['2daySMA'].fillna(0)     
+    
     #Save to folder
-    pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+    pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\DAY\\' + p + '\\' + p)
+    #Display results
     print(p + ' is processed and saved.')
+#End timer    
 end = time.time()
+#Timer stats
 t = round(end - start, 2)
-n = round(len(os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'  +
+#Number of tickers processed
+n = round(len(os.listdir('Z:\\Users\\Username\\DirectoryLocation\\'  +
                                       'YahooSource\\ProcessedData\\DAY\\')), 2)
+#Display results
 print('Yahoo processed data is full.')
 print('YahooSource took ' + str(t) + ' seconds for ' + str(n) + ' tickers.')
