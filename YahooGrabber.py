@@ -50,8 +50,8 @@ def YahooGrabber(ticker):
 
     #Optional write to file as CSV or pickle 
     #See YahooSource.py for Database Creation + Management
-    #df.to_csv(("F:\\Users\\ComputerName\\DatabaseFolder\\"+ ticker + ".csv"))
-    #df.to_pickle(df, ("F:\\Users\\ComputerName\\DatabaseFolder\\"+ ticker))
+    #df.to_csv(("F:\\Users\\Username\\DatabaseFolder\\"+ ticker + ".csv"))
+    #df.to_pickle(df, ("F:\\Users\\Username\\DatabaseFolder\\"+ ticker))
 
     #End timer    
     endtime = t.time()
@@ -59,5 +59,5 @@ def YahooGrabber(ticker):
     duration = endtime - starttime
     #Display time taken for request and formatting
     print("Data request took " + str(duration) +" seconds.") 
-
+    #Output
     return df
