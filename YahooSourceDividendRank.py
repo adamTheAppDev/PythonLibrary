@@ -18,7 +18,7 @@ Empty = []
 Empty2 = []
 
 #Read in ticker
-Universe = os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\DAY')
+Universe = os.listdir('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\DAY')
 #Manually assign tickers
 #Universe = ['ABIO', 'ACST', 'AEZS', 'AGRX', 'AIRI', 'AKER', 'AKTX', 'AMCN', 'AMDA', 'AMRS', 'AMTX', 'ANTH', 'ANY', 
 'APDN', 'APHB', 'AQXP', 'ARDM', 'ARDX', 'ARGS', 'AST', 'ATOS', 'BAS', 'BCEI', 'BIOC', 'BIS', 'BSPM', 'BST', 'BSTG', 
