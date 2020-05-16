@@ -9,7 +9,7 @@
 
 #R Multiple Finder; Trade Data Tracking
 
-#Import libraries
+#Import modules
 import numpy as np
 import pandas as pd
 import warnings 
@@ -19,13 +19,12 @@ import matplotlib.pyplot as plt
 from matplotlib.finance import candlestick_ohlc
 import matplotlib.dates as mdates
 
-#Input ticker
+#Assign ticker
 ticker = 'GLD'
 
 #Request data
 while True: 
     try:
-        #Get data
         Asset1 = YahooGrabber(ticker)
     except CParserError:
         continue
@@ -36,7 +35,6 @@ warnings.filterwarnings("ignore",category = RuntimeWarning)
 pd.options.mode.chained_assignment = None 
 
 #Declaration/Assignments
-
 #Empty list
 Empty = []
 #Empty dataframe
@@ -54,20 +52,20 @@ Asset1 = Asset1[-1500:] #In
 
 #Variable windows / params
 
-#donchianwidow is used to find the min/max of the price range to make the long/short signal
+#Donchianwidow is used to find the min/max of the price range to make the long/short signal
 #Smaller donchain window = more likely double days
 donchianwindow = 55
 #ATRwindow is used for volatility position sizing
 ATRwindow = 20
-#stopwindow is used for trailing high/low used for long/short exits
+#Stopwindow is used for trailing high/low used for long/short exits
 stopwindow = 13
-#Counter tracks iteration progress
+#Iteration tracking
 Counter = 0
 
-#SubIndex column is a secondary index, it only exists to help identify exits
+#Secondary index, it exists to help identify exits
 Asset1['SubIndex'] = range(0,len(Asset1))
 
-#Log Returns
+#Calculate log Returns
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
 
@@ -82,6 +80,7 @@ Asset1['TrueRange'] = Asset1[['Method1','Method2','Method3']].max(axis = 1)
 #ATR in points; not %
 Asset1['ATR'] = Asset1['TrueRange'].rolling(window = ATRwindow,
                                 center=False).mean()
+
 Asset1['ATRPercent'] = Asset1['ATR'] / Asset1['Close']
 Asset1['ATRRollingMax'] = Asset1['ATR'].rolling(ATRwindow).max()
 Asset1['ATRRollingMin'] = Asset1['ATR'].rolling(ATRwindow).min()
@@ -101,7 +100,7 @@ Asset1['SMA5'] = Asset1['Close'].rolling(5).mean()
 Asset1['SMA20'] = Asset1['Close'].rolling(20).mean()
 
 #Signal = Price </> min/max
-#if price is greater than the max go long
+#If price is greater than the max go long
 Asset1['LongSignal'] = np.where(Asset1['High'] >= Asset1['RollingMax'].shift(1), 1, 0)
 #if price is less than the min go short
 Asset1['ShortSignal'] = np.where(Asset1['Low'] <= Asset1['RollingMin'].shift(1), 1, 0)
@@ -114,12 +113,12 @@ Asset1['ShortSignal'].loc[(Asset1['ShortSignal'] == 1) & (Asset1['Filter'] == 1)
 #If double signal days exist, then entry and P/L on those days will not be reflected correctly, spurious return stream
 Asset1['DoubleDay'] = np.where(Asset1['LongSignal'] + Asset1['ShortSignal'] == 2, 1, 0)
 
-#Next two lines combines long signal and short signal columns into a single column
+#Combine long signal and short signal columns into a single column
 #If there is a double day then a short entry is recorded
 Asset1['Signal'] = np.where(Asset1['LongSignal'] == 1, 1, 0)
 Asset1['Signal'] = np.where(Asset1['ShortSignal'] == 1, -1, Asset1['Signal'])
 
-#if Rolling Min/Max is still being computed, stay out of market
+#If Rolling Min/Max is still being computed, stay out of market
 Asset1['Signal'] = np.where(Asset1['RollingMax'] == np.nan, 0, Asset1['Signal'])
 
 #Index values for segmenting data for trade analysis
@@ -136,8 +135,7 @@ Asset1['LongExitPrice'] =  Asset1['Low'].rolling(window=stopwindow, center=False
 Asset1['EntryPriceUnitOne'] = np.nan
 Asset1['StopPriceUnitOne'] = np.nan
 
-#Be sure to check for double signal days, gaps on first unit entry, and gaps on exits.
-
+#Check for double signal days, gaps on first unit entry, and gaps on exits.
 #Default stops and entries 
 #Find the first trade of the signal period to document entry prices
 #Long entry first unit // enter one cent above previous high
@@ -164,7 +162,6 @@ for s in ShortGapEntryIndexList:
     Asset1.set_value(s, 'EntryPriceUnitOne', Asset1.loc[s]['Open'])
 
 #Entry prices are defined, calculate stop based on direction and entry price
-
 #Fixed long stop first unit - 2 ATR
 Asset1['StopPriceUnitOne'] = np.where(Asset1['Signal'] == 1, 
                 Asset1['EntryPriceUnitOne'] - (Asset1['TradeATR'] * 2), np.nan)
@@ -192,7 +189,7 @@ TradeSubset = Asset1.loc[(Asset1.index >= SignalDates[0])]
 
 #while Counter < 15: #Use this instead of the while loop to go a certain number of trades into the iteration
 
-#while there is still a signal in the time series
+#While there is still a signal in the time series
 while sum(abs(TradeSubset['Signal'])) != 0:
     #This is the ATR on the day before signal day
     TradeATR = TradeSubset['ATR'][0]
@@ -219,6 +216,7 @@ while sum(abs(TradeSubset['Signal'])) != 0:
         #Set values for long exits
         for l in LongExitIndexList:
             TradeSubset.set_value(l, 'LongExit', 1)
+    #If in a short trade            
     if TradeDirection == -1:        
         #Change the value of TradeSubset['ShortExit'] to 1 on the days that there is a short exit signal
         #Find days for short exits
@@ -236,7 +234,7 @@ while sum(abs(TradeSubset['Signal'])) != 0:
         #Set values for gap long exits
         for l in GapLongExitIndexList:
             TradeSubset.set_value(l, 'GapLongExit', 1)
-                 
+    #Assess Gaps on days where open short trade closes         
     if TradeDirection == -1:             
         #Change the value of TradeSubset['GapShortExit'] to 1 on the days that there is a short exit signal
         #Find days for gap short exits
@@ -251,9 +249,6 @@ while sum(abs(TradeSubset['Signal'])) != 0:
     TradeSubset['Exit'].loc[(TradeSubset['LongExit'] == 1)] = 2 #1 indicating long exit 
     TradeSubset['Exit'].loc[(TradeSubset['GapShortExit'] == 1)] = 3 #1 indicating short exit w/ gap
     TradeSubset['Exit'].loc[(TradeSubset['GapLongExit'] == 1)] = 4 #1 indicating long exit w/ gap
- 
-#Above is 'df.set_value()' way of assignment 
-#Compare that to the df[].loc[()] = way of assignment above. Which is best?
    
     #List comprehension to find exit taken for subset.
     #The next function gives a position on the TradeSubset index
@@ -300,7 +295,7 @@ while sum(abs(TradeSubset['Signal'])) != 0:
     #R Multiple calculation, return based on initial risk
     RMultiple = TradeDollarReturn / RiskPerTrade
 
-    #Log individual trade details in the Trade dataframe
+    #Save params and metrics to list
     Empty.append(ExitTaken)
     Empty.append(numshares)
     Empty.append(LengthOfTrade)
@@ -319,15 +314,14 @@ while sum(abs(TradeSubset['Signal'])) != 0:
 
     #List to series
     Emptyseries = pd.Series(Empty)
-    #Append series to Trades dataframe to log details
+    #Series to dataframe
     Trades[Counter] = Emptyseries.values
 
-    #Empty the list for next trade
+    #Clear list
     Empty[:] = [] 
 
-    #Confirm trade number
+    #Iteration tracking
     print(Counter) 
-    #Keeping track of iteration progress
     Counter = Counter + 1
 
     #Recalculate equity and risk for next trade
@@ -386,7 +380,7 @@ if sum(abs(TradeSubset['Signal'])) != 0:
     #Readjust equity for dollar returns on latest trade
     Equity = Equity + TradeDollarReturn
 
-    #Log Trade details in Trade dataframe
+    #Save params and metrics to list
     Empty.append(ExitTaken)
     Empty.append(numshares)
     Empty.append(LengthOfTrade)
@@ -403,11 +397,11 @@ if sum(abs(TradeSubset['Signal'])) != 0:
     Empty.append(TradeATR)
     Empty.append(RiskPerTrade)
 
-    #Turn list into series    
+    #List to series 
     Emptyseries = pd.Series(Empty)
-    #Add all trade details to Trades DataFrame
+    #Series to dataframe
     Trades[Counter] = Emptyseries.values
-    #Clear the list for next iteration
+    #Clear list 
     Empty[:] = [] 
 
     #Iteration tracking
@@ -421,11 +415,11 @@ Trades = Trades.rename(index={0: "ExitTaken", 1: "NumberOfShares", 2: "LengthOfT
     10: "TradeDollarReturn", 11: "RMultiple", 12:"SubIndexOfExit", 
     13:"TradeATR", 14:"RiskPerTrade"})
 
+#Ones/Zeroes
 Asset1['StrategyPercentReturns'] = 1   
 Asset1['StrategyDollarReturns'] = 0   
 
-#The next two lines are the only reason keep track of 'SubIndexOfExit'
-#This is where I apply the returns on the trade close date to get the trade by trade return stream
+#Apply the returns on the trade close date to get the trade by trade return stream
 for d in Trades:
     Asset1['StrategyPercentReturns'].loc[(Asset1['SubIndex'] == Trades[d]['SubIndexOfExit'])] = 1 + Trades[d]['TradePercentReturn']
     Asset1['StrategyDollarReturns'].loc[(Asset1['SubIndex'] == Trades[d]['SubIndexOfExit'])] = 1 + Trades[d]['TradeDollarReturn']
@@ -445,7 +439,7 @@ LossRate = NumLosingTrades / (NumWinningTrades + NumLosingTrades)
 #Expectancy Calculation
 Expectancy = (WinRate * RewardRisk) - (LossRate)
 
-#Make a DataFrame that stores just R multiples from the Trades DataFrame
+#Make a DataFrame that stores R multiples from the Trades DataFrame
 RMultiples = pd.DataFrame(data = Trades.loc['RMultiple',:])
 
 #Return stream modification for graphing
@@ -466,6 +460,7 @@ ax.set_xlabel('Date')
 ax.set_ylabel('Profit/Loss')
 print('-' * 55)
 plt.show()
+
 #This is a histogram for RMultiples
 fig2, ax2 = plt.subplots()
 #Separate RMultiples for histogram
@@ -530,18 +525,22 @@ axe.scatter(ExitScatterData.loc[ExitScatterData['TradeDirection'] == 1, 'IndexTo
 Asset1Copy = Asset1[['IndexToNumber', 'Open', 'High', 'Low', 'Close', 'Adj Close']].copy()
 #Plot the DF values with the figure, object
 candlestick_ohlc(axe, Asset1Copy.values, width=.6, colorup='green', colordown='red')
+#Format dates
 axe.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
 print('-' * 90)
 plt.show()
 print('-' * 90)
-#For ATR
+#For ATR create graph object
 figure2, axe2 = plt.subplots(figsize = (10,2))
+#Add labels
 axe2.set_title(ticker + ' ATR')
 plt.ylabel(ticker + ' ATR')
 plt.xlabel('Date')
+#Populate graph
 axe2.plot(Asset1['IndexToNumber'], Asset1['ATRPercent'], color = 'black', label = 'ATR Percent')
 axe2.plot(Asset1['IndexToNumber'], Asset1['ATRPercentRollingMax'], color = 'green', label = 'ATRPercentRollingMax')
 axe2.plot(Asset1['IndexToNumber'], Asset1['ATRPercentRollingMin'], color = 'red', label = 'ATRPercentRollingMin')
+#Format date
 axe2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 plt.show()
