@@ -67,17 +67,17 @@ def TickerToCSV(Ticker):
 start = time.time()
 
 #Use directory location from FolderFramework.py
-DL = "F:\\Users\\AmatVictoriaCuram\\Documents\\FDL"
+DL = "Z:\\Users\\Username\\DirectoryLocation\\"
 
 #Load universe list // change back to DL + '\\DataSources
-UniverseList = pd.read_csv('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\NASDAQSource\\UniverseLists\\' + 
+UniverseList = pd.read_csv('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\NASDAQSource\\UniverseLists\\' + 
                             'UniverseList.csv', sep = ',')
 
 #Modify size
 UniverseList = UniverseList[:20]
 
 #Load the NASDAQ CSV // change back to DL + '\\DataSources // change to DirtyNASDAQData.csv
-NASDAQData = pd.read_csv('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\NASDAQSource\\QualitativeData\\' +
+NASDAQData = pd.read_csv('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\NASDAQSource\\QualitativeData\\' +
                                 'PretrimQualitativeData.csv', sep = ',')
 
 #Iterable range, one per issue
@@ -305,7 +305,7 @@ for p in ProcessedDailies:
     temp['LogRet'] = np.log(temp['Adj Close']/temp['Adj Close'].shift(1)) 
     temp['LogRet'] = temp['LogRet'].fillna(0)
     
-    #EasyData 
+    #Technical data 
     temp['HigherOpen'] = (np.where(temp['Open'] > temp['Open'].shift(1), 1,0))
     temp['LowerOpen'] = (np.where(temp['Open'] < temp['Open'].shift(1), 1,0))
     temp['HigherHigh'] = (np.where(temp['High'] > temp['High'].shift(1), 1,0))
@@ -481,6 +481,7 @@ for p in ProcessedDailies:
     temp['4dayTotalAverageRange'] = temp['4dayRangePercent'].mean() * 4
     temp['3dayTotalAverageRange'] = temp['3dayRangePercent'].mean() * 3
     temp['2dayTotalAverageRange'] = temp['2dayRangePercent'].mean() * 2
+    
     #DYNAMIC Rolling Average Range
     temp['100wkRollingAverageRange'] = temp['100wkRangePercent'].rolling(
                                      center=False, window = 500).mean()
@@ -823,7 +824,6 @@ for p in ProcessedDailies:
     temp['2dayRollingAverageReturn'] = temp['LogRet'].rolling(
                                      center=False, window = 2).mean()                                         
                                      
-                                     
     #Over rolling period, Average Std Dev during period; DYNAMIC
     temp['100wkRollingStdDev'] = temp['LogRet'].rolling(
                                      center=False, window = 500).std()
@@ -885,6 +885,7 @@ for p in ProcessedDailies:
                                      center=False, window = 3).std()
     temp['2dayRollingStdDev'] = temp['LogRet'].rolling(
                                      center=False, window = 2).std()
+    
     #Rate of Change (ROC) in %
     temp['100wkRateOfChange'] = (temp['Adj Close'] - temp['Adj Close'].shift(500)
                                       ) / temp['Adj Close'].shift(500)  
@@ -1327,8 +1328,7 @@ for p in ProcessedDailies:
                                      center=False, window = 3).mean()
     temp['2dayRollingAverageATR'] = temp['2dayATRPercent'].rolling(
                                      center=False, window = 2).mean()            
-
-
+    
     #DYNAMIC RAATR/TAATR - 1   
     temp['100wkRAATRtoTAATR'] = (temp['100wkRollingAverageATR']/temp['100wkTotalAverageATR']) - 1
     temp['90wkRAATRtoTAATR'] = (temp['90wkRollingAverageATR']/temp['90wkTotalAverageATR']) - 1
@@ -1427,7 +1427,6 @@ for p in ProcessedDailies:
     temp['3dayTotalAverageATRtoRange'] = temp['3dayATRtoRange'].mean() * 3 
     temp['2dayTotalAverageATRtoRange'] = temp['2dayATRtoRange'].mean() * 2    
 
-
     #DTNAMIC Rolling Average ATRtoRange
     temp['100wkRollingAverageATRtoRange'] = temp['100wkATRtoRange'].rolling(
                                      center=False, window = 500).mean()
@@ -1489,10 +1488,6 @@ for p in ProcessedDailies:
                                      center=False, window = 3).mean()
     temp['2dayRollingAverageATRtoRange'] = temp['2dayATRtoRange'].rolling(
                                      center=False, window = 2).mean()                                     
-
- 
-
-
 
     #Efficiency (is normalized across markets by Diff/ATR)                                          
     temp['100wkCloseDiff'] = temp['Adj Close'] - temp['Adj Close'].shift(500)
@@ -1556,7 +1551,7 @@ for p in ProcessedDailies:
     temp['2dayCloseDiff'] = temp['Adj Close'] - temp['Adj Close'].shift(2)
     temp['2dayEfficiency'] = temp['2dayCloseDiff'] / temp['2dayATRPoints'] 
   
-    #average rolling volume
+    #Average rolling volume
     temp['100wkAverageRollingVolume'] = temp['Volume'].rolling(center=False, 
                                                         window=500).mean() 
     temp['90wkAverageRollingVolume'] = temp['Volume'].rolling(center=False, 
@@ -1682,12 +1677,17 @@ for p in ProcessedDailies:
     temp['3daySMA'] = temp['3daySMA'].fillna(0)
     temp['2daySMA'] = temp['Adj Close'].rolling(window=2, center=False).mean()
     temp['2daySMA'] = temp['2daySMA'].fillna(0)     
+    
     #Save to folder
     pd.to_pickle(temp, DL + '\\DataSources\\YahooSource\\ProcessedData\\DAY\\'
                                                                 + p + '\\' + p)
+    #Display results
     print(p + ' is processed and saved.')
+#Timer stats    
 end = time.time()
 t = round(end - start, 2)
+#Number of tickers processed
 n = round(len(os.listdir(DL + '\\DataSources\\YahooSource\\ProcessedData\\DAY\\')), 2)
+#Display results
 print('Yahoo processed data is full.')
 print('YahooSource took ' + str(t) + ' seconds for ' + str(n) + ' tickers.')
