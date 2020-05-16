@@ -31,10 +31,12 @@ port = ['ABIO', 'ACST', 'AEZS', 'AGRX', 'AIRI', 'AKER', 'AKTX', 'AMCN', 'AMDA', 
         'SALT', 'SBLK', 'SCON', 'SCYX', 'SGOC', 'SHIP', 'SHOS', 'SNSS', 'SQQQ', 'SXE', 'SYN', 'TBK', 'TCS', 'TEAR', 'TGTX', 
         'TNDM', 'TNXP', 'TOPS', 'TROV', 'TRVN', 'TVIX', 'TWER', 'TWLO', 'USLV', 'UUUU', 'UVXY', 'VIIX', 'VIVE', 'VJET', 'VRML', 
         'VSAR', 'VTGN', 'VXX', 'WHLR', 'WMLP', 'XGTI', 'XPLR', 'XTNT', 'YGE']
+
 #Empty list
 refinedportfolio = []
 #Confirm symbols
 #print(symbols)
+
 #For all tickers to scan
 for s in port:
     try:
@@ -45,36 +47,31 @@ for s in port:
         q = DatabaseGrabber(s)    
         #If true
         if q['AverageRollingVolume'][-1] > 5000000:
-#            if float(SCoeffVar(q)) < -5:
+            #if float(SCoeffVar(q)) < -5:
             if q['Age'][-1] > 1000:
-#                        if float(SRelStrInd(q)) < 30:
-#                            if float(SCommodityChannelIndex(q)) < -80:
+                        #if float(SRelStrInd(q)) < 30:
+                            #if float(SCommodityChannelIndex(q)) < -80:
                 #Insert another if or do commands
                 #Confirmation
                 print(s)
                 #Add to list
                 refinedportfolio.append(s)
-#                            else:
-#                                continue
-#                        else:
-#                            continue
-#                    else:
-#                        continue
-#                else:
-#                    continue
+                            #else:
+                                #continue
+                        #else:
+                            #continue
+                    #else:
+                        #continue
+                #else:
+                    #continue
             else:
                 continue
         else:
             continue
 
-
-#                ) > 500000 and sum( and sum(SRelStrInd(q)) < 30:
-        
-#              and sum(DayOverAverageRollingVolume(q)
-#        ) > 5 and sum(SAverageReturn(q)) < .02 and sum(SCoeffVar(q)
-#        ) < 1:
     except OSError:
         pass
+
 #List refined portfolio
 print(refinedportfolio)
 #Save tickersubset to folder..
