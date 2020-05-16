@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 11 09:04:55 2018
 
-@author: Adam Reinhold Von Fisher
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
-#Developed in Spyder - Python 3.5.2
+
+#Developed in Python 3.5.2
 
 #This is a trading model, similar to DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
 #R Multiple Finder; Trade Data Tracking
 
-#Import libraries
+#Import modules
 import numpy as np
 #import random as rand
 import pandas as pd
@@ -19,12 +20,11 @@ import pandas as pd
 #import matplotlib.pyplot as plt
 import warnings 
 
-#Inputs - OHLC data
-#Ticker1 = 'GLD'
-#Asset1 = YahooGrabber(Ticker1)
 
-#Tasty OHLC; ***ATTN*** insert path for OHLC data
-Asset1 = pd.read_pickle('C:\\Users\\DrData\\Desktop\\TastyDir\\GLD')
+#Assign ticker
+Ticker1 = 'GLD'
+#Request data
+Asset1 = YahooGrabber(Ticker1)
 
 #Don't display warnings
 warnings.filterwarnings("ignore",category =RuntimeWarning) 
@@ -43,28 +43,28 @@ RiskPerTrade = Equity * .005
 Commission = .01
 Slippage = .01
 
-#Time series trimmer for in/out sample data
-Asset1 = Asset1[:-1500] #In
+#Time series trimmer
+Asset1 = Asset1[:-1500] #In sample
 
 #Variable windows
-#donchianwidow is used to find the min/max of the price range to make the long/short signal
+#donchianwidow is used to find the min/max of the price range for long/short signal
 #Smaller donchain window = more likely double days
 donchianwindow = 55
 #ATRwindow is used for volatility position sizing
 ATRwindow = 20
 #stopwindow is used for trailing high/low used for long/short exits
 stopwindow = 13
-#Counter tracks iteration progress
+#Iteration tracking
 Counter = 0
 
-#SubIndex column is a secondary index, it only exists to help identify exits and is used later to populate return stream
+#SubIndex is a secondary index, it exists to help identify exits and populate return stream
 Asset1['SubIndex'] = range(0,len(Asset1))
 
-#Log Returns (Should I be subtracting 1 from here?)
+#Calculate log Returns
 Asset1['LogRet'] = np.log(Asset1['Adj Close']/Asset1['Adj Close'].shift(1))
 Asset1['LogRet'] = Asset1['LogRet'].fillna(0)
 
-#ATR calculation using ATRwindow; Used for volatility based position sizing
+#ATR calculation used for volatility based position sizing
 Asset1['Method1'] = Asset1['High'] - Asset1['Low']
 Asset1['Method2'] = abs((Asset1['High'] - Asset1['Close'].shift(1)))
 Asset1['Method3'] = abs((Asset1['Low'] - Asset1['Close'].shift(1)))
@@ -79,24 +79,21 @@ Asset1['ATR'] = Asset1['TrueRange'].rolling(window = ATRwindow,
 Asset1['RollingMax'] = Asset1['High'].rolling(window=donchianwindow, center=False).max()
 Asset1['RollingMin'] = Asset1['Low'].rolling(window=donchianwindow, center=False).min()
 
-#Asset1[['RollingMax','RollingMin','Close']].plot()
-
-#All the technical data is arranged, now to make the trade signal
 #Signal = Price </> min/max
-#if price is greater than the max go long
+#If price is greater than the max go long
 Asset1['LongSignal'] = np.where(Asset1['High'] >= Asset1['RollingMax'].shift(1), 1, 0)
-#if price is less than the min go short
+#If price is less than the min go short
 Asset1['ShortSignal'] = np.where(Asset1['Low'] <= Asset1['RollingMin'].shift(1), 1, 0)
 
 #If double signal days exist, then entry and P/L on those days will not be reflected correctly, spurious return stream
 Asset1['DoubleDay'] = np.where(Asset1['LongSignal'] + Asset1['ShortSignal'] == 2, 1, 0)
 
-#Next two lines combines long signal and short signal columns into a single column
+#Combines long and short signal columns into a single column
 #If there is a double day then a short entry is recorded
 Asset1['Signal'] = np.where(Asset1['LongSignal'] == 1, 1, 0)
 Asset1['Signal'] = np.where(Asset1['ShortSignal'] == 1, -1, Asset1['Signal'])
 
-#if Rolling Min/Max is still being computed, stay out of market
+#If Rolling Min/Max is still being computed, stay out of market
 Asset1['Signal'] = np.where(Asset1['RollingMax'] == np.nan, 0, Asset1['Signal'])
 
 #Index values for segmenting data for trade analysis
@@ -105,7 +102,7 @@ SignalDates = list(Asset1['Signal'].loc[(Asset1['Signal'] != 0)].index)
 #Trade ATR on signal day
 Asset1['TradeATR'] = np.where(Asset1['Signal'] != 0, Asset1['ATR'].shift(1), np.nan)
 
-#Exits other than initial 2 ATR stop, stopwindow is used here
+#Exits other than initial 2 ATR stop
 #Asset1['LimitExitPrice'] = np.nan 
 Asset1['ShortExitPrice'] =  Asset1['High'].rolling(window=stopwindow, center=False).max()
 Asset1['LongExitPrice'] =  Asset1['Low'].rolling(window=stopwindow, center=False).min()
@@ -115,11 +112,9 @@ Asset1['LongExitPrice'] =  Asset1['Low'].rolling(window=stopwindow, center=False
 Asset1['EntryPriceUnitOne'] = np.nan
 Asset1['StopPriceUnitOne'] = np.nan
 
-#Be sure to check for double signal days, gaps on first unit entry, and gaps on exits.
-
-
+#Check for double signal days, gaps on first unit entry, and gaps on exits.
 #Default stops and entries 
-#Find the first trade of the signal period, so we can document entry prices
+#Find the first trade of the signal period, document entry prices
 #Long entry first unit // enter one cent above previous high
 Asset1['EntryPriceUnitOne'] = np.where(Asset1['Signal'] == 1, 
                               Asset1['RollingMax'].shift(1) + .01, np.nan)
@@ -145,8 +140,7 @@ ShortGapEntryIndexList = list(Asset1['EntryPriceUnitOne'].loc[(Asset1['Signal'] 
 for s in ShortGapEntryIndexList:
     Asset1.set_value(s, 'EntryPriceUnitOne', Asset1.loc[s]['Open'])
 
-#Entry prices are defined, calculate stop based on direction and entry price
-
+#Calculate stop based on direction and entry price
 #Fixed long stop first unit
 Asset1['StopPriceUnitOne'] = np.where(Asset1['Signal'] == 1, 
                 Asset1['EntryPriceUnitOne'] - (Asset1['TradeATR'] * 2), np.nan)
@@ -154,7 +148,6 @@ Asset1['StopPriceUnitOne'] = np.where(Asset1['Signal'] == 1,
 Asset1['StopPriceUnitOne'] = np.where(Asset1['Signal'] == -1, 
               Asset1['EntryPriceUnitOne'] + (Asset1['TradeATR'] * 2), Asset1['StopPriceUnitOne'])
               
-
 #Experimental exits - combine fixed stop with trailing max high/min low once 
 #In a long trade, when a 13 day low becomes higher than the initial 2 ATR stop, that is the new stop, otherwise, initial 2 ATR stop
 Asset1['HybridLongExitPrice'] = np.where(Asset1['LongExitPrice'] > Asset1['StopPriceUnitOne'], 
@@ -165,9 +158,7 @@ Asset1['HybridShortExitPrice'] = np.where(Asset1['ShortExitPrice'] < Asset1['Sto
                           Asset1['ShortExitPrice'], Asset1['StopPriceUnitOne'])  
 Asset1['HybridShortExitPrice'] = Asset1['HybridShortExitPrice'].ffill()
 
-               
-
-#On the first signal we record entry, record  exit, record trade details, and then
+#On the first signal we record entry, record exit, record trade details, and then
 #trim the time series to the next signal after exit. This process repeats.    
 #TradeSubset is a copy of Asset1 from the date of the signal to the end of the time series
 TradeSubset = Asset1.loc[(Asset1.index >= SignalDates[0])] 
@@ -175,7 +166,7 @@ TradeSubset = Asset1.loc[(Asset1.index >= SignalDates[0])]
 #Every trade is in the while loop. If a position exists that is still open
 #at the end of the testing period, it is taken care of outside the while loop
 #while Counter < 15: #Use this instead of the while loop to go a certain number of trades into the iteration
-#while there is still a signal in the time series
+#While there is still a signal in the time series
 while sum(abs(TradeSubset['Signal'])) != 0:
     #This is the ATR on the day before signal day
     TradeATR = TradeSubset['ATR'][0]
@@ -218,17 +209,16 @@ while sum(abs(TradeSubset['Signal'])) != 0:
         #Set values for gap long exits
         for l in GapLongExitIndexList:
             TradeSubset.set_value(l, 'GapLongExit', 1)
-                 
+     #Assess Gaps on days where open short trade closes        
     if TradeDirection == -1:             
         #Change the value of TradeSubset['GapShortExit'] to 1 on the days that there is a short exit signal
         #Find days for gap short exits
-#Next 4 lines is 'df.set_value()' way of assignment 
-#Compare that to the df[].loc[()] = way of assignment 4 lines after that. Which is best?
         GapShortExitIndexList = list(TradeSubset['GapShortExit'].loc[(TradeSubset['ShortExit'] == 1) & (
                 TradeSubset['Open'] > TradeSubset['HybridShortExitPrice'])].index)
-        ##Set values for gap short exits
+        #Set values for gap short exits
         for s in GapShortExitIndexList:
             TradeSubset.set_value(s, 'GapShortExit', 1)
+            
     #Set TradeSubset['Exit'] column to the specific exit recorded
     TradeSubset['Exit'].loc[(TradeSubset['ShortExit'] == 1)] = 1 #1 indicating short exit
     TradeSubset['Exit'].loc[(TradeSubset['LongExit'] == 1)] = 2 #1 indicating long exit 
@@ -276,7 +266,7 @@ while sum(abs(TradeSubset['Signal'])) != 0:
     #R Multiple calculation, return based on initial risk
     RMultiple = TradeDollarReturn / RiskPerTrade
 
-    #Log individual trade details in the Trade dataframe
+    #Save params and metrics to list
     Empty.append(ExitTaken)
     Empty.append(numshares)
     Empty.append(LengthOfTrade)
@@ -294,23 +284,23 @@ while sum(abs(TradeSubset['Signal'])) != 0:
     Empty.append(RiskPerTrade)
     #List to series
     Emptyseries = pd.Series(Empty)
-    #Append series to Trades dataframe to log details
+    #Series to dataframe
     Trades[Counter] = Emptyseries.values
-    #Empty the list for next trade
+    #Clear list
     Empty[:] = [] 
     #Confirm trade number
     print(Counter) 
-    #Keeping track of iteration progress
+    #Iteration tracking
     Counter = Counter + 1
     #Recalculate equity and risk for next trade
     Equity = Equity + TradeDollarReturn
     RiskPerTrade = Equity * .005
-    #This trimmer trims the above Trade out of the TradeSubset, then trims to the next signal day!
+    #Trimmer trims the above Trade out of the TradeSubset, then trims to the next signal date
     TradeSubset = TradeSubset[(LengthOfTrade + 1):]
     SignalTrim = next((n for n, x in enumerate(TradeSubset['Signal']) if x), 0)
     TradeSubset = TradeSubset[SignalTrim:]
 
-#If there is a trade that is still open..
+#If there is a trade that is still open
 if sum(abs(TradeSubset['Signal'])) != 0:
     #This exit type corresponds to an open trade 
     ExitTaken = 0
@@ -349,11 +339,13 @@ if sum(abs(TradeSubset['Signal'])) != 0:
     elif TradeDirection == -1:
         TradePercentReturn = (EntryPriceUnitOne - TradeSubset['Adj Close'][-1])/EntryPriceUnitOne
         TradeDollarReturn = (EntryPriceUnitOne - TradeSubset['Adj Close'][-1]) * numshares
+    
     #Based on latest close price even though trade is still open
     RMultiple = TradeDollarReturn / RiskPerTrade
     #Readjust equity for dollar returns on latest trade
     Equity = Equity + TradeDollarReturn
-    #Log Trade details in Trade dataframe
+    
+    #Save params and metrics to list
     Empty.append(ExitTaken)
     Empty.append(numshares)
     Empty.append(LengthOfTrade)
@@ -369,11 +361,11 @@ if sum(abs(TradeSubset['Signal'])) != 0:
     Empty.append(SubIndexOfExit)
     Empty.append(TradeATR)
     Empty.append(RiskPerTrade)
-    #Turn list into series    
+    #List to series    
     Emptyseries = pd.Series(Empty)
-    #Add all trade details to Trades DataFrame
+    #Series to dataframe
     Trades[Counter] = Emptyseries.values
-    #Clear the list for next iteration
+    #Clear list
     Empty[:] = [] 
     #Iteration tracking
     Counter = Counter + 1
@@ -386,14 +378,15 @@ Trades = Trades.rename(index={0: "ExitTaken", 1: "NumberOfShares", 2: "LengthOfT
     7: "TradeDirection", 8: "OpenPriceOnGap", 9: "TradePercentReturn",
     10: "TradeDollarReturn", 11: "RMultiple", 12:"SubIndexOfExit", 
     13:"TradeATR", 14:"RiskPerTrade"})
+#Ones // Zeroes
 Asset1['StrategyPercentReturns'] = 1   
 Asset1['StrategyDollarReturns'] = 0   
 
-#The next two lines are the only reason keep track of 'SubIndexOfExit'
-#This is where I apply the returns on the trade close date to get the trade by trade return stream
+#Apply the returns on the trade close date to get the trade by trade return stream
 for d in Trades:
     Asset1['StrategyPercentReturns'].loc[(Asset1['SubIndex'] == Trades[d]['SubIndexOfExit'])] = 1 + Trades[d]['TradePercentReturn']
     Asset1['StrategyDollarReturns'].loc[(Asset1['SubIndex'] == Trades[d]['SubIndexOfExit'])] = 1 + Trades[d]['TradeDollarReturn']
+    
 #System statistics    
 #Number Win/Loss
 NumWinningTrades = len(Asset1['StrategyPercentReturns'][Asset1['StrategyPercentReturns'] > 1])
@@ -410,16 +403,16 @@ LossRate = NumLosingTrades / (NumWinningTrades + NumLosingTrades)
 Expectancy = (WinRate * AvgWin) - (LossRate * AvgLoss)
 #Make a DataFrame that stores just R multiples from the Trades DataFrame
 RMultiples = pd.DataFrame(data = Trades.loc['RMultiple',:])
+
 #Return stream modification for graphing
 Asset1['Multiplier'] = Asset1['StrategyPercentReturns'].cumprod()
 Asset1['DollarPL'] = Asset1['StrategyDollarReturns'].cumsum()
+
 #This is supposed to be a graph of the equity curve from trade exits
 Asset1['DollarPL'].plot()
 #See if there are any double days that would call for spurious return stream
 print(sum(Asset1['DoubleDay']), ' Double signal days exist')
+
+#Display results
 print('The expectancy of the system is ', Expectancy)
 print(RMultiples)
-##Need to make histogram
-#plt.hist(RMultiples['RMultiple'], normed=True, bins=10
-#plt.ylabel('RMultiple')
-#plt.show()
