@@ -24,7 +24,7 @@ from YahooGrabber import YahooGrabber
 #Iteration tracking
 #Counter = 0
 
-#Start tracking
+#Start timer
 #start = t.time()
 
 #Assign ticker
