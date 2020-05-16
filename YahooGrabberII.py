@@ -62,6 +62,6 @@ def YahooGrabberII(ticker):
     duration = endtime - starttime
     #Display time taken for request and formatting
     print("Data request for " + ticker + " took " + str(duration) +" seconds.") 
-
+    #Output
     return Asset
     
