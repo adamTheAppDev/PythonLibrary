@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jan 28 05:33:49 2020
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #Supervised Learning FDL Data Model Evaluation - Continuous Data
@@ -26,7 +26,7 @@ data = YahooSourceDailyGrabber('TQQQ')
 dataII = YahooSourceDailyGrabber('GLD')
 dataIII = YahooSourceDailyGrabber('TLT')
 dataIV = YahooSourceDailyGrabber('^VIX')
-#trim data to match length
+#Trim data to match length
 dataII = dataII[-len(data):]
 dataIII = dataIII[-len(data):]
 dataIV = dataIV[-len(data):]
@@ -96,9 +96,9 @@ XIV = np.array(dataIV[['8wkBreakOutRatio', '8wkBreakDownRatio', '4wkBreakOutRati
 X = np.append(X, XII, 1)
 X = np.append(X, XIII, 1)
 X = np.append(X, XIV, 1)
-#data is trimmed due to calculation windows
+#Data is trimmed due to calculation windows
 y = np.array(data['LogRet'][50:])
-#display info
+#Display info
 print("Data shape: {}".format(X.shape))
 print("--------------------------------")
 
