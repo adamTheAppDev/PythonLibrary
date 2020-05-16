@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Sep  3 22:41:25 2017
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
-#This is a windowed view tool - a formatting tool - stolen from the depths of the internet
-#I probably rewrote it into another program to fit my data.
+#This is a windowed view tool - a formatting tool from the depths of the internet
 
+#Import modules
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
 import pandas as pd
 
+#Define function
 def WindowedView(x, window_size):
-    """Creat a 2d windowed view of a 1d array.
+    """Create a 2d windowed view of a 1d array.
 
     `x` must be a 1d numpy array.
 
@@ -29,6 +30,8 @@ def WindowedView(x, window_size):
            [3, 4, 5],
            [4, 5, 6]])
     """
+    #Turn array to windowed (rolling) view
     y = as_strided(x, shape=(x.size - window_size + 1, window_size),
                    strides=(x.strides[0], x.strides[0]))
+    #Output
     return y
