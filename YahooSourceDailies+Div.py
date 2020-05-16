@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jan  9 20:29:48 2019
 
-@author: AmatVictoriaCuramIII
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is a database creation tool, I/O, technical analysis tool, and formatting tool.
@@ -24,19 +24,21 @@ from pandas.parser import CParserError
 from requests.exceptions import ConnectionError
 import pandas.io.common
 
+#Start timer
 start = time.time()
 #Load universe list
-UniverseCSVList = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\FDL\\'+
+UniverseCSVList = pd.read_pickle('Z:\\Users\\Username\\DirectoryLocation\\'+
                       'DataSources\\NASDAQSource\\UniverseLists\\Universe2018')
 UniverseList =  [s[:-4] for s in UniverseCSVList]
-#Custom; to add to Universe
+
+#Manually add to Universe
 #UniverseList = ['SPY', 'GLD', 'TQQQ', 'SQQQ', 'VXXB', 'SLV']#, '''''']
 
 #Trimmer
 #UniverseList = UniverseList[:10]
 
 #Load the NASDAQ CSV
-NASDAQData = pd.read_csv('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'+
+NASDAQData = pd.read_csv('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'+
         'NASDAQSource\\QualitativeData\\PretrimQualitativeData.csv', sep = ',')
 NASDAQDataTickers = list(NASDAQData['Symbol'])
 
@@ -57,11 +59,7 @@ for i in ranger:
         
         #Get crumb for daily download url
         DailyCrumb = str(CrumbCatcher(str(ticker)))
-        #Generate daily download url // STOPS ON OCT. 6 2019 move period two out after..
-         #Generate daily download url // STOPS ON OCT. 6 2019 move period two out after..
-         #Generate daily download url // STOPS ON OCT. 6 2019 move period two out after..
-         #Generate daily download url // STOPS ON OCT. 6 2019 move period two out after..
-         #Generate daily download url // STOPS ON OCT. 6 2019 move period two out after..
+        #Generate download url
         DailyDownloadURL = ("https://query1.finance.yahoo.com/v7/finance/download/" + ticker 
         + "?period1=-631123200&period2=1570258800&interval=1d&events=history&crumb=" + DailyCrumb)
         #Download // capture response from post request
@@ -110,8 +108,8 @@ for i in ranger:
         DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
         
         #Save to preprocess storage
-        DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-        DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
+        DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
+        DividendResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
     
         print(ticker + ' completed.')        
         continue
@@ -180,8 +178,8 @@ for i in ranger:
             DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
             
             #Save to preprocess storage
-            DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-            DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
+            DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
+            DividendResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
         
             print(ticker + ' completed.')        
             continue
@@ -248,8 +246,8 @@ for i in ranger:
                 DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
                 
                 #Save to preprocess storage
-                DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-                DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
+                DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
+                DividendResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
             
                 print(ticker + ' completed.')        
                 continue   
@@ -322,8 +320,8 @@ for i in ranger:
             DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
             
             #Save to preprocess storage
-            DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-            DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
+            DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
+            DividendResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
         
             print(ticker + ' completed.')        
             continue   
@@ -393,8 +391,8 @@ for i in ranger:
                 DividendResponseDataFrame.index = pd.to_datetime(DividendResponseDataFrame.index, format = "%Y/%m/%d") 
                 
                 #Save to preprocess storage
-                DailyResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
-                DividendResponseDataFrame.to_csv(("F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
+                DailyResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\DAY-" + ticker + ".csv"))
+                DividendResponseDataFrame.to_csv(("Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\DividendData\\DIV-" + ticker + ".csv"))
             
                 print(ticker + ' completed.')        
                 continue
@@ -410,7 +408,7 @@ print('All source data is in preprocess storage as CSV; ready for processing.')
 #Processed data will be stored as FREQ-TICKER-YYYYMMDD(Timestamp??? Daily is smallest frequency for this source.)
             
 #CSV list for TimeSeries Data to put into processing
-TimeSeries = os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\')
+TimeSeries = os.listdir('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\')
 
 #Trimmer
 #TimeSeries = TimeSeries[:10]
@@ -422,7 +420,7 @@ ranger = range(0,len(TimeSeries))
 
 for i in ranger:
     try:
-        temp = read_csv('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\TimeSeriesData\\' +
+        temp = read_csv('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\TimeSeriesData\\' +
                          (TimeSeries[i]), sep = ',')
         print('Basic TS processing for ' + TimeSeries[i] +'.')
         #Until Prefix + Suffix fixed, use Date as index regardless of frequency for this source..       
@@ -466,11 +464,11 @@ for i in ranger:
         temp['SharesOutstanding'] = temp['GivenMarketCap']/temp['LastSale']
         temp['MarketCap'] = (temp['SharesOutstanding'] * temp['Adj Close'])/10**9          
         #Make folders inside quarternary folders - Choose frequency and save in frequency folder; For time series data
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        if not os.path.exists('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4]):
-            os.makedirs('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+            os.makedirs('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4])
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
             temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4] + '\\' + TimeSeries[i][:-4])
         print(temp['Ticker'][0] + ' time series pickles saved.')
     except OSError:
@@ -487,17 +485,17 @@ for i in ranger:
         #Perhaps make a proxy for market cap and insert here
         temp['MarketCap'] = np.nan
         #Make folders inside quarternary folders - Choose frequency and save in frequency folder; For time series data
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        if not os.path.exists('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4]):
-            os.makedirs('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+            os.makedirs('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4])
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
             temp['FrequencyPrefix'][0] + '\\' + TimeSeries[i][:-4] + '\\' + TimeSeries[i][:-4])
 
 print('TS data stored in ProcessedData')
 
 #Contents of dividend parse
-Dividends = os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\')
+Dividends = os.listdir('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\DividendData\\')
 
 #Trimmer
 #Dividends = Dividends[:10]
@@ -508,7 +506,7 @@ DividendsTickers = [s[4:-4] for s in Dividends]
 ranger = range(0,len(Dividends))
 for i in ranger:
     try:
-        temp = read_csv('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\DividendData\\' +
+        temp = read_csv('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\DividendData\\' +
                          (Dividends[i]), sep = ',')
         if len(temp['Dividends']) == 0:
             print('No dividend data in ' + Dividends[i])
@@ -554,11 +552,11 @@ for i in ranger:
         temp['Industry'] = NASDAQDataRow.iloc[0][7]
         temp['SharesOutstanding'] = temp['GivenMarketCap']/temp['LastSale']         
         #Make folders inside quarternary folders - Choose frequency and save in frequency folder; For time series data
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        if not os.path.exists('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4]):
-            os.makedirs('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+            os.makedirs('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4])
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
             temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4] + '\\' + Dividends[i][:-4])
         print(temp['Ticker'][0] + ' time series pickles saved.')
     except pandas.io.common.EmptyDataError:
@@ -577,11 +575,11 @@ for i in ranger:
         temp['Industry'] = np.nan
         temp['SharesOutstanding'] = np.nan
         #Make folders inside quarternary folders - Choose frequency and save in frequency folder; For time series data
-        if not os.path.exists('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        if not os.path.exists('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4]):
-            os.makedirs('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+            os.makedirs('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
                          temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4])
-        pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\YahooSource\\ProcessedData\\' +
+        pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\YahooSource\\ProcessedData\\' +
             temp['FrequencyPrefix'][0] + '\\' + Dividends[i][:-4] + '\\' + Dividends[i][:-4])
 
 print('DIV data stored in DividendData')
@@ -594,10 +592,10 @@ DividendAndTechnicalList = list(set([i for i in DividendsTickers if i in TimeSer
 for d in DividendAndTechnicalList:
     try:
         #Get DAY time series
-        DAY = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+        DAY = pd.read_pickle('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\' + 'DAY' + '\\' + 'DAY-' + d + '\\' + 'DAY-' + d)    
         #Get DIV 
-        DIV = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+        DIV = pd.read_pickle('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\' + 'DIV' + '\\' + 'DIV-' + d + '\\' + 'DIV-' + d)
         #For every dividend entry, populate daily TS['Dividends'] from DIV.T
         TimeStamps = [i for i in DAY.index if i in DIV.index]
@@ -610,7 +608,7 @@ for d in DividendAndTechnicalList:
         DAY['Dividends'] = DAY['Dividends'].fillna(0) 
         #Div Yield by unspecified frequency // Be aware of assumptions using AdjClose
         DAY['DividendYield'] = DAY['LastDividend']/DAY['Adj Close']
-        pd.to_pickle(DAY, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\' +
+        pd.to_pickle(DAY, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\' +
             'YahooSource\\ProcessedData\\' + 'DAY' + '\\' + 'DAY-' + d + '\\' + 'DAY-' + d)
         print('Dividends added to ' + d + ' dailies.')       
     except FileNotFoundError:
@@ -623,7 +621,7 @@ for d in DividendAndTechnicalList:
 #Start with Yahoo dailies TA mod
 print('Processing for dailies.')
 #Get list to process
-ProcessedDailies = os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+ProcessedDailies = os.listdir('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\DAY\\')
 
 #Trimmer
@@ -631,7 +629,7 @@ ProcessedDailies = os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
 
 for p in ProcessedDailies:
     #Access data
-    temp = pd.read_pickle('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+    temp = pd.read_pickle('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\DAY\\' + p + '\\' + p)
             #Daily Log Returns (subtract 1!!!)
     temp['LogRet'] = np.log(temp['Adj Close']/temp['Adj Close'].shift(1)) 
@@ -813,6 +811,7 @@ for p in ProcessedDailies:
     temp['4dayTotalAverageRange'] = temp['4dayRangePercent'].mean() * 4
     temp['3dayTotalAverageRange'] = temp['3dayRangePercent'].mean() * 3
     temp['2dayTotalAverageRange'] = temp['2dayRangePercent'].mean() * 2
+    
     #DYNAMIC Rolling Average Range
     temp['100wkRollingAverageRange'] = temp['100wkRangePercent'].rolling(
                                      center=False, window = 500).mean()
@@ -1155,7 +1154,6 @@ for p in ProcessedDailies:
     temp['2dayRollingAverageReturn'] = temp['LogRet'].rolling(
                                      center=False, window = 2).mean()                                         
                                      
-                                     
     #Over rolling period, Average Std Dev during period; DYNAMIC
     temp['100wkRollingStdDev'] = temp['LogRet'].rolling(
                                      center=False, window = 500).std()
@@ -1217,6 +1215,7 @@ for p in ProcessedDailies:
                                      center=False, window = 3).std()
     temp['2dayRollingStdDev'] = temp['LogRet'].rolling(
                                      center=False, window = 2).std()
+    
     #Rate of Change (ROC) in %
     temp['100wkRateOfChange'] = (temp['Adj Close'] - temp['Adj Close'].shift(500)
                                       ) / temp['Adj Close'].shift(500)  
@@ -1660,7 +1659,6 @@ for p in ProcessedDailies:
     temp['2dayRollingAverageATR'] = temp['2dayATRPercent'].rolling(
                                      center=False, window = 2).mean()            
 
-
     #DYNAMIC RAATR/TAATR - 1   
     temp['100wkRAATRtoTAATR'] = (temp['100wkRollingAverageATR']/temp['100wkTotalAverageATR']) - 1
     temp['90wkRAATRtoTAATR'] = (temp['90wkRollingAverageATR']/temp['90wkTotalAverageATR']) - 1
@@ -1692,9 +1690,7 @@ for p in ProcessedDailies:
     temp['4dayRAATRtoTAATR'] = (temp['4dayRollingAverageATR']/temp['4dayTotalAverageATR']) - 1
     temp['3dayRAATRtoTAATR'] = (temp['3dayRollingAverageATR']/temp['3dayTotalAverageATR']) - 1    
     temp['2dayRAATRtoTAATR'] = (temp['2dayRollingAverageATR']/temp['2dayTotalAverageATR']) - 1    
-
-
-               
+         
     #DYNAMIC ATR percent / Range percent               
     temp['100wkATRtoRange'] = temp['100wkATRPercent'] / temp['100wkRangePercent']
     temp['90wkATRtoRange'] = temp['90wkATRPercent'] / temp['90wkRangePercent']
@@ -1759,7 +1755,6 @@ for p in ProcessedDailies:
     temp['3dayTotalAverageATRtoRange'] = temp['3dayATRtoRange'].mean() * 3 
     temp['2dayTotalAverageATRtoRange'] = temp['2dayATRtoRange'].mean() * 2    
 
-
     #DTNAMIC Rolling Average ATRtoRange
     temp['100wkRollingAverageATRtoRange'] = temp['100wkATRtoRange'].rolling(
                                      center=False, window = 500).mean()
@@ -1821,10 +1816,6 @@ for p in ProcessedDailies:
                                      center=False, window = 3).mean()
     temp['2dayRollingAverageATRtoRange'] = temp['2dayATRtoRange'].rolling(
                                      center=False, window = 2).mean()                                     
-
- 
-
-
 
     #Efficiency (is normalized across markets by Diff/ATR)                                          
     temp['100wkCloseDiff'] = temp['Adj Close'] - temp['Adj Close'].shift(500)
@@ -1888,7 +1879,7 @@ for p in ProcessedDailies:
     temp['2dayCloseDiff'] = temp['Adj Close'] - temp['Adj Close'].shift(2)
     temp['2dayEfficiency'] = temp['2dayCloseDiff'] / temp['2dayATRPoints'] 
   
-    #average rolling volume
+    #Average rolling volume
     temp['100wkAverageRollingVolume'] = temp['Volume'].rolling(center=False, 
                                                         window=500).mean() 
     temp['90wkAverageRollingVolume'] = temp['Volume'].rolling(center=False, 
@@ -2014,13 +2005,19 @@ for p in ProcessedDailies:
     temp['3daySMA'] = temp['3daySMA'].fillna(0)
     temp['2daySMA'] = temp['Adj Close'].rolling(window=2, center=False).mean()
     temp['2daySMA'] = temp['2daySMA'].fillna(0)     
+    
     #Save to folder
-    pd.to_pickle(temp, 'F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'
+    pd.to_pickle(temp, 'Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'
         + 'YahooSource\\ProcessedData\\DAY\\' + p + '\\' + p)
+    #Display results
     print(p + ' is processed and saved.')
+#End timer    
 end = time.time()
+#Timer stats
 t = round(end - start, 2)
-n = round(len(os.listdir('F:\\Users\\AmatVictoriaCuram\\FDL\\DataSources\\'  +
-                                      'YahooSource\\ProcessedData\\DAY\\')), 2)
+#Number of tickers processed
+n = round(len(os.listdir('Z:\\Users\\Username\\DirectoryLocation\\DataSources\\'  +
+                                     'YahooSource\\ProcessedData\\DAY\\')), 2)
+#Display results
 print('Yahoo processed data is full.')
 print('YahooSource took ' + str(t) + ' seconds for ' + str(n) + ' tickers.')
