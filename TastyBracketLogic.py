@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Dec 28 01:20:06 2017
 
-@author: Adam Reinhold Von Fisher 
+@author: Adam Reinhold Von Fisher - https://www.linkedin.com/in/adamrvfisher/
+
 """
 
 #This is an outdated trading model see DonchianTrendEfficiencyFilterSingleStockSingleFrequency.py
